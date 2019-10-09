@@ -16,6 +16,10 @@
 	<link href="<?php echo base_url('/files/');?>assets/css/colors.min.css" rel="stylesheet" type="text/css">
 	<!-- /global stylesheets -->
 
+	<script src="<?php echo base_url()?>files/global_assets/js/main/jquery.min.js"></script>
+
+	<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
 	<!-- Core JS files -->
 	<script src="<?php echo base_url('/files/');?>global_assets/js/main/jquery.min.js"></script>
 	<script src="<?php echo base_url('/files/');?>global_assets/js/main/bootstrap.bundle.min.js"></script>
