@@ -33,12 +33,9 @@
 				</li>
 				<li class="nav-item nav-item-submenu">
 					<a href="#" class="nav-link"><i class="icon-copy"></i> <span>Transaksi 1</span></a>
-
 					<ul class="nav nav-group-sub" data-submenu-title="Layouts">
-						<li class="nav-item nav-item-submenu">
-							<a href="#" class="nav-link">Input Data Transaksi 1</a>
+						<li class="nav-item nav-item-submenu"><a href="#" class="nav-link active">EKSTERNAL</a>
 							<ul class="nav nav-group-sub">
-								<li class="nav-item"><a href="#" class="nav-link active">EKSTERNAL</a></li>
 								<li class="nav-item"><a href="<?php echo base_url('/msi/inpofromvendor');?>" class="nav-link">In PO from Vendor</a></li>
 								<li class="nav-item"><a href="#" class="nav-link">Good Receipt from Central Kitchen Sentul</a></li>
 								<li class="nav-item"><a href="#" class="nav-link">Transfer Out Inter Outlet</a></li>
@@ -48,39 +45,26 @@
 								<li class="nav-item"><a href="../seed/sidebar_right.html" class="nav-link">Retur In</a></li>
 								<li class="nav-item"><a href="../seed/sidebar_right.html" class="nav-link">Good Issue</a></li>
 								<li class="nav-item"><a href="../seed/sidebar_right.html" class="nav-link">Good Receipt Non PO</a></li>
-								<li class="nav-item"><a href="#" class="nav-link active">PRODUKSI</a></li>
-								<li class="nav-item"><a href="#" class="nav-link">Work Order</a></li>
-								<li class="nav-item"><a href="#" class="nav-link active">STOCK OUTLET</a></li>
-								<li class="nav-item"><a href="#" class="nav-link">Stock Opname</a></li>
 							</ul>
 						</li>
-						<li class="nav-item nav-item-submenu">
-							<a href="#" class="nav-link">List Data Transaksi 1</a>
+						<li class="nav-item nav-item-submenu"><a href="#" class="nav-link active">PRODUKSI</a>
 							<ul class="nav nav-group-sub">
-								<li class="nav-item"><a href="../seed/sidebar_secondary.html" class="nav-link">Secondary sidebar</a></li>
-								<li class="nav-item"><a href="../seed/sidebar_right.html" class="nav-link">Right sidebar</a></li>
+								<li class="nav-item"><a href="#" class="nav-link">Work Order</a></li>	
+							</ul>
+						</li>
+						<li class="nav-item nav-item-submenu"><a href="#" class="nav-link active">STOCK OUTLET</a>
+							<ul class="nav nav-group-sub">
+								<li class="nav-item"><a href="#" class="nav-link">Stock Opname</a></li>
+								<li class="nav-item"><a href="#" class="nav-link">Spoiled/Breakage/lost</a></li>
 							</ul>
 						</li>
 					</ul>
 				</li>
 				<li class="nav-item nav-item-submenu">
 					<a href="#" class="nav-link"><i class="icon-color-sampler"></i> <span>Transaksi 2</span></a>
-
-					<ul class="nav nav-group-sub" data-submenu-title="Layouts">
-						<li class="nav-item nav-item-submenu">
-							<a href="#" class="nav-link">Input Data Transaksi 2</a>
-							<ul class="nav nav-group-sub">
-								<li class="nav-item"><a href="../seed/sidebar_secondary.html" class="nav-link">Secondary sidebar</a></li>
-								<li class="nav-item"><a href="../seed/sidebar_right.html" class="nav-link">Right sidebar</a></li>
-							</ul>
-						</li>
-						<li class="nav-item nav-item-submenu">
-							<a href="#" class="nav-link">List Data Transaksi 2</a>
-							<ul class="nav nav-group-sub">
-								<li class="nav-item"><a href="../seed/sidebar_secondary.html" class="nav-link">Secondary sidebar</a></li>
-								<li class="nav-item"><a href="../seed/sidebar_right.html" class="nav-link">Right sidebar</a></li>
-							</ul>
-						</li>
+					<ul class="nav nav-group-sub">
+						<li class="nav-item"><a href="../seed/sidebar_secondary.html" class="nav-link">Secondary sidebar</a></li>
+						<li class="nav-item"><a href="../seed/sidebar_right.html" class="nav-link">Right sidebar</a></li>
 					</ul>
 				</li>
 				<li class="nav-item nav-item-submenu">
@@ -94,7 +78,14 @@
 						<li class="nav-item"><a href="../seed/navbar_fixed_main.html" class="nav-link">Master Bill Of Materials</a></li>
 					</ul>
 				</li>
-				<li class="nav-item"><a href="../../../RTL/default/full/index.html" class="nav-link"><i class="icon-width"></i> <span>Report Summary</span></a></li>
+				<li class="nav-item nav-item-submenu">
+					<a href="#" class="nav-link"><i class="icon-width"></i> <span>Report Summary</span></a>
+					<ul class="nav nav-group-sub" data-submenu-title="Starter kit">
+						<li class="nav-item"><a href="<?php echo site_url('/report/inventory');?>" class="nav-link">Inventory Audit</a></li>
+						<li class="nav-item"><a href="<?php echo site_url('/report/bincard');?>" class="nav-link">Bincard Report</a></li>
+						<li class="nav-item"><a href="<?php echo site_url('/report/onhand');?>" class="nav-link">Onhand Report</a></li>
+					</ul>
+				</li>
 				<!-- /main -->
 				
 			</ul>
