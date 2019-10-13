@@ -62,29 +62,23 @@
                                             <div class="form-group row">
 												<label class="col-lg-3 col-form-label">Pilih Plant:</label>
 												<div class="col-lg-9">
-													<select class="form-control form-control-select2 mdb-select" data-fouc>
-                                                        <option>Pilihan 1</option>
-                                                        <option>Pilihan 2</option>
-                                                        <option>Pilihan 3</option>
-                                                        <option>Pilihan 4</option>
-                                                        <option>Pilihan 5</option>
-                                                        <option>Pilihan 6</option>
-                                                        <option>Pilihan 7</option>
-													</select>
+                                                    <select class="form-control multiselect-select-all-filtering" multiple="multiple" data-fouc>
+                                                        <option value="cheese">pilih 1</option>
+                                                        <option value="tomatoes">pilih 2</option>
+                                                        <option value="mozarella">pilih 3</option>
+                                                        <option value="mushrooms">pilih 4</option>
+                                                    </select>
 												</div>
 											</div>
 
                                             <div class="form-group row">
 												<label class="col-lg-3 col-form-label">Group Hak Akses:</label>
 												<div class="col-lg-9">
-                                                    <select class="form-control form-control-select2" data-fouc>
-                                                        <option>Pilihan 1</option>
-                                                        <option>Pilihan 2</option>
-                                                        <option>Pilihan 3</option>
-                                                        <option>Pilihan 4</option>
-                                                        <option>Pilihan 5</option>
-                                                        <option>Pilihan 6</option>
-                                                        <option>Pilihan 7</option>
+                                                    <select class="form-control multiselect-select-all-filtering" multiple="multiple" data-fouc>
+                                                        <option value="cheese">pilih 1</option>
+                                                        <option value="tomatoes">pilih 2</option>
+                                                        <option value="mozarella">pilih 3</option>
+                                                        <option value="mushrooms">pilih 4</option>
                                                     </select>
 												</div>
 											</div>
@@ -103,10 +97,5 @@
 			</div>
 		</div>
         <?php  $this->load->view("_template/js.php")?>
-        <script>
-            $(document).ready(function() {
-                $('.mdb-select').materialSelect();
-            });
-        </script>
 	</body>
 </html>
