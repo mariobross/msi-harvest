@@ -12,8 +12,10 @@
 <script src="<?php echo base_url('/files/');?>global_assets/js/plugins/ui/moment/moment.min.js"></script>
 <script src="<?php echo base_url('/files/');?>global_assets/js/plugins/pickers/daterangepicker.js"></script>
 
+
 <script src="<?php echo base_url('/files/');?>assets/js/app.js"></script>
 <script src="<?php echo base_url('/files/');?>global_assets/js/demo_pages/dashboard.js"></script>
+<script src="<?php echo base_url('/files/');?>global_assets/js/demo_pages/form_multiselect.js"></script>
 <!-- /theme JS files -->
 
 <!-- dataTable -->
