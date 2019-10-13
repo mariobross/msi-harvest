@@ -1,9 +1,3 @@
-<!-- Core JS files -->
-<script src="<?php echo base_url('/files/');?>global_assets/js/main/jquery.min.js"></script>
-<script src="<?php echo base_url('/files/');?>global_assets/js/main/bootstrap.bundle.min.js"></script>
-<script src="<?php echo base_url('/files/');?>global_assets/js/plugins/loaders/blockui.min.js"></script>
-<!-- /core JS files -->
-
 <!-- Theme JS files -->
 <script src="<?php echo base_url('/files/');?>global_assets/js/plugins/visualization/d3/d3.min.js"></script>
 <script src="<?php echo base_url('/files/');?>global_assets/js/plugins/visualization/d3/d3_tooltip.js"></script>
@@ -21,6 +15,9 @@
 <!-- dataTable -->
 <script src="<?php echo base_url('/files/');?>global_assets/js/dataTable/jquery.dataTables.min.js"></script>
 <!-- /dataTable-->
+
+<script src="<?php echo base_url('/files/');?>global_assets/js/plugins/datepicker/bootstrap-datepicker.js"></script>
+
 
 <!-- SweetAlert -->
 <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
