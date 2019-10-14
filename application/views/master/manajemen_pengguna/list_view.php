@@ -13,7 +13,7 @@
                     <div class="card">
                         <div class="card-header">
                             <legend class="font-weight-semibold"><i class="icon-list mr-2"></i>List Manajemen Pengguna</legend>
-                            <a href="<?php echo site_url('master/manajemen/add') ?>" class="btn btn-danger"> Add New</a>
+                            <a href="<?php echo site_url('master/manajemen/add') ?>" class="btn btn-primary"> Add New</a>
                         </div>
                         <div class="card-body">
                             <table id="table-manajemen" class="table table-striped " style="width:100%">
@@ -35,7 +35,7 @@
 				<?php  $this->load->view("_template/footer.php")?>
 			</div>
 		</div>
-        <?php  $this->load->view("_template/modal.php")?>
+        <?php  $this->load->view("_template/modal_delete.php")?>
         <?php  $this->load->view("_template/js.php")?>
         <script>
             $(document).ready(function(){
