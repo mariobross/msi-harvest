@@ -116,7 +116,7 @@
 			const table = document.getElementById("tblReportBincard");
 			const search = document.getElementById("btnSearch");
 			search.addEventListener('click', function () {
-				table.style.display = "block";
+				table.style.display = "table";
 			});
 		});
 		</script>
