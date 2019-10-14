@@ -12,6 +12,7 @@
 				<div class="content">
                     <div class="card">
                         <div class="card-header">
+                            <legend class="font-weight-semibold"><i class="icon-list mr-2"></i>List Manajemen Pengguna</legend>
                             <a href="<?php echo site_url('master/manajemen/add') ?>" class="btn btn-danger"> Add New</a>
                         </div>
                         <div class="card-body">
@@ -34,6 +35,7 @@
 				<?php  $this->load->view("_template/footer.php")?>
 			</div>
 		</div>
+        <?php  $this->load->view("_template/modal.php")?>
         <?php  $this->load->view("_template/js.php")?>
         <script>
             $(document).ready(function(){
@@ -49,13 +51,18 @@
                         {"data":"nama_lengkap"},
                         {"data":"grup_hak_akses"},
                         {"data":"no","className":"dt-center", render:function(data, type, row, meta){
-                                console.log(row['no']);
-                                rr = `<a href='<?php echo site_url('master/manajemen/edit')?>' ><i class='icon-file-plus2'></i></a>&nbsp;<a href='<?php echo site_url('master/manajemen/delete')?>' ><i class='icon-file-minus2'></i></a>`;
+                                rr = `<a href='<?php echo site_url('master/manajemen/edit')?>' ><i class='icon-file-plus2' title="Edit"></i></a>&nbsp;
+                                        <a onClick="deleteConfirm('<?php echo site_url('master/manajemen/delete')?>')" href="#!"><i class='icon-cross2' title="Delete"></i></a>`;
                                 return rr;
                             }
                         }
                     ]
                 });
+
+                deleteConfirm = (url)=>{
+                    $('#btn-delete').attr('href', url);
+	                $('#deleteModal').modal();
+                }
             });
         
         </script>
