@@ -14,6 +14,7 @@
 
 <!-- dataTable -->
 <script src="<?php echo base_url('/files/');?>global_assets/js/dataTable/jquery.dataTables.min.js"></script>
+<script src="<?php echo base_url('/files/');?>global_assets/js/demo_pages/form_multiselect.js"></script>
 <!-- /dataTable-->
 
 <script src="<?php echo base_url('/files/');?>global_assets/js/plugins/datepicker/bootstrap-datepicker.js"></script>
