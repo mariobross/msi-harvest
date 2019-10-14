@@ -88,7 +88,7 @@
 
 					<ul class="nav nav-group-sub" data-submenu-title="Starter kit">
 						<li class="nav-item"><a href="<?php echo base_url('/master/manajemen');?>" class="nav-link">Manajeman Pengguna</a></li>
-						<li class="nav-item"><a href="../seed/sidebar_none.html" class="nav-link">Hak Akses</a></li>
+						<li class="nav-item"><a href="<?php echo base_url('/master/akses');?>" class="nav-link">Hak Akses</a></li>
 						<li class="nav-item"><a href="../seed/sidebar_main.html" class="nav-link">Integration Log</a></li>
 						<li class="nav-item"><a href="../seed/layout_boxed.html" class="nav-link">Master Konversi Item Whole ke Slice</a></li>
 						<li class="nav-item"><a href="../seed/navbar_fixed_main.html" class="nav-link">Master Bill Of Materials</a></li>

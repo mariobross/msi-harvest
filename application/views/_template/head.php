@@ -10,7 +10,7 @@
 <link href="<?php echo base_url('/files/');?>assets/css/bootstrap.min.css" rel="stylesheet" type="text/css">
 <link href="<?php echo base_url('/files/');?>assets/css/bootstrap_limitless.min.css" rel="stylesheet" type="text/css">
 <link href="<?php echo base_url('/files/');?>assets/css/layout.min.css" rel="stylesheet" type="text/css">
-<!-- <link href="<?php echo base_url('/files/');?>assets/css/components.min.css" rel="stylesheet" type="text/css"> -->
+<link href="<?php echo base_url('/files/');?>assets/css/components.min.css" rel="stylesheet" type="text/css"> 
 <link href="<?php echo base_url('/files/');?>assets/css/colors.min.css" rel="stylesheet" type="text/css">
 <!-- /global stylesheets -->
 
