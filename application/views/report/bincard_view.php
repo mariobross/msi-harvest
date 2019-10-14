@@ -16,7 +16,7 @@
                                 <div class="row">
                                     <div class="col-md-12">
                                         <fieldset>
-                                            <legend class="font-weight-semibold"><i class="icon-reading mr-2"></i>Inventory Audit</legend>
+                                            <legend class="font-weight-semibold"><i class="icon-reading mr-2"></i>Bincard Report</legend>
                                             <div class="form-group row">
 												<label class="col-lg-3 col-form-label">Dari Tanggal</label>
 												<div class="col-lg-3 input-group date">
@@ -77,33 +77,22 @@
 								<div class="row">
 									<div class="col-md-12" style="overflow: auto">
 									<fieldset>
-										<table class="table table-bordered table-striped" id="tblReportInventory" style="display:none">
+										<table class="table table-bordered table-striped" id="tblReportBincard" style="display:none">
 											<thead>
 												<tr>
 													<th rowspan="2">No</th>
 													<th rowspan="2">Code</th>
 													<th rowspan="2">Description</th>
-													<th rowspan="2">Unit</th>
-													<th rowspan="2" style="text-align: center">Beginning Stock</th>
-													<th colspan="7" style="text-align: center">Qty In</th>
+													<th colspan="3" style="text-align: center">Qty In</th>
 													<th rowspan="2" style="text-align: center">Total In</th>
-													<th colspan="6" style="text-align: center">Qty Out</th>
+													<th colspan="2" style="text-align: center">Qty Out</th>
 													<th rowspan="2" style="text-align: center">Total Out</th>
-													<th rowspan="2">Subtotal</th>
 												</tr>
 												<tr>
 													<th style="text-align: center">GR From CK</th>
-													<th style="text-align: center">GR PO</th>
 													<th style="text-align: center">GR From Outlet</th>
-													<th style="text-align: center">GR Production</th>
-													<th style="text-align: center">GR Whole Cake</th>
-													<th style="text-align: center">GR No PO</th>
 													<th style="text-align: center">GR Return</th>
-													<th style="text-align: center">ISSUE Sales</th>
 													<th style="text-align: center">ISSUE Transfer Outlet</th>
-													<th style="text-align: center">ISSUE Production</th>
-													<th style="text-align: center">ISSUE Whole Cake</th>
-													<th style="text-align: center">ISSUE Waste Material</th>
 													<th style="text-align: center">ISSUE Return Out</th>
 												</tr>
 											</thead>
@@ -124,7 +113,7 @@
 			$('#fromDate').datepicker();
 			$('#toDate').datepicker();
 
-			const table = document.getElementById("tblReportInventory");
+			const table = document.getElementById("tblReportBincard");
 			const search = document.getElementById("btnSearch");
 			search.addEventListener('click', function () {
 				table.style.display = "block";
