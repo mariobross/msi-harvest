@@ -103,6 +103,16 @@ class Sr extends CI_Controller{
          
          echo json_encode($data);
      }
+
+     public function add()
+     {
+         # code...
+         $this->load->view('transaksi2/sr/add_view');
+     }
+
+     public function edit(){
+        $this->load->view('transaksi2/sr/edit_view');
+    }
  
 }
 ?>

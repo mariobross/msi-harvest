@@ -24,16 +24,66 @@
                                 <div class="row">
                                     <div class="col-md-12">
                                         <fieldset>
-                                            <legend class="font-weight-semibold"><i class="icon-reading mr-2"></i>Tambah Whole to Slice</legend>
+                                            <legend class="font-weight-semibold"><i class="icon-reading mr-2"></i> Tambah Store Room Request (SR)</legend>
                                             <div class="form-group row">
 												<label class="col-lg-3 col-form-label">ID Transaksi</label>
 												<div class="col-lg-9">
 													<input type="text" class="form-control" placeholder="ID Transaksi" readOnly>
 												</div>
+                                            </div>
+                                            
+                                            <div class="form-group row">
+												<label class="col-lg-3 col-form-label">Store Room Reques(SR) Number</label>
+												<div class="col-lg-9">
+													<input type="text" class="form-control" placeholder="(Auto Number after Posting to SAP)" readOnly>
+												</div>
+                                            </div>
+                                            
+                                            <div class="form-group row">
+												<label class="col-lg-3 col-form-label">Outlet From</label>
+												<div class="col-lg-9">
+													<input type="text" class="form-control" placeholder="Outlet" readOnly>
+												</div>
+                                            </div>
+                                            
+                                            <div class="form-group row">
+												<label class="col-lg-3 col-form-label">Storage Location</label>
+												<div class="col-lg-9">
+													<input type="text" class="form-control" placeholder="Outlet" readOnly>
+												</div>
+                                            </div>
+                                            
+                                            <div class="form-group row">
+												<label class="col-lg-3 col-form-label">Status</label>
+												<div class="col-lg-9">
+													<input type="text" class="form-control" placeholder="Not Approved" readOnly>
+												</div>
 											</div>
 
                                             <div class="form-group row">
-												<label class="col-lg-3 col-form-label">Item Code</label>
+												<label class="col-lg-3 col-form-label">Request To Outlet</label>
+												<div class="col-lg-9">
+													<select class="form-control form-control-select2" data-live-search="true">
+														<option value="">Select Item</option>
+														<option value="1">Pilih 1</option>
+														<option value="2">Pilih 2</option>
+													</select>
+												</div>
+                                            </div>
+                                            
+                                            <div class="form-group row">
+												<label class="col-lg-3 col-form-label">Request Reason</label>
+												<div class="col-lg-9">
+													<select class="form-control form-control-select2" data-live-search="true">
+														<option value="">Select Item</option>
+														<option value="1">Pilih 1</option>
+														<option value="2">Pilih 2</option>
+													</select>
+												</div>
+                                            </div>
+                                            
+                                            <div class="form-group row">
+												<label class="col-lg-3 col-form-label">Material Group</label>
 												<div class="col-lg-9">
 													<select class="form-control form-control-select2" data-live-search="true">
 														<option value="">Select Item</option>
@@ -44,18 +94,27 @@
 											</div>
 
                                             <div class="form-group row">
-												<label class="col-lg-3 col-form-label">Nama Lengkap:</label>
-												<div class="col-lg-9">
-													<input type="text" class="form-control" placeholder="Description Item" readOnly>
-												</div>
+                                                <label class="col-lg-3 col-form-label">Delivery Date</label>
+                                                <div class="col-lg-9 input-group date">
+                                                    <input type="text" class="form-control" id="deliveDate">
+                                                    <div class="input-group-prepend">
+                                                        <span class="input-group-text" id="basic-addon1">
+                                                            <i class="icon-calendar"></i>
+                                                        </span>
+                                                    </div>
+                                                </div>
 											</div>
 
                                             <div class="form-group row">
-												<label class="col-lg-3 col-form-label">Quatity</label>
-												<div class="col-lg-9">
-													<input type="text" class="form-control" placeholder="0.00">
-													<div>On Hand:.00</div>
-												</div>
+                                                <label class="col-lg-3 col-form-label">Created Date</label>
+                                                <div class="col-lg-9 input-group date">
+                                                    <input type="text" class="form-control" id="createdDate">
+                                                    <div class="input-group-prepend">
+                                                        <span class="input-group-text" id="basic-addon1">
+                                                            <i class="icon-calendar"></i>
+                                                        </span>
+                                                    </div>
+                                                </div>
 											</div>
 
                                             <div class="text-right">
@@ -73,16 +132,15 @@
 										<table class="table table-bordered table-striped" id="tblWhole">
 											<thead>
 												<tr>
-													<th colspan="7" >BOM ITEM</th>
-												</tr>
-												<tr>
 													<th></th>
 													<th>No</th>
 													<th>Material No</th>
 													<th>Material Desc</th>
 													<th>Quantity</th>
 													<th>UOM</th>
-													<th>Var</th>
+                                                    <th>On Hand</th>
+                                                    <th>Min Stock</th>
+													<th>Outstanding Total</th>
 												</tr>
 											</thead>
 										</table>
@@ -121,7 +179,10 @@
 					</select>`,
 					`<input type="text" name="qty[]" id="qty[]">`,
 					'',
-					''
+					'',
+                    '',
+                    '',
+                    ''
 				]).draw(false);
 				count++;
 			});
@@ -138,6 +199,7 @@
                     if(deleteidArr.length > 0){
                         var confirmDelete = confirm("Do you really want to Delete records?");
                         if(confirmDelete == true){
+							// console.log(deleteidArr);
 							$("input:checked").each(function(){
 								table.row($(this).closest("tr")).remove().draw();;
 							});
@@ -154,6 +216,9 @@
                         }
                     });
                 }
+
+            $('#deliveDate').datepicker();
+			$('#createdDate').datepicker();
 		});
 		</script>
 	</body>
