@@ -54,8 +54,8 @@
 						</li>
 						<li class="nav-item nav-item-submenu"><a href="#" class="nav-link active">STOCK OUTLET</a>
 							<ul class="nav nav-group-sub">
-								<li class="nav-item"><a href="#" class="nav-link">Stock Opname</a></li>
-								<li class="nav-item"><a href="#" class="nav-link">Spoiled/Breakage/lost</a></li>
+								<li class="nav-item"><a href="<?php echo site_url('/transaksi1/stock');?>" class="nav-link">Stock Opname</a></li>
+								<li class="nav-item"><a href="<?php echo site_url('/transaksi1/spoiled');?>" class="nav-link">Spoiled/Breakage/lost</a></li>
 							</ul>
 						</li>
 					</ul>
@@ -74,7 +74,7 @@
 						<li class="nav-item"><a href="<?php echo base_url('/master/manajemen');?>" class="nav-link">Manajeman Pengguna</a></li>
 						<li class="nav-item"><a href="<?php echo base_url('/master/akses');?>" class="nav-link">Hak Akses</a></li>
 						<li class="nav-item"><a href="<?php echo base_url('/master/integration');?>" class="nav-link">Integration Log</a></li>
-						<li class="nav-item"><a href="../seed/layout_boxed.html" class="nav-link">Master Konversi Item Whole ke Slice</a></li>
+						<!-- <li class="nav-item"><a href="../seed/layout_boxed.html" class="nav-link">Master Konversi Item Whole ke Slice</a></li> -->
 						<li class="nav-item"><a href="../seed/navbar_fixed_main.html" class="nav-link">Master Bill Of Materials</a></li>
 					</ul>
 				</li>
