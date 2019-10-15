@@ -63,8 +63,8 @@
 				<li class="nav-item nav-item-submenu">
 					<a href="#" class="nav-link"><i class="icon-color-sampler"></i> <span>Transaksi 2</span></a>
 					<ul class="nav nav-group-sub">
-						<li class="nav-item"><a href="../seed/sidebar_secondary.html" class="nav-link">Secondary sidebar</a></li>
-						<li class="nav-item"><a href="../seed/sidebar_right.html" class="nav-link">Right sidebar</a></li>
+						<li class="nav-item"><a href="<?php echo site_url('/transaksi2/sr');?>" class="nav-link">Store Room Request(SR)</a></li>
+						<li class="nav-item"><a href="<?php echo site_url('/transaksi2/whole');?>" class="nav-link">Transaksi Pemotongan Whole di Outlet</a></li>
 					</ul>
 				</li>
 				<li class="nav-item nav-item-submenu">
@@ -73,7 +73,7 @@
 					<ul class="nav nav-group-sub" data-submenu-title="Starter kit">
 						<li class="nav-item"><a href="<?php echo base_url('/master/manajemen');?>" class="nav-link">Manajeman Pengguna</a></li>
 						<li class="nav-item"><a href="<?php echo base_url('/master/akses');?>" class="nav-link">Hak Akses</a></li>
-						<li class="nav-item"><a href="../seed/sidebar_main.html" class="nav-link">Integration Log</a></li>
+						<li class="nav-item"><a href="<?php echo base_url('/master/integration');?>" class="nav-link">Integration Log</a></li>
 						<li class="nav-item"><a href="../seed/layout_boxed.html" class="nav-link">Master Konversi Item Whole ke Slice</a></li>
 						<li class="nav-item"><a href="../seed/navbar_fixed_main.html" class="nav-link">Master Bill Of Materials</a></li>
 					</ul>
