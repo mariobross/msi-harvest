@@ -103,6 +103,16 @@ class Whole extends CI_Controller{
          
          echo json_encode($data);
      }
+
+     public function add()
+     {
+         # code...
+         $this->load->view('transaksi2/whole/add_view');
+     }
+
+     public function edit(){
+        $this->load->view('transaksi2/whole/edit_view');
+    }
  
 }
 ?>

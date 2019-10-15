@@ -73,7 +73,7 @@
                     <div class="card">
                         <div class="card-header">
                             <legend class="font-weight-semibold"><i class="icon-list mr-2"></i>List of Store Room Request (SR)</legend>
-                            <a href="<?php echo site_url('transaksi2/whole/add') ?>" class="btn btn-primary"> Add New</a>
+                            <a href="<?php echo site_url('transaksi2/sr/add') ?>" class="btn btn-primary"> Add New</a>
                             <input type="button" value="Delete" class="btn btn-danger" id="deleteRecord">
                             <input type="button" value="Export To Excel" class="btn btn-success" id="deleteRecord">  
                         </div>
@@ -124,8 +124,8 @@
                             return rr;
                         }},
                         {"data":"action", "className":"dt-center", render:function(data, type, row, meta){
-                                rr = `<a href='<?php echo site_url('transaksi2/whole/edit')?>' ><i class='icon-file-plus2' title="Edit"></i></a>&nbsp;
-                                        <a onClick="deleteConfirm('<?php echo site_url('transaksi2/whole/delete')?>')" href="#!"><i class='icon-printer' title="Delete"></i></a>`;
+                                rr = `<a href='<?php echo site_url('transaksi2/sr/edit')?>' ><i class='icon-file-plus2' title="Edit"></i></a>&nbsp;
+                                        <a onClick="deleteConfirm('<?php echo site_url('transaksi2/sr/delete')?>')" href="#!"><i class='icon-printer' title="Delete"></i></a>`;
                                 return rr;
                         }},
                         {"data":"id"},

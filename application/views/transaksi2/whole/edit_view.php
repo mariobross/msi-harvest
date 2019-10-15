@@ -24,7 +24,7 @@
                                 <div class="row">
                                     <div class="col-md-12">
                                         <fieldset>
-                                            <legend class="font-weight-semibold"><i class="icon-reading mr-2"></i>Tambah Whole to Slice</legend>
+                                            <legend class="font-weight-semibold"><i class="icon-reading mr-2"></i>Edit Whole to Slice</legend>
                                             <div class="form-group row">
 												<label class="col-lg-3 col-form-label">ID Transaksi</label>
 												<div class="col-lg-9">
@@ -59,7 +59,7 @@
 											</div>
 
                                             <div class="text-right">
-                                                <button type="submit" class="btn btn-primary">Save<i class="icon-paperplane ml-2"></i></button>
+                                                <button type="submit" class="btn btn-primary">Update<i class="icon-paperplane ml-2"></i></button>
 												<button type="submit" class="btn btn-success">Approve SAP<i class="icon-paperplane ml-2"></i></button>
                                             </div>
 
@@ -138,6 +138,7 @@
                     if(deleteidArr.length > 0){
                         var confirmDelete = confirm("Do you really want to Delete records?");
                         if(confirmDelete == true){
+							// console.log(deleteidArr);
 							$("input:checked").each(function(){
 								table.row($(this).closest("tr")).remove().draw();;
 							});
