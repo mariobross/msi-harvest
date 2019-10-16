@@ -52,7 +52,10 @@
                             <table id="table-bom" class="table table-striped " style="width:100%">
                                 <thead>
                                     <tr>
-                                        <th style="text-align: left">*</th>
+										<tr>
+											<th colspan="5" class="text-center">BOM ITEM</th>
+										</tr>
+                                        <th style="text-align: left"><input type="checkbox" name="checkall" id="checkall"></th>
                                         <th>Material No</th>
                                         <th>Material Desc</th>
                                         <th>Quantity</th>
@@ -62,6 +65,24 @@
                                 <tbody>
                                 </tbody>
                             </table>
+							<div class="row">
+								<div class="col-md-12">
+									<fieldset>
+										<div class="form-group row">
+											<div class="col-lg-6">
+												<select class="form-control multiselect-full-featured" multiple="multiple" data-fouc>
+													<option value="bread">Bread</option>
+													<option value="proseminar">Proseminar</option>
+													<option value="chocolate">Chocolate</option>
+												</select>
+											</div>
+											<div class="col-lg-6">
+												<input type="text" class="form-control" value="Latte Cookies">
+											</div>
+										</div>
+									</fieldset>
+								</div>
+							</div>
 							<div class="text-center">
 								<button type="submit" class="btn btn-primary">Save<i class="icon-paperplane ml-2"></i></button>
 							</div>
@@ -81,7 +102,10 @@
                         "type":"POST"
                     },
                     "columns": [
-                        {"data":"no"},
+                        {"data":"no", "className":"dt-center", render:function(data, type, row, meta){
+                            rr=`<input type="checkbox" class="check_delete" id="chk_${data}" value="${data}" onclick="checkcheckbox();">`;
+                            return rr;
+                        }},
                         {"data":"material_no"},
                         {"data":"material_description"},
 						{"data":"quantity", render:function(data, type, row, meta){
@@ -92,6 +116,16 @@
                         {"data":"uom"},
                     ]
                 });
+				
+				// untuk check all
+                $("#checkall").click(function(){
+                    if($(this).is(':checked')){
+                        $(".check_delete").prop('checked', true);
+                    }else{
+                        $(".check_delete").prop('checked', false);
+                    }
+                });
+                // end check all
 
                 deleteConfirm = (url)=>{
                     $('#btn-delete').attr('href', url);
