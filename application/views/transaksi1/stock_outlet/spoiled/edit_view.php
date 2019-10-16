@@ -74,7 +74,7 @@
                                             <div class="form-group row">
                                                 <label class="col-lg-3 col-form-label">Posting Date</label>
                                                 <div class="col-lg-9 input-group date">
-                                                    <input type="text" class="form-control" id="deliveDate">
+                                                    <input type="text" class="form-control" id="postDate">
                                                     <div class="input-group-prepend">
                                                         <span class="input-group-text" id="basic-addon1">
                                                             <i class="icon-calendar"></i>
@@ -92,8 +92,8 @@
 
 
                                             <div class="text-right">
-                                                <button type="submit" class="btn btn-primary">Update<i class="icon-paperplane ml-2"></i></button>
-												<button type="submit" class="btn btn-success">Approve SAP<i class="icon-paperplane ml-2"></i></button>
+                                                <button type="submit" class="btn btn-primary">Cancel<i class="icon-paperplane ml-2"></i></button>
+												<!-- <button type="submit" class="btn btn-success">Approve SAP<i class="icon-paperplane ml-2"></i></button> -->
                                             </div>
 
 											
@@ -121,8 +121,8 @@
 									</div>
 									<div class="col-md-12">
 										<div class="text-left">
-											<input type="button" class="btn btn-primary" value="Add" id="addTable"> 
-											<input type="button" value="Delete" class="btn btn-danger" id="deleteRecord"> 
+											<!-- <input type="button" class="btn btn-primary" value="Add" id="addTable"> 
+											<input type="button" value="Delete" class="btn btn-danger" id="deleteRecord">  -->
 										</div>
 									</div>
 								</div>
@@ -192,6 +192,8 @@
                         }
                     });
                 }
+
+			$('#postDate').datepicker();
 		});
 		</script>
 	</body>
