@@ -37,7 +37,7 @@
 						<li class="nav-item nav-item-submenu"><a href="#" class="nav-link active">EKSTERNAL</a>
 							<ul class="nav nav-group-sub">
 								<li class="nav-item"><a href="<?php echo base_url('/transaksi1/pofromvendor');?>" class="nav-link">In PO from Vendor</a></li>
-								<li class="nav-item"><a href="#" class="nav-link">Good Receipt from Central Kitchen Sentul</a></li>
+								<li class="nav-item"><a href="<?php echo base_url('/transaksi1/grfromkitchensentul');?>" class="nav-link">Good Receipt from Central Kitchen Sentul</a></li>
 								<li class="nav-item"><a href="#" class="nav-link">Transfer Out Inter Outlet</a></li>
 								<li class="nav-item"><a href="#" class="nav-link">Transfer In Inter Outlet</a></li>
 								<li class="nav-item"><a href="<?php echo base_url('/transaksi1/purchase_request');?>" class="nav-link">Purchase Request (PR)</a></li>
