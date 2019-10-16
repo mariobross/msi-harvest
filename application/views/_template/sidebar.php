@@ -44,7 +44,7 @@
 								<li class="nav-item"><a href="../seed/sidebar_right.html" class="nav-link">Retur Out</a></li>
 								<li class="nav-item"><a href="../seed/sidebar_right.html" class="nav-link">Retur In</a></li>
 								<li class="nav-item"><a href="../seed/sidebar_right.html" class="nav-link">Good Issue</a></li>
-								<li class="nav-item"><a href="../seed/sidebar_right.html" class="nav-link">Good Receipt Non PO</a></li>
+								<li class="nav-item"><a href="<?php echo site_url('/transaksi1/grnopo');?>" class="nav-link">Good Receipt Non PO</a></li>
 							</ul>
 						</li>
 						<li class="nav-item nav-item-submenu"><a href="#" class="nav-link active">PRODUKSI</a>
