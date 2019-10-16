@@ -55,7 +55,6 @@
 										<tr>
 											<th colspan="5" class="text-center">BOM ITEM</th>
 										</tr>
-                                        <th style="text-align: left"><input type="checkbox" name="checkall" id="checkall"></th>
                                         <th>Material No</th>
                                         <th>Material Desc</th>
                                         <th>Quantity</th>
@@ -116,16 +115,6 @@
                         {"data":"uom"},
                     ]
                 });
-				
-				// untuk check all
-                $("#checkall").click(function(){
-                    if($(this).is(':checked')){
-                        $(".check_delete").prop('checked', true);
-                    }else{
-                        $(".check_delete").prop('checked', false);
-                    }
-                });
-                // end check all
 
                 deleteConfirm = (url)=>{
                     $('#btn-delete').attr('href', url);
