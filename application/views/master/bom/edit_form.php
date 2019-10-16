@@ -55,6 +55,7 @@
 										<tr>
 											<th colspan="5" class="text-center">BOM ITEM</th>
 										</tr>
+                                        <th>*</th>
                                         <th>Material No</th>
                                         <th>Material Desc</th>
                                         <th>Quantity</th>
