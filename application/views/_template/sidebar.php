@@ -54,8 +54,8 @@
 						</li>
 						<li class="nav-item nav-item-submenu"><a href="#" class="nav-link active">STOCK OUTLET</a>
 							<ul class="nav nav-group-sub">
-								<li class="nav-item"><a href="#" class="nav-link">Stock Opname</a></li>
-								<li class="nav-item"><a href="#" class="nav-link">Spoiled/Breakage/lost</a></li>
+								<li class="nav-item"><a href="<?php echo site_url('/transaksi1/stock');?>" class="nav-link">Stock Opname</a></li>
+								<li class="nav-item"><a href="<?php echo site_url('/transaksi1/spoiled');?>" class="nav-link">Spoiled/Breakage/lost</a></li>
 							</ul>
 						</li>
 					</ul>
@@ -63,8 +63,8 @@
 				<li class="nav-item nav-item-submenu">
 					<a href="#" class="nav-link"><i class="icon-color-sampler"></i> <span>Transaksi 2</span></a>
 					<ul class="nav nav-group-sub">
-						<li class="nav-item"><a href="../seed/sidebar_secondary.html" class="nav-link">Secondary sidebar</a></li>
-						<li class="nav-item"><a href="../seed/sidebar_right.html" class="nav-link">Right sidebar</a></li>
+						<li class="nav-item"><a href="<?php echo site_url('/transaksi2/sr');?>" class="nav-link">Store Room Request(SR)</a></li>
+						<li class="nav-item"><a href="<?php echo site_url('/transaksi2/whole');?>" class="nav-link">Transaksi Pemotongan Whole di Outlet</a></li>
 					</ul>
 				</li>
 				<li class="nav-item nav-item-submenu">
@@ -76,6 +76,7 @@
 						<li class="nav-item"><a href="<?php echo base_url('/master/integration');?>" class="nav-link">Integration Log</a></li>
 						<!--<li class="nav-item"><a href="../seed/layout_boxed.html" class="nav-link">Master Konversi Item Whole ke Slice</a></li>-->
 						<li class="nav-item"><a href="<?php echo base_url('/master/bom');?>" class="nav-link">Master Bill Of Materials</a></li>
+						
 					</ul>
 				</li>
 				<li class="nav-item nav-item-submenu">
