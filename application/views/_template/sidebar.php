@@ -38,7 +38,7 @@
 							<ul class="nav nav-group-sub">
 								<li class="nav-item"><a href="<?php echo base_url('/transaksi1/pofromvendor');?>" class="nav-link">In PO from Vendor</a></li>
 								<li class="nav-item"><a href="<?php echo base_url('/transaksi1/grfromkitchensentul');?>" class="nav-link">Good Receipt from Central Kitchen Sentul</a></li>
-								<li class="nav-item"><a href="#" class="nav-link">Transfer Out Inter Outlet</a></li>
+								<li class="nav-item"><a href="<?php echo base_url('/transaksi1/transferoutinteroutlet');?>" class="nav-link">Transfer Out Inter Outlet</a></li>
 								<li class="nav-item"><a href="#" class="nav-link">Transfer In Inter Outlet</a></li>
 								<li class="nav-item"><a href="<?php echo base_url('/msi/purchaserequest');?>" class="nav-link">Purchase Request (PR)</a></li>
 								<li class="nav-item"><a href="../seed/sidebar_right.html" class="nav-link">Retur Out</a></li>
