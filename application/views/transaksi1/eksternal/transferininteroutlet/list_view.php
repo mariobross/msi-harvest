@@ -27,10 +27,7 @@
 											<div class="form-group row">
 												<label class="col-lg-3 col-form-label">Store Room Request (SR) Number</label>
 												<div class="col-lg-9">
-													<select class="form-control">
-														<option value="94897" selected>94897 - The Harvest Harapan Indah Bekasi</option>
-													</select>
-													<a href="#">Pilih ulang SR No dan Jenis Material</a>
+													<b>94897 </b><a href="#">Pilih ulang SR No dan Jenis Material</a>
 												</div>
 											</div>
 											
@@ -64,10 +61,7 @@
 											<div class="form-group row">
 												<label class="col-lg-3 col-form-label">Material Group</label>
 												<div class="col-lg-9">
-													<select class="form-control">
-														<option value="all" selected>All</option>
-														<option value="rmbeverage">RM Beverage</option>
-													</select>
+													<b>All</b>
 												</div>
 											</div>
 											
