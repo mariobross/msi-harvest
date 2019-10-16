@@ -48,12 +48,12 @@
                         {"data":"no"},
                         {"data":"grup_hak_akses"},
 						{"data":"admin_terkait","className":"dt-center", render:function(data, type, row, meta){
-								rr = (data=="true")?`<a href='<?php echo site_url('master/akses/check')?>' ><i class='icon-file-check'></i></a>`:``;
+								rr = (data=="true")?`<a href='<?php echo site_url('master/akses/check')?>' ><i class='icon-file-check' title="List Admin Terkait"></i></a>`:``;
 								return rr;
                             }
                         },
                         {"data":"no","className":"dt-center", render:function(data, type, row, meta){
-                                rr = `<a href='<?php echo site_url('master/akses/edit')?>' ><i class='icon-file-check2'></i></a>&nbsp;<a href='<?php echo site_url('master/akses/check')?>' ><i class='icon-file-text3'></i></a>&nbsp;<a onClick="deleteConfirm('<?php echo site_url('master/akses/delete')?>')" href="#!"><i class='icon-cross2' title="Delete"></i></a>`;
+                                rr = `<a href='<?php echo site_url('master/akses/edit')?>' ><i class='icon-file-check2' title="Edit"></i></a>&nbsp;<a href='<?php echo site_url('master/akses/check')?>' ><i class='icon-file-text3' title="Check"></i></a>&nbsp;<a onClick="deleteConfirm('<?php echo site_url('master/akses/delete')?>')" href="#!"><i class='icon-cross2' title="Delete"></i></a>`;
                                 return rr;
                             }
                         }
