@@ -86,7 +86,7 @@
                     "columns": [
                         {"data":"no"},
 						{"data":"no","className":"dt-center", render:function(data, type, row, meta){
-                                rr = `<a href='<?php echo site_url('master/bom/edit')?>' ><i class='icon-file-check2' title="Edit berdasarkan Nama"></i></a>&nbsp;<a href='<?php echo site_url('master/bom/edit')?>' ><i class='icon-file-check' title="Edit berdasarkan ID"></i></a>`;
+                                rr = `<a href='<?php echo site_url('master/bom/edit')?>' ><i class='icon-file-check2' title="Edit"></i></a>&nbsp;`;
                                 return rr;
                             }
                         },

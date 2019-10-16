@@ -13,7 +13,7 @@
 				<div class="content">
                     <div class="card">
                         <div class="card-header">
-                            <a href="<?php echo site_url('master/akses/add') ?>" class="btn btn-danger"> Tambah </a>
+                            <a href="<?php echo site_url('master/akses/add') ?>" class="btn btn-primary"> Add New </a>
                         </div>
                         <div class="card-body">
                             <table id="table-akses" class="table table-striped " style="width:100%">
