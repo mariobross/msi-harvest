@@ -24,7 +24,7 @@
                                 <div class="row">
                                     <div class="col-md-12">
                                         <fieldset>
-                                            <legend class="font-weight-semibold"><i class="icon-reading mr-2"></i>Tambah Spoiled / Breakage / Lost</legend>
+                                            <legend class="font-weight-semibold"><i class="icon-reading mr-2"></i>Tambah Stock Opname</legend>
                                             <div class="form-group row">
 												<label class="col-lg-3 col-form-label">ID Transaksi</label>
 												<div class="col-lg-9">
@@ -33,7 +33,7 @@
                                             </div>
                                             
                                             <div class="form-group row">
-												<label class="col-lg-3 col-form-label">Spoiled No</label>
+												<label class="col-lg-3 col-form-label">Stock Opname Number</label>
 												<div class="col-lg-9">
 													<input type="text" class="form-control" placeholder="(Auto Number after Posting to SAP)" readOnly>
 												</div>
@@ -83,14 +83,6 @@
                                                 </div>
 											</div>
 
-                                            <div class="form-group row">
-                                                <label class="col-lg-3 col-form-label">Issue Note</label>
-                                                <div class="col-lg-9 input-group date">
-                                                    <textarea name="txtIssue" id="txtIssue" cols="5" rows="5" class="form-control"></textarea>
-                                                </div>
-											</div>
-
-
                                             <div class="text-right">
                                                 <button type="submit" class="btn btn-primary">Save<i class="icon-paperplane ml-2"></i></button>
 												<button type="submit" class="btn btn-success">Approve SAP<i class="icon-paperplane ml-2"></i></button>
@@ -108,13 +100,9 @@
 												<tr>
 													<th></th>
 													<th>No</th>
-													<th>Spoiled No</th>
+													<th>Material No</th>
 													<th>Material Desc</th>
-													<th>In Whs Quantity</th>	
 													<th>Quantity</th>
-													<th>UOM</th>
-													<th>Reason</th>
-													<th>Other Reason</th> 
 												</tr>
 											</thead>
 										</table>
@@ -151,14 +139,6 @@
 						<option value="2">Pilih 2</option>
 					</select>`,
 					``,
-					'',
-					'<input type="text" name="qty[]" id="qty[]">',
-					'',
-					`<select class="form-control form-control-select2" data-live-search="true">
-						<option value="">Select Item</option>
-						<option value="1">Pilih 1</option>
-						<option value="2">Pilih 2</option>
-					</select>`,
 					'<input type="text" name="qty[]" id="qty[]">'
 				]).draw(false);
 				count++;

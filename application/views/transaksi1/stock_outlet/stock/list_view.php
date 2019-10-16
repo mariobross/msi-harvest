@@ -12,7 +12,7 @@
 				<div class="content">
                     <div class="card">
                         <div class="card-header">
-                            <legend class="font-weight-semibold"><i class="icon-search4 mr-2"></i>Search of Spoiled / Breakage / Lost</legend>  
+                            <legend class="font-weight-semibold"><i class="icon-search4 mr-2"></i>Search of Stock Opname</legend>  
                         </div>
                         <div class="card-body">
                         <form action="#" method="POST">
@@ -60,8 +60,8 @@
                     </div> 
                     <div class="card">
                         <div class="card-header">
-                            <legend class="font-weight-semibold"><i class="icon-list mr-2"></i>List Spoiled / Breakage / Lost</legend>
-                            <a href="<?php echo site_url('transaksi1/spoiled/add') ?>" class="btn btn-primary"> Add New</a>
+                            <legend class="font-weight-semibold"><i class="icon-list mr-2"></i>List Stock Opname</legend>
+                            <a href="<?php echo site_url('transaksi1/stock/add') ?>" class="btn btn-primary"> Add New</a>
                             <input type="button" value="Delete" class="btn btn-danger" id="deleteRecord"> 
                             <input type="button" value="Export To Excel" class="btn btn-success" id="btnExpExcel"> 
                         </div>
@@ -74,9 +74,13 @@
                                                 <th style="text-align: center"><input type="checkbox" name="checkall" id="checkall"></th>
                                                 <th style="text-align: center">Action</th>
                                                 <th style="text-align: center">ID</th>
-                                                <th style="text-align: center">Spoiled No</th>
-                                                <th style="text-align: center">Posting Date</th>
+                                                <th style="text-align: center">Stock Opname No</th>
+                                                <th style="text-align: center">Created Date</th>
                                                 <th style="text-align: center">Status</th>
+                                                <th style="text-align: center">Created By</th>
+                                                <th style="text-align: center">Approved by</th>
+                                                <th style="text-align: center">Last Modified</th>
+                                                <th style="text-align: center">Log</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -94,13 +98,10 @@
         <?php  $this->load->view("_template/js.php")?>
         <script>
             $(document).ready(function(){
-                $('#fromDate').datepicker();
-                $('#toDate').datepicker();
-
                 dataTable = $('#tableWhole').DataTable({
                     "ordering":false,  "paging": true, "searching":true,
                     "ajax": {
-                        "url":"<?php echo site_url('transaksi1/spoiled/showAllData');?>",
+                        "url":"<?php echo site_url('transaksi1/stock/showAllData');?>",
                         "type":"POST"
                     },
                     "columns": [
@@ -109,15 +110,19 @@
                             return rr;
                         }},
                         {"data":"action", "className":"dt-center", render:function(data, type, row, meta){
-                                rr = `<a href='<?php echo site_url('transaksi1/spoiled/edit')?>' ><i class='icon-file-plus2' title="Edit"></i></a>&nbsp;
+                                rr = `<a href='<?php echo site_url('transaksi1/stock/edit')?>' ><i class='icon-file-plus2' title="Edit"></i></a>&nbsp;
                                         <a href='#' ><i class='icon-printer' title="Print"></i></a>&nbsp;
-                                        <a onClick="deleteConfirm('<?php echo site_url('transaksi1/spoiled/delete')?>')" href="#!"><i class='icon-cross2' title="Delete"></i></a>`;
+                                        <a onClick="deleteConfirm('<?php echo site_url('transaksi1/stock/delete')?>')" href="#!"><i class='icon-cross2' title="Delete"></i></a>`;
                                 return rr;
                         }},
                         {"data":"id"},
                         {"data":"date"},
                         {"data":"item_no"},
-                        {"data":"item_description"}
+                        {"data":"item_description"},
+                        {"data":"createdBy"},
+                        {"data":"approvedBy"},
+                        {"data":"lastModified"},
+                        {"data":"log"}
                     ]
                 });
 
