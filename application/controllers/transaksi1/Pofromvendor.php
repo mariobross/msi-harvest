@@ -14,6 +14,119 @@ class Pofromvendor extends CI_Controller
         $this->load->view('transaksi1/eksternal/pofromvendor/list_view');
     }
 	
+	public function add()
+    {
+        $this->load->view('transaksi1/eksternal/pofromvendor/add_new');
+    }
+	
+	public function showListData(){
+        $dt= array(
+            array(
+                "no" => "1675",
+                "action" => "1675",
+                "id" => "1675",
+                "gr_no" => "13270",
+                "po_no" => "10452",
+                "vendor_code"=>"AT.TD01A0019",
+                "vendor_name"=> "Artfreshindo",
+                "delivery_date" => "07-05-2018",
+                "posting_date" => "18-05-2018",
+                "status"=> "Approved",
+                "created_by"=> "Admin Outlet Bintaro (AT)",
+                "approved_by" => "Admin Outlet Bintaro (AT)",
+                "last_modified"=>"2018-06-08 16:27:42",
+                "log"=> "Integrated"
+            ),
+			array(
+                "no" => "1675",
+                "action" => "1675",
+                "id" => "1675",
+                "gr_no" => "13270",
+                "po_no" => "10452",
+                "vendor_code"=>"AT.TD01A0019",
+                "vendor_name"=> "Artfreshindo",
+                "delivery_date" => "07-05-2018",
+                "posting_date" => "18-05-2018",
+                "status"=> "Approved",
+                "created_by"=> "Admin Outlet Bintaro (AT)",
+                "approved_by" => "Admin Outlet Bintaro (AT)",
+                "last_modified"=>"2018-06-08 16:27:42",
+                "log"=> "Integrated"
+            ),
+			array(
+                "no" => "1675",
+                "action" => "1675",
+                "id" => "1675",
+                "gr_no" => "13270",
+                "po_no" => "10452",
+                "vendor_code"=>"AT.TD01A0019",
+                "vendor_name"=> "Artfreshindo",
+                "delivery_date" => "07-05-2018",
+                "posting_date" => "18-05-2018",
+                "status"=> "Approved",
+                "created_by"=> "Admin Outlet Bintaro (AT)",
+                "approved_by" => "Admin Outlet Bintaro (AT)",
+                "last_modified"=>"2018-06-08 16:27:42",
+                "log"=> "Integrated"
+            ),
+			array(
+                "no" => "1675",
+                "action" => "1675",
+                "id" => "1675",
+                "gr_no" => "13270",
+                "po_no" => "10452",
+                "vendor_code"=>"AT.TD01A0019",
+                "vendor_name"=> "Artfreshindo",
+                "delivery_date" => "07-05-2018",
+                "posting_date" => "18-05-2018",
+                "status"=> "Approved",
+                "created_by"=> "Admin Outlet Bintaro (AT)",
+                "approved_by" => "Admin Outlet Bintaro (AT)",
+                "last_modified"=>"2018-06-08 16:27:42",
+                "log"=> "Integrated"
+            ),
+			array(
+                "no" => "1675",
+                "action" => "1675",
+                "id" => "1675",
+                "gr_no" => "13270",
+                "po_no" => "10452",
+                "vendor_code"=>"AT.TD01A0019",
+                "vendor_name"=> "Artfreshindo",
+                "delivery_date" => "07-05-2018",
+                "posting_date" => "18-05-2018",
+                "status"=> "Approved",
+                "created_by"=> "Admin Outlet Bintaro (AT)",
+                "approved_by" => "Admin Outlet Bintaro (AT)",
+                "last_modified"=>"2018-06-08 16:27:42",
+                "log"=> "Integrated"
+            ),
+			array(
+                "no" => "1675",
+                "action" => "1675",
+                "id" => "1675",
+                "gr_no" => "13270",
+                "po_no" => "10452",
+                "vendor_code"=>"AT.TD01A0019",
+                "vendor_name"=> "Artfreshindo",
+                "delivery_date" => "07-05-2018",
+                "posting_date" => "18-05-2018",
+                "status"=> "Approved",
+                "created_by"=> "Admin Outlet Bintaro (AT)",
+                "approved_by" => "Admin Outlet Bintaro (AT)",
+                "last_modified"=>"2018-06-08 16:27:42",
+                "log"=> "Integrated"
+            ),
+			
+         ); 
+ 
+         $data = [
+             "data"=> $dt
+         ];
+         
+         echo json_encode($data);
+     }
+	
 	public function showAllData(){
        $dt= array(
            array(
