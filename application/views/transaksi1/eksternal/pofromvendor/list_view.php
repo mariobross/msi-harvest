@@ -11,172 +11,180 @@
                 <!-- <?php  $this->load->view("_template/breadcrumb.php")?> -->
 				<div class="content">
                     <div class="card">
-                        <div class="card-body">
-                            <form action="#" method="POST">
-                                <div class="row">
-                                    <div class="col-md-12">
-                                        <fieldset>
-                                            <legend class="font-weight-semibold"><i class="icon-reading mr-2"></i>Good Receipt PO from Vendor</legend>
-
-                                            <div class="form-group row">
-												<label class="col-lg-3 col-form-label"><b>Data SAP per Tanggal/Jam</b></label>
-												<div class="col-lg-9"><b>Belum ada data</b>
-												</div>
-											</div>
-											
-											<div class="form-group row">
-												<label class="col-lg-3 col-form-label">Purchase Order Number</label>
-												<div class="col-lg-9">
-													<u>Anda memiliki 1 Nomor PO yang harus segera diterima dan disetujui.</u>
-												</div>
-											</div>
-											
-											<div class="form-group row">
-												<label class="col-lg-3 col-form-label"></label>
-												<div class="col-lg-9">
-													<select class="form-control form-control-select2" data-live-search="true">
-														<option value="">40471 - PO2019100000815( PR ->1709 )</option>
-														<option value="">40472 - PO2019100840815( PR ->1710 )</option>
-														<option value="">40473 - PO2019100984815( PR ->1711 )</option>
-														<option value="">40474 - PO2019100000815( PR ->1712 )</option>
-														<option value="">40475 - PO2019143300815( PR ->1713 )</option>
-													</select>
-												</div>
-											</div>
-											
-											<div class="form-group row">
-												<label class="col-lg-3 col-form-label">Vendor Code</label>
-												<div class="col-lg-9">
-													<b>TH.NT2P1363</b>
-												</div>
-											</div>
-											
-											<div class="form-group row">
-												<label class="col-lg-3 col-form-label">Vendor Name</label>
-												<div class="col-lg-9">
-													<b>Pijar Mas, CV</b>
-												</div>
-											</div>
-											
-											<div class="form-group row">
-												<label class="col-lg-3 col-form-label">Delivery Date</label>
-												<div class="col-lg-9">
-													<b>07-10-2019</b>
-												</div>
-											</div>
-											
-											<div class="form-group row">
-												<label class="col-lg-3 col-form-label">Goods Receipt Number</label>
-												<div class="col-lg-9">
-													<i>(Auto Number after Posting to SAP)</i>
-												</div>
-											</div>
-											
-											<div class="form-group row">
-												<label class="col-lg-3 col-form-label">Outlet</label>
-												<div class="col-lg-9">
-													WMSICKST - Cikarang
-												</div>
-											</div>
-											
-											<div class="form-group row">
-												<label class="col-lg-3 col-form-label">Storage Location</label>
-												<div class="col-lg-9">
-													WMSICKST - MSI Cikarang
-												</div>
-											</div>
-											
-											<div class="form-group row">
-												<label class="col-lg-3 col-form-label">Status</label>
-												<div class="col-lg-9">
-													<b>Not Approved</b>
-												</div>
-											</div>
-											
-											<div class="form-group row">
-												<label class="col-lg-3 col-form-label">Material Group</label>
-												<div class="col-lg-9">
-													<select class="form-control form-control-select2" data-live-search="true">
-														<option value="">All</option>
-														<option value="">RM MAT Office</option>
-														<option value="">Exp. Stationary</option>
-													</select>
-												</div>
-											</div>
-											
-											<div class="form-group row">
-												<label class="col-lg-3 col-form-label">Posting Date</label>
-												<div class="col-lg-9">
-													<input type="text" value="07-10-2019" class="form-control">
-												</div>
-											</div>
-											<div class="form-group row">
-												<div class="col-lg-12 text-right">
-													<div class="text-right">
-														<button type="submit" class="btn btn-primary">Save <i class="icon-pencil5 ml-2"></i></button>
-														<button type="submit" class="btn btn-success">Approve <i class="icon-paperplane ml-2"></i></button>
-													</div>
-												</div>
-                                            </div>
-											
-                                        </fieldset>
-                                    </div>
-								</div>	
-                            </form>
-                        </div>
-                    </div>                    
-					
-					<div class="card">
                         <div class="card-header">
-                            <legend class="font-weight-semibold"><i class="icon-list mr-2"></i>List Manajemen Pengguna</legend>
+                            <legend class="font-weight-semibold"><i class="icon-search4 mr-2"></i>Search of Good Receive PO from Vendor</legend>  
                         </div>
                         <div class="card-body">
-                            <table id="table-manajemen" class="table table-striped " style="width:100%">
-                                <thead>
-                                    <tr>
-                                        <th style="text-align: left">*</th>
-                                        <th>Material No</th>
-                                        <th>Material Desc</th>
-                                        <th>Outstanding Qty</th>
-                                        <th>Gr Qty</th>
-                                        <th>Uom</th>
-                                        <th>QC</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                </tbody>
-                            </table>
+                        <form action="#" method="POST">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group row">
+                                        <label class="col-lg-3 col-form-label">Dari Tanggal</label>
+                                        <div class="col-lg-3 input-group date">
+                                            <input type="text" class="form-control" id="fromDate">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text" id="basic-addon1">
+                                                    <i class="icon-calendar"></i>
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <label class="col-lg-2 col-form-label">Sampai Tanggal</label>
+                                        <div class="col-lg-4 input-group date">
+                                            <input type="text" class="form-control" id="toDate">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text" id="basic-addon1">
+                                                    <i class="icon-calendar"></i>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+                                    <div class="form-group row">
+                                        <label class="col-lg-3 col-form-label">Status</label>
+                                        <div class="col-lg-9">
+                                            <select class="form-control form-control-select2" data-live-search="true">
+                                                <option value="">none selected</option>
+                                                <option value="approved">Approved</option>
+                                                <option value="notapproved">Not Approved</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="text-right">
+                                        <button type="submit" class="btn btn-primary">Search<i class="icon-search4  ml-2"></i></button>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                        </div>                        
+                    </div> 
+                    <div class="card">
+                        <div class="card-header">
+                            <legend class="font-weight-semibold"><i class="icon-list mr-2"></i>List Good Receive PO from Vendor</legend>
+                            <a href="<?php echo site_url('transaksi1/pofromvendor/add') ?>" class="btn btn-primary"> Add New</a>
+                            <input type="button" value="Delete" class="btn btn-danger" id="deleteRecord">  
                         </div>
-                    </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-12" style="overflow:auto">
+                                    <table id="tableWhole" class="table table-striped" style="widht:100%" >
+                                        <thead>
+                                            <tr>
+                                                <th style="text-align: left"><input type="checkbox" name="checkall" id="checkall"></th>
+                                                <th style="text-align: center">Action</th>
+                                                <th style="text-align: center">ID</th>
+                                                <th style="text-align: center">Good Receipt No</th>
+                                                <th style="text-align: center">Purchase Order No</th>
+                                                <th style="text-align: center">Vendor Code</th>
+                                                <th style="text-align: center">Vendor Name</th>
+                                                <th style="text-align: center">Delivery Date</th>
+                                                <th style="text-align: center">Posting Date</th>
+                                                <th style="text-align: center">Status</th>
+                                                <th style="text-align: center">Created By</th>
+                                                <th style="text-align: center">Approved By</th>
+                                                <th style="text-align: center">Last Modified</th>
+                                                <th style="text-align: center">Log</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        </div>                   
 				</div>
 				<?php  $this->load->view("_template/footer.php")?>
 			</div>
 		</div>
-		<?php  $this->load->view("_template/js.php")?>
-		<script>
+        <?php  $this->load->view("_template/modal_delete.php")?>
+        <?php  $this->load->view("_template/js.php")?>
+        <script>
             $(document).ready(function(){
-                $('#table-manajemen').DataTable({
+                $('#fromDate').datepicker();
+                $('#toDate').datepicker();
+                dataTable = $('#tableWhole').DataTable({
                     "ordering":false,  "paging": true, "searching":true,
                     "ajax": {
-                        "url":"<?php echo site_url('transaksi1/pofromvendor/showAllData');?>",
+                        "url":"<?php echo site_url('transaksi1/pofromvendor/showListData');?>",
                         "type":"POST"
                     },
                     "columns": [
-                        {"data":"no"},
-                        {"data":"material_no"},
-                        {"data":"material_desc"},
-                        {"data":"quantity"},
-						{"data":"gr_qty", "className":"dt-center", render:function(data, type, row, meta){
-                            rr=`<input type="text" class="form-control" value="${data}">`;
+                        {"data":"no", "className":"dt-center", render:function(data, type, row, meta){
+                            rr=`<input type="checkbox" class="check_delete" id="chk_${data}" value="${data}" onclick="checkcheckbox();">`;
                             return rr;
                         }},
-                        {"data":"uom"},
-						{"data":"qc", "className":"dt-center", render:function(data, type, row, meta){
-                            rr=`<input type="text" class="form-control" id="chk_${data}" value="">`;
-                            return rr;
+                        {"data":"action", "className":"dt-center", render:function(data, type, row, meta){
+                            rr = `<div style="width:100px">
+                                        <a href='<?php echo site_url('transaksi1/purchase_request/edit')?>' ><i class='icon-file-plus2' title="Edit"></i></a>&nbsp;
+                                    </div>`;
+                                        return rr;
                         }},
+                        {"data":"id"},
+                        {"data":"gr_no"},
+                        {"data":"po_no"},
+                        {"data":"vendor_code"},
+                        {"data":"vendor_name"},
+                        {"data":"delivery_date"},
+                        {"data":"posting_date"},
+                        {"data":"status"},
+                        {"data":"created_by"},
+                        {"data":"approved_by"},
+                        {"data":"last_modified"},
+                        {"data":"log"}
                     ]
                 });
+                // untuk check all
+                $("#checkall").click(function(){
+                    if($(this).is(':checked')){
+                        $(".check_delete").prop('checked', true);
+                    }else{
+                        $(".check_delete").prop('checked', false);
+                    }
+                });
+                // end check all
+                $("#deleteRecord").click(function(){
+                    let deleteidArr=[];
+                    $("input:checkbox[class=check_delete]:checked").each(function(){
+                        deleteidArr.push($(this).val());
+                    })
+                    // mengecek ckeckbox tercheck atau tidak
+                    if(deleteidArr.length > 0){
+                        var confirmDelete = confirm("Do you really want to Delete records?");
+                        if(confirmDelete == true){
+                            $.ajax({
+                                url:"", //masukan url untuk delete
+                                type: "post",
+                                data:{deleteArr: deleteidArr},
+                                success:function(res) {
+                                    dataTable.ajax.reload();
+                                }
+                            });
+                        }
+                    }
+                });
+                // ini adalah function versi ES6
+                checkcheckbox = () => {
+                    
+                    const lengthcheck = $(".check_delete").length;
+                    
+                    let totalChecked = 0;
+                    $(".check_delete").each(function(){
+                        if($(this).is(":checked")){
+                            totalChecked += 1;
+                        }
+                    });
+                    if(totalChecked == lengthcheck){
+                        $("#checkall").prop('checked', true);
+                    }else{
+                        $("#checkall").prop('checked', false);
+                    }
+                }
+                deleteConfirm = (url)=>{
+                    $('#btn-delete').attr('href', url);
+	                $('#deleteModal').modal();
+                }
             });
         
         </script>
