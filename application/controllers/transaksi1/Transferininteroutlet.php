@@ -11,7 +11,9 @@ class Transferininteroutlet extends CI_Controller
 
     public function index()
     {
+
         $this->load->view('transaksi1/eksternal/transferininteroutlet/list_view');
+
     }
 	
 	public function showAllData(){
@@ -56,7 +58,6 @@ class Transferininteroutlet extends CI_Controller
             "val"=> "",
             "variance"=> "0.00",
            ),
-		   
 		   
         ); 
 
