@@ -17,64 +17,69 @@
                                     <div class="col-md-12">
                                         <fieldset>
                                             <legend class="font-weight-semibold"><i class="icon-reading mr-2"></i>Transfer Out Inter Outlet</legend>
-
-                                            <div class="form-group row">
-												<label class="col-lg-3 col-form-label"><b>Data SAP per Tanggal/Jam</b></label>
-												<div class="col-lg-9"><b>Data tidak ditemukan.</b>
-												</div>
-											</div>
 											
 											<div class="form-group row">
-												<label class="col-lg-3 col-form-label">Store Room Request (SR) Number</label>
+												<label class="col-lg-3 col-form-label"><i>SR Number — Transfer In Inter Outlet</i></label>
 												<div class="col-lg-9">
 													<select class="form-control">
-														<option value="94897" selected>94897 - The Harvest Harapan Indah Bekasi</option>
+														<option value="94897" selected>94897</option>
 													</select>
-													<a href="#">Pilih ulang SR No dan Jenis Material</a>
+													<a href="#">Pilih ulang SR Number</a>
 												</div>
 											</div>
 											
 											<div class="form-group row">
-												<label class="col-lg-3 col-form-label">Transfer Slip Number</label>
-												<div class="col-lg-9"><b><i>(Auto Number after Posting to SAP).</i></b>
+												<label class="col-lg-3 col-form-label">Transfer Out No</label>
+												<div class="col-lg-9"><b>200352</b>
 												</div>
 											</div>
 											
 											<div class="form-group row">
-												<label class="col-lg-3 col-form-label">Outlet From</label>
+												<label class="col-lg-3 col-form-label">Transfer In Number</label>
 												<div class="col-lg-9">
-													WMSICKST - Cikarang
+													<i>(Auto Number after Posting to SAP)</i>
+												</div>
+											</div>
+											
+											<div class="form-group row">
+												<label class="col-lg-3 col-form-label">Outlet</label>
+												<div class="col-lg-9">
+													WDFGBNST - Bintaro
 												</div>
 											</div>
 											
 											<div class="form-group row">
 												<label class="col-lg-3 col-form-label">Storage Transit Location</label>
 												<div class="col-lg-9">
-													WMSICKST - MSI Cikarang
+													WDFGBNST - Bintaro
 												</div>
 											</div>
 											
 											<div class="form-group row">
-												<label class="col-lg-3 col-form-label">Request To</label>
+												<label class="col-lg-3 col-form-label">Delivery Outlet</label>
 												<div class="col-lg-9">
-													T.WMSIHI - Transit The Harvest Harapan Indah Bekasi
+													<b>WDFGAMPM - Ampera - PM</b>
 												</div>
 											</div>
 											
 											<div class="form-group row">
-												<label class="col-lg-3 col-form-label">Material Group</label>
+												<label class="col-lg-3 col-form-label">Delivery Date</label>
 												<div class="col-lg-9">
-													<select class="form-control">
-														<option value="all" selected>All</option>
-														<option value="rmbeverage">RM Beverage</option>
-													</select>
+													<b>16-10-2019</b>
+												</div>
+											</div>
+											
+											<div class="form-group row">
+												<label class="col-lg-3 col-form-label">Status</label>
+												<div class="col-lg-9">
+													<b>Not Approved</b>
 												</div>
 											</div>
 											
 											<div class="form-group row">
 												<label class="col-lg-3 col-form-label">Posting Date</label>
 												<div class="col-lg-9">
-													16-10-2019 
+													<input type="text" class="form-control" value="17-10-2019">
 												</div>
 											</div>
 											
@@ -90,31 +95,26 @@
                                         </fieldset>
                                     </div>
 								</div>	
+								<br>
+								
+								<table id="table-transferininteroutlet" class="table table-striped " style="width:100%">
+									<thead>
+										<tr>
+											<th style="text-align: left">*</th>
+											<th>Material No</th>
+											<th>Material Desc</th>
+											<th>Good Issue Qty</th>
+											<th>Actual GR. Qty</th>
+											<th>Uom</th>
+											<th>Val</th>
+											<th>Variance</th>
+										</tr>
+									</thead>
+									<tbody>
+									</tbody>
+								</table>
                             </form>
-                        </div>
-                    </div>                    
-					
-					<div class="card">
-                        <div class="card-header">
-                            <legend class="font-weight-semibold"><i class="icon-list mr-2"></i>List Manajemen Pengguna</legend>
-                        </div>
-                        <div class="card-body">
-                            <table id="table-manajemen" class="table table-striped " style="width:100%">
-                                <thead>
-                                    <tr>
-                                        <th style="text-align: left">*</th>
-                                        <th>Material No</th>
-                                        <th>Material Desc</th>
-                                        <th>In WHS Quantity</th>
-                                        <th>Outstanding Qty</th>
-                                        <th>Quantity</th>
-                                        <th>Uom Reg.</th>
-                                        <th>Uom</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                </tbody>
-                            </table>
+                        
                         </div>
                     </div>
 				</div>
@@ -123,30 +123,34 @@
 		</div>
 		<?php  $this->load->view("_template/js.php")?>
 		<script>
-            /*$(document).ready(function(){
-                $('#table-manajemen').DataTable({
+            $(document).ready(function(){
+                $('#table-transferininteroutlet').DataTable({
                     "ordering":false,  "paging": true, "searching":true,
                     "ajax": {
-                        "url":"<?php echo site_url('transaksi1/pofromvendor/showData');?>",
+                        "url":"<?php echo site_url('transaksi1/transferininteroutlet/showAllData');?>",
                         "type":"POST"
                     },
                     "columns": [
                         {"data":"no"},
                         {"data":"material_no"},
                         {"data":"material_desc"},
-                        {"data":"quantity"},
+                        {"data":"gi_qty"},
 						{"data":"gr_qty", "className":"dt-center", render:function(data, type, row, meta){
                             rr=`<input type="text" class="form-control" value="${data}">`;
                             return rr;
                         }},
                         {"data":"uom"},
-						{"data":"qc", "className":"dt-center", render:function(data, type, row, meta){
-                            rr=`<input type="text" class="form-control" id="chk_${data}" value="">`;
+						{"data":"val", "className":"dt-center", render:function(data, type, row, meta){
+                            rr=`<select class="form-control"><option value="variance" selected>Variance</option><option value="rmbeverage">RM Beverage</option></select>`;
+                            return rr;
+                        }},
+						{"data":"variance", "className":"dt-center", render:function(data, type, row, meta){
+                            rr=`<input type="text" class="form-control" value="${data}">`;
                             return rr;
                         }},
                     ]
                 });
-            });*/
+            });
         
         </script>
 	</body>
