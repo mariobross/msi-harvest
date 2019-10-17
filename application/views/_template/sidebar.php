@@ -39,9 +39,12 @@
 								<li class="nav-item"><a href="<?php echo base_url('/transaksi1/pofromvendor');?>" class="nav-link">In PO from Vendor</a></li>
 								<li class="nav-item"><a href="<?php echo base_url('/transaksi1/grfromkitchensentul');?>" class="nav-link">Good Receipt from Central Kitchen Sentul</a></li>
 								<li class="nav-item"><a href="<?php echo base_url('/transaksi1/transferoutinteroutlet');?>" class="nav-link">Transfer Out Inter Outlet</a></li>
-								<li class="nav-item"><a href="#" class="nav-link">Transfer In Inter Outlet</a></li>
+
+								<li class="nav-item"><a href="<?php echo base_url('/transaksi1/transferininteroutlet');?>" class="nav-link">Transfer In Inter Outlet</a></li>
+								
 								<li class="nav-item"><a href="<?php echo base_url('/transaksi1/purchase_request');?>" class="nav-link">Purchase Request (PR)</a></li>
 								<li class="nav-item"><a href="<?php echo site_url('/transaksi1/returnout');?>" class="nav-link">Retur Out</a></li>
+
 								<li class="nav-item"><a href="../seed/sidebar_right.html" class="nav-link">Retur In</a></li>
 								<li class="nav-item"><a href="<?php echo site_url('/transaksi1/goodissue');?>" class="nav-link">Good Issue</a></li>
 								<li class="nav-item"><a href="<?php echo site_url('/transaksi1/grnopo');?>" class="nav-link">Good Receipt Non PO</a></li>
