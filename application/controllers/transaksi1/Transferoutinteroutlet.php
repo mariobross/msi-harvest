@@ -14,6 +14,16 @@ class Transferoutinteroutlet extends CI_Controller
         $this->load->view('transaksi1/eksternal/transferoutinteroutlet/list_view');
     }
 	
+	public function add()
+    {
+        $this->load->view('transaksi1/eksternal/transferoutinteroutlet/add_new');
+    }
+	
+	public function edit()
+    {
+        $this->load->view('transaksi1/eksternal/transferoutinteroutlet/edit_view');
+    }
+	
 	public function showAllData(){
        $dt= array(
            array(
@@ -60,6 +70,88 @@ class Transferoutinteroutlet extends CI_Controller
             "gr_qty"=> "1.000",
             "uom"=> "pcs",
             "qc"=> ""
+           ),
+		   
+        ); 
+
+        $data = [
+            "data"=> $dt
+        ];
+        
+        echo json_encode($data);
+    }
+	
+	public function showListData(){
+       $dt= array(
+           array(
+            "no" => "4711",
+			"action" => "4711",
+			"id" => "4711",
+			"tf_slip_number" => "8649",
+			"sr_req_number"=>"6329",
+			"posting_date"=> "03-05-2018",
+			"tf_out_to_outlet"=> "WDFGCPST-Ciputat",
+			"status" => "Approved",
+			"created_by"=>"Admin Outlet Bintaro (AT)",
+			"approved_by"=> "Admin Outlet Bintaro (AT)",
+			"last_modified" => "2018-05-31 08:16:41",
+			"log"=> "Integrated"
+           ),
+		   array(
+            "no" => "4711",
+			"action" => "4711",
+			"id" => "4711",
+			"tf_slip_number" => "8649",
+			"sr_req_number"=>"6329",
+			"posting_date"=> "03-05-2018",
+			"tf_out_to_outlet"=> "WDFGCPST-Ciputat",
+			"status" => "Approved",
+			"created_by"=>"Admin Outlet Bintaro (AT)",
+			"approved_by"=> "Admin Outlet Bintaro (AT)",
+			"last_modified" => "2018-05-31 08:16:41",
+			"log"=> "Integrated"
+           ),
+		   array(
+            "no" => "4711",
+			"action" => "4711",
+			"id" => "4711",
+			"tf_slip_number" => "8649",
+			"sr_req_number"=>"6329",
+			"posting_date"=> "03-05-2018",
+			"tf_out_to_outlet"=> "WDFGCPST-Ciputat",
+			"status" => "Approved",
+			"created_by"=>"Admin Outlet Bintaro (AT)",
+			"approved_by"=> "Admin Outlet Bintaro (AT)",
+			"last_modified" => "2018-05-31 08:16:41",
+			"log"=> "Integrated"
+           ),
+		   array(
+            "no" => "4711",
+			"action" => "4711",
+			"id" => "4711",
+			"tf_slip_number" => "8649",
+			"sr_req_number"=>"6329",
+			"posting_date"=> "03-05-2018",
+			"tf_out_to_outlet"=> "WDFGCPST-Ciputat",
+			"status" => "Approved",
+			"created_by"=>"Admin Outlet Bintaro (AT)",
+			"approved_by"=> "Admin Outlet Bintaro (AT)",
+			"last_modified" => "2018-05-31 08:16:41",
+			"log"=> "Integrated"
+           ),
+		   array(
+            "no" => "4711",
+			"action" => "4711",
+			"id" => "4711",
+			"tf_slip_number" => "8649",
+			"sr_req_number"=>"6329",
+			"posting_date"=> "03-05-2018",
+			"tf_out_to_outlet"=> "WDFGCPST-Ciputat",
+			"status" => "Approved",
+			"created_by"=>"Admin Outlet Bintaro (AT)",
+			"approved_by"=> "Admin Outlet Bintaro (AT)",
+			"last_modified" => "2018-05-31 08:16:41",
+			"log"=> "Integrated"
            ),
 		   
         ); 
