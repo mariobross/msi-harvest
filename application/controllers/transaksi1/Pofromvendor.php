@@ -18,6 +18,11 @@ class Pofromvendor extends CI_Controller
         $this->load->view('transaksi1/eksternal/pofromvendor/add_new');
     }
 	
+	public function edit()
+    {
+        $this->load->view('transaksi1/eksternal/pofromvendor/edit_view');
+    }
+	
 	public function showListData(){
         $dt= array(
             array(
@@ -135,7 +140,8 @@ class Pofromvendor extends CI_Controller
             "quantity"=> "1.0000",
             "gr_qty"=> "1.000",
             "uom"=> "pcs",
-            "qc"=> ""
+            "qc"=> "",
+            "cancel"=> ""
            ),
 		   array(
             "no" => "2",
@@ -145,6 +151,7 @@ class Pofromvendor extends CI_Controller
             "gr_qty"=> "1.000",
             "uom"=> "pcs",
             "qc"=> "",
+			"cancel"=> ""
            ),
 		   array(
             "no" => "3",
@@ -154,6 +161,7 @@ class Pofromvendor extends CI_Controller
             "gr_qty"=> "1.000",
             "uom"=> "pcs",
             "qc"=> "",
+			"cancel"=> ""
            ),
 		   array(
             "no" => "4",
@@ -162,7 +170,8 @@ class Pofromvendor extends CI_Controller
             "quantity"=> "4.0000",
             "gr_qty"=> "4.000",
             "uom"=> "pcs",
-            "qc"=> ""
+            "qc"=> "",
+			"cancel"=> ""
            ),
 		   array(
             "no" => "5",
@@ -171,7 +180,8 @@ class Pofromvendor extends CI_Controller
             "quantity"=> "1.0000",
             "gr_qty"=> "1.000",
             "uom"=> "pcs",
-            "qc"=> ""
+            "qc"=> "",
+			"cancel"=> ""
            ),
 		   
         ); 
