@@ -27,56 +27,56 @@
 											<div class="form-group row">
 												<label class="col-lg-3 col-form-label">Store Room Request (SR) Number</label>
 												<div class="col-lg-9">
-													<b>94897 </b><a href="#">Pilih ulang SR No dan Jenis Material</a>
+													<input type="text" class="form-control" readonly="" value="94897">
+													<a href="#">Pilih ulang SR No dan Jenis Material</a>
 												</div>
 											</div>
 											
 											<div class="form-group row">
 												<label class="col-lg-3 col-form-label">Transfer Slip Number</label>
-												<div class="col-lg-9"><b><i>(Auto Number after Posting to SAP).</i></b>
+												<div class="col-lg-9"><input type="text" class="form-control" readonly="" value="(Auto Number after Posting to SAP).">
 												</div>
 											</div>
 											
 											<div class="form-group row">
 												<label class="col-lg-3 col-form-label">Outlet From</label>
 												<div class="col-lg-9">
-													WMSICKST - Cikarang
+													<input type="text" class="form-control" readonly="" value="WMSICKST - Cikarang">
 												</div>
 											</div>
 											
 											<div class="form-group row">
 												<label class="col-lg-3 col-form-label">Storage Transit Location</label>
 												<div class="col-lg-9">
-													WMSICKST - MSI Cikarang
+													<input type="text" class="form-control" readonly="" value="WMSICKST - MSI Cikarang">
 												</div>
 											</div>
 											
 											<div class="form-group row">
 												<label class="col-lg-3 col-form-label">Request To</label>
 												<div class="col-lg-9">
-													T.WMSIHI - Transit The Harvest Harapan Indah Bekasi
+													<input type="text" class="form-control" readonly="" value="T.WMSIHI - Transit The Harvest Harapan Indah Bekasi">
 												</div>
 											</div>
 											
 											<div class="form-group row">
 												<label class="col-lg-3 col-form-label">Material Group</label>
 												<div class="col-lg-9">
-													<b>All</b>
+													<input type="text" class="form-control" readonly="" value="All">
 												</div>
 											</div>
 											
 											<div class="form-group row">
 												<label class="col-lg-3 col-form-label">Posting Date</label>
 												<div class="col-lg-9">
-													16-10-2019 
+													<input type="text" class="form-control" readonly="" value="16-10-2019"> 
 												</div>
 											</div>
 											
 											<div class="form-group row">
 												<div class="col-lg-12 text-right">
 													<div class="text-right">
-														<button type="submit" class="btn btn-primary">Save <i class="icon-pencil5 ml-2"></i></button>
-														<button type="submit" class="btn btn-success">Approve <i class="icon-paperplane ml-2"></i></button>
+														<button type="submit" class="btn btn-success">Cancel <i class="icon-paperplane ml-2"></i></button>
 													</div>
 												</div>
                                             </div>
@@ -104,6 +104,7 @@
                                         <th>Quantity</th>
                                         <th>Uom Reg.</th>
                                         <th>Uom</th>
+                                        <th>Cancel</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -117,30 +118,29 @@
 		</div>
 		<?php  $this->load->view("_template/js.php")?>
 		<script>
-            /*$(document).ready(function(){
+            $(document).ready(function(){
                 $('#table-manajemen').DataTable({
                     "ordering":false,  "paging": true, "searching":true,
                     "ajax": {
-                        "url":"<?php echo site_url('transaksi1/pofromvendor/showData');?>",
+                        "url":"<?php echo site_url('transaksi1/transferoutinteroutlet/showAllData');?>",
                         "type":"POST"
                     },
                     "columns": [
                         {"data":"no"},
                         {"data":"material_no"},
                         {"data":"material_desc"},
+                        {"data":"whs_qty"},
                         {"data":"quantity"},
-						{"data":"gr_qty", "className":"dt-center", render:function(data, type, row, meta){
-                            rr=`<input type="text" class="form-control" value="${data}">`;
-                            return rr;
-                        }},
+						{"data":"gr_qty"},
+                        {"data":"uom_reg"},
                         {"data":"uom"},
-						{"data":"qc", "className":"dt-center", render:function(data, type, row, meta){
-                            rr=`<input type="text" class="form-control" id="chk_${data}" value="">`;
+						{"data":"cancel", "className":"dt-center", render:function(data, type, row, meta){
+                            rr=`<input type="checkbox" value="">`;
                             return rr;
                         }},
                     ]
                 });
-            });*/
+            });
         
         </script>
 	</body>
