@@ -23,15 +23,7 @@
 
 				<!-- Main -->
 				<li class="nav-item-header"><div class="text-uppercase font-size-xs line-height-xs">Main</div> <i class="icon-menu" title="Main"></i></li>
-				<li class="nav-item">
-					<a href="index.html" class="nav-link">
-						<i class="icon-home4"></i>
-						<span>
-							Home
-						</span>
-					</a>
-				</li>
-
+				
 				<li class="nav-item nav-item-submenu">
 					<a href="#" class="nav-link"><i class="icon-copy"></i> <span>Transaksi 1</span></a>
 					<ul class="nav nav-group-sub" data-submenu-title="Transaksi 1">
@@ -43,12 +35,7 @@
                 				<li class="nav-item"><a href="<?php echo base_url('/transaksi1/transferininteroutlet');?>" class="nav-link">Transfer In Inter Outlet</a></li>
 								<li class="nav-item"><a href="<?php echo base_url('/transaksi1/purchase_request');?>" class="nav-link">Purchase Request (PR)</a></li>
 								<li class="nav-item"><a href="<?php echo site_url('/transaksi1/returnout');?>" class="nav-link">Retur Out</a></li>
-<<<<<<< HEAD
-								<li class="nav-item"><a href="../seed/sidebar_right.html" class="nav-link">Retur In</a></li>
-=======
-
 								<li class="nav-item"><a href="<?php echo site_url('/transaksi1/returnin');?>" class="nav-link">Retur In</a></li>
->>>>>>> 4394ee0651f446f1b410bb2f314affa0ad9931b6
 								<li class="nav-item"><a href="<?php echo site_url('/transaksi1/goodissue');?>" class="nav-link">Good Issue</a></li>
 								<li class="nav-item"><a href="<?php echo site_url('/transaksi1/grnopo');?>" class="nav-link">Good Receipt Non PO</a></li>
 							</ul>
