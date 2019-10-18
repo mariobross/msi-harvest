@@ -26,7 +26,7 @@
 											
 											<div class="form-group row">
 												<label class="col-lg-3 col-form-label">ID Transaksi</label>
-												<div class="col-lg-9"></div>
+												<div class="col-lg-9"><input type="text" class="form-control" readonly=""></div>
 											</div>
 											
 											<div class="form-group row">
@@ -41,42 +41,42 @@
 											
 											<div class="form-group row">
 												<label class="col-lg-3 col-form-label">Goods Receipt Number</label>
-												<div class="col-lg-9"><b><i>(Auto Number after Posting to SAP)</i></b>
+												<div class="col-lg-9"><input type="text" class="form-control" readonly="" value="(Auto Number after Posting to SAP)">
 												</div>
 											</div>
 											
 											<div class="form-group row">
 												<label class="col-lg-3 col-form-label">Outlet</label>
 												<div class="col-lg-9">
-													<i>WDFGBNST - Bintaro</i>
+													<input type="text" class="form-control" readonly="" value="WDFGBNST - Bintaro">
 												</div>
 											</div>
 											
 											<div class="form-group row">
 												<label class="col-lg-3 col-form-label">Storage Transit Location</label>
 												<div class="col-lg-9">
-													WDFGBNST - Bintaro (T.WDFGBN)
+													<input type="text" class="form-control" readonly="" value="WDFGBNST - Bintaro (T.WDFGBN)">
 												</div>
 											</div>
 											
 											<div class="form-group row">
 												<label class="col-lg-3 col-form-label">Status</label>
 												<div class="col-lg-9">
-													<b>Not Approved</b>
+													<input type="text" class="form-control" readonly="" value="Not Approved">
 												</div>
 											</div>
 											
 											<div class="form-group row">
 												<label class="col-lg-3 col-form-label">Material Group</label>
 												<div class="col-lg-9">
-													<b>All</b>
+													<input type="text" class="form-control" readonly="" value="All">
 												</div>
 											</div>
 											
 											<div class="form-group row">
 												<label class="col-lg-3 col-form-label">Posting Date</label>
 												<div class="col-lg-9">
-													17-10-2019
+													<input type="text" class="form-control" readonly="" value="17-10-2019">
 												</div>
 											</div>
 											

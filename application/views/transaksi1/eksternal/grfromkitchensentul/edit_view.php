@@ -26,55 +26,42 @@
 											
 											<div class="form-group row">
 												<label class="col-lg-3 col-form-label">ID Transaksi</label>
-												<div class="col-lg-9"><b>1095</b></div>
+												<div class="col-lg-9"><input type="text" value="1095" class="form-control" readonly=""></div>
 											</div>
 											
 											<div class="form-group row">
 												<label class="col-lg-3 col-form-label">Transfer Slip Number</label>
-												<div class="col-lg-9">
-													<b>8968</b>
-												</div>
+												<div class="col-lg-9"><input type="text" value="8968" class="form-control" readonly=""></div>
 											</div>
 											
 											<div class="form-group row">
 												<label class="col-lg-3 col-form-label">Goods Receipt Number</label>
-												<div class="col-lg-9"><b>10128</b>
-												</div>
+												<div class="col-lg-9"><input type="text" value="10128" class="form-control" readonly=""></div>
 											</div>
 											
 											<div class="form-group row">
 												<label class="col-lg-3 col-form-label">Outlet</label>
-												<div class="col-lg-9">
-													WDFGBNST - Bintaro
-												</div>
+												<div class="col-lg-9"><input type="text" value="WDFGBNST - Bintaro" class="form-control" readonly=""></div>
 											</div>
 											
 											<div class="form-group row">
 												<label class="col-lg-3 col-form-label">Storage Transit Location</label>
-												<div class="col-lg-9">
-													WDFGBNST - Bintaro (T.WDFGBN)
-												</div>
+												<div class="col-lg-9"><input type="text" value="WDFGBNST - Bintaro (T.WDFGBN)" class="form-control" readonly=""></div>
 											</div>
 											
 											<div class="form-group row">
 												<label class="col-lg-3 col-form-label">Status</label>
-												<div class="col-lg-9">
-													<b>Approved</b>
-												</div>
+												<div class="col-lg-9"><input type="text" value="Approved" class="form-control" readonly=""></div>
 											</div>
 											
 											<div class="form-group row">
 												<label class="col-lg-3 col-form-label">Material Group</label>
-												<div class="col-lg-9">
-													<b>All</b>
-												</div>
+												<div class="col-lg-9"><input type="text" value="All" class="form-control" readonly=""></div>
 											</div>
 											
 											<div class="form-group row">
 												<label class="col-lg-3 col-form-label">Posting Date</label>
-												<div class="col-lg-9">
-													17-10-2019
-												</div>
+												<div class="col-lg-9"><input type="text" value="17-10-2019" class="form-control" readonly=""></div>
 											</div>
 											
 											<div class="form-group row">
