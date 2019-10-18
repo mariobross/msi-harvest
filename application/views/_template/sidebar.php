@@ -39,23 +39,25 @@
 								<li class="nav-item"><a href="<?php echo base_url('/transaksi1/pofromvendor');?>" class="nav-link">In PO from Vendor</a></li>
 								<li class="nav-item"><a href="<?php echo base_url('/transaksi1/grfromkitchensentul');?>" class="nav-link">Good Receipt from Central Kitchen Sentul</a></li>
 								<li class="nav-item"><a href="<?php echo base_url('/transaksi1/transferoutinteroutlet');?>" class="nav-link">Transfer Out Inter Outlet</a></li>
-								<li class="nav-item"><a href="<?php echo base_url('/transaksi1/transferininteroutlet');?>" class="nav-link">Transfer In Inter Outlet</a></li>
-								<li class="nav-item"><a href="<?php echo base_url('/msi/purchaserequest');?>" class="nav-link">Purchase Request (PR)</a></li>
-								<li class="nav-item"><a href="../seed/sidebar_right.html" class="nav-link">Retur Out</a></li>
+                <li class="nav-item"><a href="<?php echo base_url('/transaksi1/transferininteroutlet');?>" class="nav-link">Transfer In Inter Outlet</a></li>
+								
+								<li class="nav-item"><a href="<?php echo base_url('/transaksi1/purchase_request');?>" class="nav-link">Purchase Request (PR)</a></li>
+								<li class="nav-item"><a href="<?php echo site_url('/transaksi1/returnout');?>" class="nav-link">Retur Out</a></li>
+
 								<li class="nav-item"><a href="../seed/sidebar_right.html" class="nav-link">Retur In</a></li>
-								<li class="nav-item"><a href="../seed/sidebar_right.html" class="nav-link">Good Issue</a></li>
-								<li class="nav-item"><a href="../seed/sidebar_right.html" class="nav-link">Good Receipt Non PO</a></li>
+								<li class="nav-item"><a href="<?php echo site_url('/transaksi1/goodissue');?>" class="nav-link">Good Issue</a></li>
+								<li class="nav-item"><a href="<?php echo site_url('/transaksi1/grnopo');?>" class="nav-link">Good Receipt Non PO</a></li>
 							</ul>
 						</li>
 						<li class="nav-item nav-item-submenu"><a href="#" class="nav-link active">PRODUKSI</a>
 							<ul class="nav nav-group-sub">
-								<li class="nav-item"><a href="#" class="nav-link">Work Order</a></li>	
+								<li class="nav-item"><a href="<?php echo site_url('/transaksi1/wo');?>" class="nav-link">Work Order</a></li>	
 							</ul>
 						</li>
 						<li class="nav-item nav-item-submenu"><a href="#" class="nav-link active">STOCK OUTLET</a>
 							<ul class="nav nav-group-sub">
-								<li class="nav-item"><a href="#" class="nav-link">Stock Opname</a></li>
-								<li class="nav-item"><a href="#" class="nav-link">Spoiled/Breakage/lost</a></li>
+								<li class="nav-item"><a href="<?php echo site_url('/transaksi1/stock');?>" class="nav-link">Stock Opname</a></li>
+								<li class="nav-item"><a href="<?php echo site_url('/transaksi1/spoiled');?>" class="nav-link">Spoiled/Breakage/lost</a></li>
 							</ul>
 						</li>
 					</ul>
@@ -63,8 +65,8 @@
 				<li class="nav-item nav-item-submenu">
 					<a href="#" class="nav-link"><i class="icon-color-sampler"></i> <span>Transaksi 2</span></a>
 					<ul class="nav nav-group-sub">
-						<li class="nav-item"><a href="../seed/sidebar_secondary.html" class="nav-link">Secondary sidebar</a></li>
-						<li class="nav-item"><a href="../seed/sidebar_right.html" class="nav-link">Right sidebar</a></li>
+						<li class="nav-item"><a href="<?php echo site_url('/transaksi2/sr');?>" class="nav-link">Store Room Request(SR)</a></li>
+						<li class="nav-item"><a href="<?php echo site_url('/transaksi2/whole');?>" class="nav-link">Transaksi Pemotongan Whole di Outlet</a></li>
 					</ul>
 				</li>
 				<li class="nav-item nav-item-submenu">
@@ -76,6 +78,7 @@
 						<li class="nav-item"><a href="<?php echo base_url('/master/integration');?>" class="nav-link">Integration Log</a></li>
 						<!--<li class="nav-item"><a href="../seed/layout_boxed.html" class="nav-link">Master Konversi Item Whole ke Slice</a></li>-->
 						<li class="nav-item"><a href="<?php echo base_url('/master/bom');?>" class="nav-link">Master Bill Of Materials</a></li>
+						
 					</ul>
 				</li>
 				<li class="nav-item nav-item-submenu">
