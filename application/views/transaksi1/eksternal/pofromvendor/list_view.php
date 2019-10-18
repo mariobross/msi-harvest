@@ -117,7 +117,10 @@
                         }},
                         {"data":"action", "className":"dt-center", render:function(data, type, row, meta){
                             rr = `<div style="width:100px">
+
+                                        
                                         <a href='<?php echo site_url('transaksi1/pofromvendor/edit')?>' ><i class='icon-file-plus2' title="Edit"></i></a>&nbsp;
+
                                     </div>`;
                                         return rr;
                         }},

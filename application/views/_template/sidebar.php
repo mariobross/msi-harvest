@@ -43,7 +43,12 @@
                 				<li class="nav-item"><a href="<?php echo base_url('/transaksi1/transferininteroutlet');?>" class="nav-link">Transfer In Inter Outlet</a></li>
 								<li class="nav-item"><a href="<?php echo base_url('/transaksi1/purchase_request');?>" class="nav-link">Purchase Request (PR)</a></li>
 								<li class="nav-item"><a href="<?php echo site_url('/transaksi1/returnout');?>" class="nav-link">Retur Out</a></li>
+<<<<<<< HEAD
 								<li class="nav-item"><a href="../seed/sidebar_right.html" class="nav-link">Retur In</a></li>
+=======
+
+								<li class="nav-item"><a href="<?php echo site_url('/transaksi1/returnin');?>" class="nav-link">Retur In</a></li>
+>>>>>>> 4394ee0651f446f1b410bb2f314affa0ad9931b6
 								<li class="nav-item"><a href="<?php echo site_url('/transaksi1/goodissue');?>" class="nav-link">Good Issue</a></li>
 								<li class="nav-item"><a href="<?php echo site_url('/transaksi1/grnopo');?>" class="nav-link">Good Receipt Non PO</a></li>
 							</ul>

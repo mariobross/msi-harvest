@@ -14,52 +14,179 @@ class Grfromkitchensentul extends CI_Controller
         $this->load->view('transaksi1/eksternal/grfromkitchensentul/list_view');
     }
 	
+	public function add()
+    {
+        $this->load->view('transaksi1/eksternal/grfromkitchensentul/add_new');
+    }
+	
+	public function edit()
+    {
+        $this->load->view('transaksi1/eksternal/grfromkitchensentul/edit_view');
+    }
+	
+	public function showlistData(){
+        $dt= array(
+            array(
+                "no" => "1095",
+                "action" => "1095",
+                "id" => "1095",
+                "transfer_slip_no" => "8968",
+                "gr_no"=>"10128",
+                "delivery_date"=> "26-05-2018",
+                "posting_date"=> "26-05-2018",
+                "status" => "Approved",
+                "log"=> "Integrated"
+            ),
+            array(
+                "no" => "1095",
+                "action" => "1095",
+                "id" => "1095",
+                "transfer_slip_no" => "8968",
+                "gr_no"=>"10128",
+                "delivery_date"=> "26-05-2018",
+                "posting_date"=> "26-05-2018",
+                "status" => "Approved",
+                "log"=> "Integrated"
+            ),
+            array(
+                "no" => "1095",
+                "action" => "1095",
+                "id" => "1095",
+                "transfer_slip_no" => "8968",
+                "gr_no"=>"10128",
+                "delivery_date"=> "26-05-2018",
+                "posting_date"=> "26-05-2018",
+                "status" => "Approved",
+                "log"=> "Integrated"
+            ),
+            array(
+                "no" => "1095",
+                "action" => "1095",
+                "id" => "1095",
+                "transfer_slip_no" => "8968",
+                "gr_no"=>"10128",
+                "delivery_date"=> "26-05-2018",
+                "posting_date"=> "26-05-2018",
+                "status" => "Approved",
+                "log"=> "Integrated"
+            ),
+            array(
+                "no" => "1095",
+                "action" => "1095",
+                "id" => "1095",
+                "transfer_slip_no" => "8968",
+                "gr_no"=>"10128",
+                "delivery_date"=> "26-05-2018",
+                "posting_date"=> "26-05-2018",
+                "status" => "Approved",
+                "log"=> "Integrated"
+            )
+         ); 
+ 
+         $data = [
+             "data"=> $dt
+         ];
+         
+         echo json_encode($data);
+     }
+	
 	public function showAllData(){
        $dt= array(
            array(
             "no" => "1",
-            "material_no" => "ATK0216 ",
-            "material_desc"=>"Label Tom & Jerry No. 103 @1Pcs/Pcs (Ina",
-            "quantity"=> "1.0000",
-            "gr_qty"=> "1.000",
+            "material_no" => "AT-FDG0159",
+            "material_desc"=>"Blueberry Jam @5000gr/pail (Almondtree)",
+            "quantity"=> "15,000.00",
+            "gr_qty"=> "15000.00",
             "uom"=> "pcs",
-            "qc"=> ""
+            "val"=> "",
+            "variance"=> "0.00"
            ),
 		   array(
             "no" => "2",
-            "material_no" => "EAT0001",
-            "material_desc"=>"ABC Alkaline AAA (Active)",
-            "quantity"=> "1.0000",
-            "gr_qty"=> "1.000",
+            "material_no" => "AT-FDG0159",
+            "material_desc"=>"Blueberry Jam @5000gr/pail (Almondtree)",
+            "quantity"=> "15,000.00",
+            "gr_qty"=> "15000.00",
             "uom"=> "pcs",
-            "qc"=> "",
+            "val"=> "",
+            "variance"=> "0.00"
            ),
 		   array(
             "no" => "3",
-            "material_no" => "EAT0002 ",
-            "material_desc"=>"ABC Battery AA Kecil (Active)",
-            "quantity"=> "1.0000",
-            "gr_qty"=> "1.000",
+            "material_no" => "AT-FDG0159",
+            "material_desc"=>"Blueberry Jam @5000gr/pail (Almondtree)",
+            "quantity"=> "15,000.00",
+            "gr_qty"=> "15000.00",
             "uom"=> "pcs",
-            "qc"=> "",
+            "val"=> "",
+            "variance"=> "0.00"
            ),
 		   array(
             "no" => "4",
-            "material_no" => "EAT0007",
-            "material_desc"=>"Amplop Cashier Remitance (Active)",
-            "quantity"=> "4.0000",
-            "gr_qty"=> "4.000",
+            "material_no" => "AT-FDG0159",
+            "material_desc"=>"Blueberry Jam @5000gr/pail (Almondtree)",
+            "quantity"=> "15,000.00",
+            "gr_qty"=> "15000.00",
             "uom"=> "pcs",
-            "qc"=> ""
+            "val"=> "",
+            "variance"=> "0.00"
+           ),
+		   
+        ); 
+
+        $data = [
+            "data"=> $dt
+        ];
+        
+        echo json_encode($data);
+    }
+	
+	public function showEditData(){
+       $dt= array(
+           array(
+            "no" => "1",
+            "material_no" => "AT-FDG0159",
+            "material_desc"=>"Blueberry Jam @5000gr/pail (Almondtree)",
+            "quantity"=> "15,000.00",
+            "gr_qty"=> "15000.00",
+            "uom"=> "pcs",
+            "val"=> "",
+            "variance"=> "0.00",
+            "cancel"=> ""
            ),
 		   array(
-            "no" => "5",
-            "material_no" => "EAT0008",
-            "material_desc"=>" 	Amplop coklat folio (Active)",
-            "quantity"=> "1.0000",
-            "gr_qty"=> "1.000",
+            "no" => "2",
+            "material_no" => "AT-FDG0159",
+            "material_desc"=>"Blueberry Jam @5000gr/pail (Almondtree)",
+            "quantity"=> "15,000.00",
+            "gr_qty"=> "15000.00",
             "uom"=> "pcs",
-            "qc"=> ""
+            "val"=> "",
+            "variance"=> "0.00",
+			"cancel"=> ""
+           ),
+		   array(
+            "no" => "3",
+            "material_no" => "AT-FDG0159",
+            "material_desc"=>"Blueberry Jam @5000gr/pail (Almondtree)",
+            "quantity"=> "15,000.00",
+            "gr_qty"=> "15000.00",
+            "uom"=> "pcs",
+            "val"=> "",
+            "variance"=> "0.00",
+			"cancel"=> ""
+           ),
+		   array(
+            "no" => "4",
+            "material_no" => "AT-FDG0159",
+            "material_desc"=>"Blueberry Jam @5000gr/pail (Almondtree)",
+            "quantity"=> "15,000.00",
+            "gr_qty"=> "15000.00",
+            "uom"=> "pcs",
+            "val"=> "",
+            "variance"=> "0.00",
+			"cancel"=> ""
            ),
 		   
         ); 
