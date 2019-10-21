@@ -73,47 +73,51 @@
                                         </fieldset>
                                     </div>
 								</div>	
-								<br>
-								<div class="row">
-									<div class="col-md-12" style="overflow: auto">
-									<fieldset>
-										<table class="table table-bordered table-striped" id="tblReportInventory" style="display:none">
-											<thead>
-												<tr>
-													<th rowspan="2">No</th>
-													<th rowspan="2">Code</th>
-													<th rowspan="2">Description</th>
-													<th rowspan="2">Unit</th>
-													<th rowspan="2" style="text-align: center">Beginning Stock</th>
-													<th colspan="7" style="text-align: center">Qty In</th>
-													<th rowspan="2" style="text-align: center">Total In</th>
-													<th colspan="6" style="text-align: center">Qty Out</th>
-													<th rowspan="2" style="text-align: center">Total Out</th>
-													<th rowspan="2">Subtotal</th>
-												</tr>
-												<tr>
-													<th style="text-align: center">GR From CK</th>
-													<th style="text-align: center">GR PO</th>
-													<th style="text-align: center">GR From Outlet</th>
-													<th style="text-align: center">GR Production</th>
-													<th style="text-align: center">GR Whole Cake</th>
-													<th style="text-align: center">GR No PO</th>
-													<th style="text-align: center">GR Return</th>
-													<th style="text-align: center">ISSUE Sales</th>
-													<th style="text-align: center">ISSUE Transfer Outlet</th>
-													<th style="text-align: center">ISSUE Production</th>
-													<th style="text-align: center">ISSUE Whole Cake</th>
-													<th style="text-align: center">ISSUE Waste Material</th>
-													<th style="text-align: center">ISSUE Return Out</th>
-												</tr>
-											</thead>
-										</table>
-									<fieldset>	
-									</div>
-								</div>
+							
                             </form>
                         </div>
-                    </div>                    
+                    </div>  
+					<div class="card" style="display:none" id="crdTable">
+						<div class="card-body" >
+							<div class="row">
+								<div class="col-md-12" style="overflow: auto">
+								<fieldset>
+									<table class="table table-bordered table-striped" id="tblReportInventory">
+										<thead>
+											<tr>
+												<th rowspan="2">No</th>
+												<th rowspan="2">Code</th>
+												<th rowspan="2">Description</th>
+												<th rowspan="2">Unit</th>
+												<th rowspan="2" style="text-align: center">Beginning Stock</th>
+												<th colspan="7" style="text-align: center">Qty In</th>
+												<th rowspan="2" style="text-align: center">Total In</th>
+												<th colspan="6" style="text-align: center">Qty Out</th>
+												<th rowspan="2" style="text-align: center">Total Out</th>
+												<th rowspan="2">Subtotal</th>
+											</tr>
+											<tr>
+												<th style="text-align: center">GR From CK</th>
+												<th style="text-align: center">GR PO</th>
+												<th style="text-align: center">GR From Outlet</th>
+												<th style="text-align: center">GR Production</th>
+												<th style="text-align: center">GR Whole Cake</th>
+												<th style="text-align: center">GR No PO</th>
+												<th style="text-align: center">GR Return</th>
+												<th style="text-align: center">ISSUE Sales</th>
+												<th style="text-align: center">ISSUE Transfer Outlet</th>
+												<th style="text-align: center">ISSUE Production</th>
+												<th style="text-align: center">ISSUE Whole Cake</th>
+												<th style="text-align: center">ISSUE Waste Material</th>
+												<th style="text-align: center">ISSUE Return Out</th>
+											</tr>
+										</thead>
+									</table>
+								<fieldset>	
+								</div>
+							</div>
+						</div>
+					</div>                  
 				</div>
 				<?php  $this->load->view("_template/footer.php")?>
 			</div>
@@ -124,10 +128,10 @@
 			$('#fromDate').datepicker();
 			$('#toDate').datepicker();
 
-			const table = document.getElementById("tblReportInventory");
+			const crdTable = document.getElementById("crdTable");
 			const search = document.getElementById("btnSearch");
 			search.addEventListener('click', function () {
-				table.style.display = "block";
+				crdTable.style.display = "";
 			});
 		});
 		</script>

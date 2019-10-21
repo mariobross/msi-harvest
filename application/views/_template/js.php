@@ -23,4 +23,20 @@
 <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 <!-- /SweetAlert -->
 
-	
+<script>
+$(function(){
+    var current = location.pathname;
+    $('#nav li a').each(function(){
+        
+        const $this = $(this);
+        // console.log($this);
+        if($this.attr('href').indexOf(current) !== -1){
+            $this.parents('li.nav-item-submenu').addClass('nav-item-open');
+            $this.parents('ul.nav-group-sub').css("display","block");
+            $this.addClass('active');
+        }
+    });
+}
+
+)
+</script>
