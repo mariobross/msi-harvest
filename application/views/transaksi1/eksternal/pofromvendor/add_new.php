@@ -60,9 +60,14 @@
 											
 											<div class="form-group row">
 												<label class="col-lg-3 col-form-label">Delivery Date</label>
-												<div class="col-lg-9">
-													<input type="text" class="form-control" placeholder="Outlet" readonly="" value="07-10-2019">
-												</div>
+												<div class="col-lg-9 input-group date">
+                                                    <input type="text" class="form-control" id="delivDate">
+                                                    <div class="input-group-prepend">
+                                                        <span class="input-group-text" id="basic-addon1">
+                                                            <i class="icon-calendar"></i>
+                                                        </span>
+                                                    </div>
+                                                </div>
 											</div>
 											
 											<div class="form-group row">
@@ -128,7 +133,7 @@
 					
 					<div class="card">
                         <div class="card-header">
-                            <legend class="font-weight-semibold"><i class="icon-list mr-2"></i>List Manajemen Pengguna</legend>
+                            <legend class="font-weight-semibold"><i class="icon-list mr-2"></i>List Item</legend>
                         </div>
                         <div class="card-body">
                             <table id="table-manajemen" class="table table-striped " style="width:100%">
@@ -140,7 +145,7 @@
                                         <th>Outstanding Qty</th>
                                         <th>Gr Qty</th>
                                         <th>Uom</th>
-                                        <th>QC</th>
+                                        <th>Remark</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -155,6 +160,9 @@
 		<?php  $this->load->view("_template/js.php")?>
 		<script>
             $(document).ready(function(){
+
+				
+
                 $('#table-manajemen').DataTable({
                     "ordering":false,  "paging": true, "searching":true,
                     "ajax": {
@@ -167,7 +175,7 @@
                         {"data":"material_desc"},
                         {"data":"quantity"},
 						{"data":"gr_qty", "className":"dt-center", render:function(data, type, row, meta){
-                            rr=`<input type="text" class="form-control" value="${data}">`;
+                            rr=`<input type="text" class="form-control">`;
                             return rr;
                         }},
                         {"data":"uom"},
@@ -176,7 +184,19 @@
                             return rr;
                         }},
                     ]
-                });
+				});
+				
+				const date = new Date();
+				const today = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+				var optSimple = {
+					format: 'mm-dd-yyyy',
+					todayHighlight: true,
+					orientation: 'bottom right',
+					autoclose: true,
+					container: '#delivDate'
+				};
+				$('#delivDate').datepicker(optSimple);
+				$('#delivDate').datepicker( 'setDate', today );
             });
         
         </script>

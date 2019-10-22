@@ -108,7 +108,7 @@
                 dataTable = $('#tableWhole').DataTable({
                     "ordering":false,  "paging": true, "searching":true,
                     "ajax": {
-                        "url":"<?php echo site_url('transaksi1/wo/showAllData');?>",
+                        "url":"<?php echo site_url('transaksi1/purchase_request/showAllData');?>",
                         "type":"POST"
                     },
                     "columns": [
