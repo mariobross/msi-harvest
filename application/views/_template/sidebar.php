@@ -37,15 +37,7 @@
 
 				<!-- Main -->
 				<li class="nav-item-header"><div class="text-uppercase font-size-xs line-height-xs">Main</div> <i class="icon-menu" title="Main"></i></li>
-				<li class="nav-item">
-					<a href="index.html" class="nav-link">
-						<i class="icon-home4"></i>
-						<span>
-							Home
-						</span>
-					</a>
-				</li>
-
+				
 				<li class="nav-item nav-item-submenu">
 					<a href="#" class="nav-link"><i class="icon-copy"></i> <span>Transaksi 1</span></a>
 					<ul class="nav nav-group-sub" data-submenu-title="Transaksi 1">

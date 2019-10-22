@@ -20,20 +20,21 @@
 
                                             <div class="form-group row">
 												<label class="col-lg-3 col-form-label"><b>Data SAP per Tanggal/Jam</b></label>
-												<div class="col-lg-9"><b>Belum ada data</b>
+												<div class="col-lg-9"><b></b>
+												</div>
+											</div>
+											
+											<div class="form-group row">
+												<label class="col-lg-3 col-form-label">ID Transaksi</label>
+												<div class="col-lg-9">
+													<input type="text" class="form-control" placeholder="Outlet" readonly="" value="1675">
 												</div>
 											</div>
 											
 											<div class="form-group row">
 												<label class="col-lg-3 col-form-label">Purchase Order Entry</label>
 												<div class="col-lg-9">
-													<select class="form-control form-control-select2" data-live-search="true">
-														<option value="">40471 - PO2019100000815( PR ->1709 )</option>
-														<option value="">40472 - PO2019100840815( PR ->1710 )</option>
-														<option value="">40473 - PO2019100984815( PR ->1711 )</option>
-														<option value="">40474 - PO2019100000815( PR ->1712 )</option>
-														<option value="">40475 - PO2019143300815( PR ->1713 )</option>
-													</select>
+													<input type="text" class="form-control" placeholder="Outlet" readonly="" value="10452">
 												</div>
 											</div>
 											
@@ -96,25 +97,20 @@
 											<div class="form-group row">
 												<label class="col-lg-3 col-form-label">Material Group</label>
 												<div class="col-lg-9">
-													<select class="form-control form-control-select2" data-live-search="true">
-														<option value="">All</option>
-														<option value="">RM MAT Office</option>
-														<option value="">Exp. Stationary</option>
-													</select>
+													<input type="text" readonly="" value="All" class="form-control">
 												</div>
 											</div>
 											
 											<div class="form-group row">
 												<label class="col-lg-3 col-form-label">Posting Date</label>
 												<div class="col-lg-9">
-													<input type="text" value="07-10-2019" class="form-control">
+													<input type="text" readonly="" value="07-10-2019" class="form-control">
 												</div>
 											</div>
 											<div class="form-group row">
 												<div class="col-lg-12 text-right">
 													<div class="text-right">
-														<button type="submit" class="btn btn-primary">Save <i class="icon-pencil5 ml-2"></i></button>
-														<button type="submit" class="btn btn-success">Approve <i class="icon-paperplane ml-2"></i></button>
+														<button type="submit" class="btn btn-success">Cancel <i class="icon-paperplane ml-2"></i></button>
 													</div>
 												</div>
                                             </div>
@@ -141,6 +137,7 @@
                                         <th>Gr Qty</th>
                                         <th>Uom</th>
                                         <th>QC</th>
+                                        <th>Cancel</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -166,13 +163,14 @@
                         {"data":"material_no"},
                         {"data":"material_desc"},
                         {"data":"quantity"},
-						{"data":"gr_qty", "className":"dt-center", render:function(data, type, row, meta){
-                            rr=`<input type="text" class="form-control" value="${data}">`;
-                            return rr;
-                        }},
+                        {"data":"gr_qty"},
                         {"data":"uom"},
 						{"data":"qc", "className":"dt-center", render:function(data, type, row, meta){
                             rr=`<input type="text" class="form-control" id="chk_${data}" value="">`;
+                            return rr;
+                        }},
+						{"data":"cancel", "className":"dt-center", render:function(data, type, row, meta){
+                            rr=`<input type="checkbox" class="check_delete">`;
                             return rr;
                         }},
                     ]
