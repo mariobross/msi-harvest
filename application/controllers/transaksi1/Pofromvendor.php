@@ -138,7 +138,7 @@ class Pofromvendor extends CI_Controller
             "material_no" => "ATK0216 ",
             "material_desc"=>"Label Tom & Jerry No. 103 @1Pcs/Pcs (Ina",
             "quantity"=> "1.0000",
-            "gr_qty"=> "1.000",
+            "gr_qty"=> "0",
             "uom"=> "pcs",
             "qc"=> "",
             "cancel"=> ""
@@ -148,7 +148,7 @@ class Pofromvendor extends CI_Controller
             "material_no" => "EAT0001",
             "material_desc"=>"ABC Alkaline AAA (Active)",
             "quantity"=> "1.0000",
-            "gr_qty"=> "1.000",
+            "gr_qty"=> "0",
             "uom"=> "pcs",
             "qc"=> "",
 			"cancel"=> ""
@@ -158,7 +158,7 @@ class Pofromvendor extends CI_Controller
             "material_no" => "EAT0002 ",
             "material_desc"=>"ABC Battery AA Kecil (Active)",
             "quantity"=> "1.0000",
-            "gr_qty"=> "1.000",
+            "gr_qty"=> "0",
             "uom"=> "pcs",
             "qc"=> "",
 			"cancel"=> ""
@@ -168,7 +168,7 @@ class Pofromvendor extends CI_Controller
             "material_no" => "EAT0007",
             "material_desc"=>"Amplop Cashier Remitance (Active)",
             "quantity"=> "4.0000",
-            "gr_qty"=> "4.000",
+            "gr_qty"=> "0",
             "uom"=> "pcs",
             "qc"=> "",
 			"cancel"=> ""
@@ -178,7 +178,7 @@ class Pofromvendor extends CI_Controller
             "material_no" => "EAT0008",
             "material_desc"=>" 	Amplop coklat folio (Active)",
             "quantity"=> "1.0000",
-            "gr_qty"=> "1.000",
+            "gr_qty"=> "0",
             "uom"=> "pcs",
             "qc"=> "",
 			"cancel"=> ""
