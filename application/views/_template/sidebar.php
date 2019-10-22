@@ -18,6 +18,20 @@
 	<div class="sidebar-content">
 
 		<!-- Main navigation -->
+		<div class="sidebar-user">
+			<div class="card-body">
+				<div class="media">
+
+					<div class="media-body">
+						<div class="media-title font-weight-semibold">Bintaro</div>
+						<div class="font-size-md opacity-50">
+							Bintaro / WDFGBNST <a href="#" style="color:white;"><i class="icon-git-compare"></i></a>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		
 		<div class="card card-sidebar-mobile">
 			<ul class="nav nav-sidebar" data-nav-type="accordion" id="nav">
 
