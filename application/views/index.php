@@ -181,6 +181,24 @@
 													<h6 class="font-weight-semibold mb-0">9</h6>
 												</td>
 											</tr>
+											
+											<tr>
+												<td>
+													<i class="icon-checkmark3 font-size-sm mr-1"></i> List of PO Outstanding
+												</td>
+												<td>
+													<h6 class="font-weight-semibold mb-0">6</h6>
+												</td>
+											</tr>
+											
+											<tr>
+												<td>
+													<i class="icon-checkmark3 font-size-sm mr-1"></i> Delete Status PO
+												</td>
+												<td>
+													<h6 class="font-weight-semibold mb-0">3</h6>
+												</td>
+											</tr>
 
 										</tbody>
 									</table>
