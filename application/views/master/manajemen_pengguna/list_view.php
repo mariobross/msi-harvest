@@ -52,8 +52,7 @@
                         {"data":"grup_hak_akses"},
                         {"data":"no","className":"dt-center", render:function(data, type, row, meta){
                                 rr = `<a href='<?php echo site_url('master/manajemen/edit')?>' ><i class='icon-file-plus2' title="Edit"></i></a>&nbsp;
-                                        <a href='<?php echo site_url('master/manajemen/ubahpass')?>'><i class='icon-file-plus' title="Ubah Password"></i></a>
-                                        <a onClick="deleteConfirm('<?php echo site_url('master/manajemen/delete')?>')" href="#!"><i class='icon-cross2' title="Delete"></i></a>`;
+                                     <a onClick="deleteConfirm('<?php echo site_url('master/manajemen/delete')?>')" href="#!"><i class='icon-cross2' title="Delete"></i></a>`;
                                 return rr;
                             }
                         }
