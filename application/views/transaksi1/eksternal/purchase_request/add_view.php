@@ -18,6 +18,7 @@
 			<div class="content-wrapper">
                 <!-- <?php  $this->load->view("_template/breadcrumb.php")?> -->
 				<div class="content">
+
                     <form action="#" method="POST">
 					<div class="card">
                         <div class="card-body">
@@ -27,32 +28,33 @@
                                         <fieldset>
                                             <legend class="font-weight-semibold"><i class="icon-reading mr-2"></i>Tambah Purchase Request (PR)</legend>
                                             <div class="form-group row">
+
 												<label class="col-lg-3 col-form-label">ID Transaksi</label>
 												<div class="col-lg-9">
 													<input type="text" class="form-control" placeholder="ID Transaksi" readOnly>
 												</div>
-                                            </div>
-                                            
-                                            <div class="form-group row">
+											</div>
+											
+											<div class="form-group row">
 												<label class="col-lg-3 col-form-label">Purchase Request (PR) Number	</label>
 												<div class="col-lg-9">
 													<input type="text" class="form-control" placeholder="(Auto Number after Posting to SAP)" readOnly>
 												</div>
-                                            </div>
-                                            
-                                            <div class="form-group row">
+											</div>
+											
+											<div class="form-group row">
 												<label class="col-lg-3 col-form-label">Outlet</label>
 												<div class="col-lg-9">
 													<input type="text" class="form-control" placeholder="Outlet" readOnly>
 												</div>
-                                            </div>
-                                            
-                                            <div class="form-group row">
+											</div>
+											
+											<div class="form-group row">
 												<label class="col-lg-3 col-form-label">Storage Location</label>
 												<div class="col-lg-9">
 													<input type="text" class="form-control" placeholder="Outlet" readOnly>
 												</div>
-                                            </div>
+											</div>
 
 											<div class="form-group row">
 												<label class="col-lg-3 col-form-label">Status</label>
@@ -72,7 +74,7 @@
 												</div>
 											</div> -->
 
-                                           	<div class="form-group row">
+											<div class="form-group row">
 												<label class="col-lg-3 col-form-label">Material Group</label>
 												<div class="col-lg-9">
 													<select class="form-control form-control-select2" data-live-search="true">
@@ -83,24 +85,27 @@
 												</div>
 											</div>
 
-                                            <div class="form-group row">
-                                                <label class="col-lg-3 col-form-label">Delivery Date</label>
-                                                <div class="col-lg-9 input-group date">
-                                                    <input type="text" class="form-control" id="postDate">
-                                                    <div class="input-group-prepend">
-                                                        <span class="input-group-text" id="basic-addon1">
-                                                            <i class="icon-calendar"></i>
-                                                        </span>
-                                                    </div>
-                                                </div>
+											<div class="form-group row">
+												<label class="col-lg-3 col-form-label">Delivery Date</label>
+												<div class="col-lg-9 input-group date">
+													<input type="text" class="form-control" id="postDate">
+													<div class="input-group-prepend">
+														<span class="input-group-text" id="basic-addon1">
+															<i class="icon-calendar"></i>
+														</span>
+													</div>
+												</div>
 											</div>
+
 
                                             <div class="text-right">
                                                 <button type="submit" class="btn btn-primary">Save<i class="icon-safe ml-2"></i></button>
+
 												<button type="submit" class="btn btn-success">Approve SAP<i class="icon-paperplane ml-2"></i></button>
-                                            </div>
+											</div>
 
 											
+
                                         </fieldset>
                                     </div>
                                 </div>
@@ -142,6 +147,7 @@
                     </div> 
                             </form>
                                            
+
 				</div>
 				<?php  $this->load->view("_template/footer.php")?>
 			</div>

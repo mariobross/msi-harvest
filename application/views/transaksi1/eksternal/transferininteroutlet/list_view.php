@@ -15,7 +15,6 @@
                             <legend class="font-weight-semibold"><i class="icon-search4 mr-2"></i>Search of Transfer Out Inter Outlet</legend>  
                         </div>
                         <div class="card-body">
-
 							<form action="#" method="POST">
 								<div class="row">
 									<div class="col-md-12">
@@ -59,7 +58,9 @@
 								</div>
 							</form>
                         </div>                        
+                    </div>                        
                     
+					<div class="card">
                         <div class="card-header">
                             <a href="<?php echo site_url('transaksi1/transferininteroutlet/add') ?>" class="btn btn-primary"> Add New</a>
                             <input type="button" value="Delete" class="btn btn-danger" id="deleteRecord">  
@@ -92,7 +93,7 @@
                                 </div>
                             </div>
                         </div>
-                        </div>                   
+                    </div>                   
 				</div>
 				<?php  $this->load->view("_template/footer.php")?>
 			</div>
