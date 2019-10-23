@@ -10,15 +10,15 @@
 			<div class="content-wrapper">
                 <!-- <?php  $this->load->view("_template/breadcrumb.php")?> -->
 				<div class="content">
-                    <div class="card">
-                        <div class="card-body">
-                            <form action="#" method="POST">
-                                <div class="row">
-                                    <div class="col-md-12">
-                                        <fieldset>
-                                            <legend class="font-weight-semibold"><i class="icon-reading mr-2"></i>Transfer Out Inter Outlet</legend>
+					<form action="#" method="POST">
+						<div class="card">
+							<div class="card-body">
+								<div class="row">
+									<div class="col-md-12">
+										<fieldset>
+											<legend class="font-weight-semibold"><i class="icon-reading mr-2"></i>Transfer Out Inter Outlet</legend>
 
-                                            <div class="form-group row">
+											<div class="form-group row">
 												<label class="col-lg-3 col-form-label"><b>Data SAP per Tanggal/Jam</b></label>
 												<div class="col-lg-9"><b>Data tidak ditemukan.</b>
 												</div>
@@ -79,39 +79,39 @@
 														<button type="submit" class="btn btn-success">Cancel <i class="icon-paperplane ml-2"></i></button>
 													</div>
 												</div>
-                                            </div>
+											</div>
 											
-                                        </fieldset>
-                                    </div>
+										</fieldset>
+									</div>
 								</div>	
-                            </form>
-                        </div>
-                    </div>                    
-					
-					<div class="card">
-                        <div class="card-header">
-                            <legend class="font-weight-semibold"><i class="icon-list mr-2"></i>List Manajemen Pengguna</legend>
-                        </div>
-                        <div class="card-body">
-                            <table id="table-manajemen" class="table table-striped " style="width:100%">
-                                <thead>
-                                    <tr>
-                                        <th style="text-align: left">*</th>
-                                        <th>Material No</th>
-                                        <th>Material Desc</th>
-                                        <th>In WHS Quantity</th>
-                                        <th>Outstanding Qty</th>
-                                        <th>Quantity</th>
-                                        <th>Uom Reg.</th>
-                                        <th>Uom</th>
-                                        <th>Cancel</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
+							</div>
+						</div>                    
+						
+						<div class="card">
+							<div class="card-header">
+								<legend class="font-weight-semibold"><i class="icon-list mr-2"></i>List Transfer Out Inter Outlet</legend>
+							</div>
+							<div class="card-body">
+								<table id="table-manajemen" class="table table-striped " style="width:100%">
+									<thead>
+										<tr>
+											<th style="text-align: left">*</th>
+											<th>Material No</th>
+											<th>Material Desc</th>
+											<th>In WHS Quantity</th>
+											<th>Outstanding Qty</th>
+											<th>Quantity</th>
+											<th>Uom Reg.</th>
+											<th>Uom</th>
+											<th>Cancel</th>
+										</tr>
+									</thead>
+									<tbody>
+									</tbody>
+								</table>
+							</div>
+						</div>
+					</form>
 				</div>
 				<?php  $this->load->view("_template/footer.php")?>
 			</div>
