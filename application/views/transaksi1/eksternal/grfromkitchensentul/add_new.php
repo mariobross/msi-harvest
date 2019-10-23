@@ -10,13 +10,14 @@
 			<div class="content-wrapper">
                 <!-- <?php  $this->load->view("_template/breadcrumb.php")?> -->
 				<div class="content">
-                    <div class="card">
-                        <div class="card-body">
-                            <form action="#" method="POST">
-                                <div class="row">
-                                    <div class="col-md-12">
-                                        <fieldset>
-                                            <legend class="font-weight-semibold"><i class="icon-reading mr-2"></i>GR from Central Kitchen Sentul</legend>
+					<form action="#" method="POST">
+						<div class="card">
+							<div class="card-body">
+								
+								<div class="row">
+									<div class="col-md-12">
+										<fieldset>
+											<legend class="font-weight-semibold"><i class="icon-reading mr-2"></i>GR from Central Kitchen Sentul</legend>
 											
 											<div class="form-group row">
 												<label class="col-lg-3 col-form-label">Data SAP per Tanggal/Jam</label>
@@ -87,13 +88,20 @@
 														<button type="submit" class="btn btn-success">Approve <i class="icon-paperplane ml-2"></i></button>
 													</div>
 												</div>
-                                            </div>
+											</div>
 											
-                                        </fieldset>
-                                    </div>
+										</fieldset>
+									</div>
 								</div>	
-								<br>
+							</div>	
+						</div>	
 								
+								
+						<div class="card">
+							<div class="card-header">
+								<legend class="font-weight-semibold"><i class="icon-list mr-2"></i>List Item</legend>
+							</div>
+							<div class="card-body">
 								<table id="table-grfromkitchensentul" class="table table-striped " style="width:100%">
 									<thead>
 										<tr>
@@ -110,10 +118,10 @@
 									<tbody>
 									</tbody>
 								</table>
-                            </form>
-                        
-                        </div>
-                    </div>
+							</div>
+						</div>
+						
+					</form>
 				</div>
 				<?php  $this->load->view("_template/footer.php")?>
 			</div>

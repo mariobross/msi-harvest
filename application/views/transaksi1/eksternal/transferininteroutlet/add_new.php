@@ -10,13 +10,19 @@
 			<div class="content-wrapper">
                 <!-- <?php  $this->load->view("_template/breadcrumb.php")?> -->
 				<div class="content">
-                    <div class="card">
-                        <div class="card-body">
-                            <form action="#" method="POST">
-                                <div class="row">
-                                    <div class="col-md-12">
-                                        <fieldset>
-                                            <legend class="font-weight-semibold"><i class="icon-reading mr-2"></i>Transfer In Inter Outlet</legend>
+					<form action="#" method="POST">
+						<div class="card">
+							<div class="card-body">
+								<div class="row">
+									<div class="col-md-12">
+										<fieldset>
+											<legend class="font-weight-semibold"><i class="icon-reading mr-2"></i>Transfer In Inter Outlet</legend>
+											
+											<div class="form-group row">
+												<label class="col-lg-3 col-form-label">ID Transaksi</label>
+												<div class="col-lg-9"><input type="text" class="form-control" readonly="" value="">
+												</div>
+											</div>
 											
 											<div class="form-group row">
 												<label class="col-lg-3 col-form-label"><i>SR Number — Transfer In Inter Outlet</i></label>
@@ -42,7 +48,7 @@
 											</div>
 											
 											<div class="form-group row">
-												<label class="col-lg-3 col-form-label">Outlet</label>
+												<label class="col-lg-3 col-form-label">Outlet From</label>
 												<div class="col-lg-9">
 													<input type="text" class="form-control" readonly="" value="WDFGBNST - Bintaro">
 												</div>
@@ -51,12 +57,12 @@
 											<div class="form-group row">
 												<label class="col-lg-3 col-form-label">Storage Transit Location</label>
 												<div class="col-lg-9">
-													<input type="text" class="form-control" readonly="" value="WDFGBNST - Bintaro">
+													<input type="text" class="form-control" readonly="" value="">
 												</div>
 											</div>
 											
 											<div class="form-group row">
-												<label class="col-lg-3 col-form-label">Delivery Outlet</label>
+												<label class="col-lg-3 col-form-label">Transfer to Outlet</label>
 												<div class="col-lg-9">
 													<input type="text" class="form-control" readonly="" value="WDFGAMPM - Ampera - PM">
 												</div>
@@ -77,6 +83,13 @@
 											</div>
 											
 											<div class="form-group row">
+												<label class="col-lg-3 col-form-label">Material Group</label>
+												<div class="col-lg-9">
+													<input type="text" class="form-control" readonly="" value="All">
+												</div>
+											</div>
+											
+											<div class="form-group row">
 												<label class="col-lg-3 col-form-label">Posting Date</label>
 												<div class="col-lg-9">
 													<input type="text" class="form-control" value="17-10-2019">
@@ -90,13 +103,19 @@
 														<button type="submit" class="btn btn-success">Approve <i class="icon-paperplane ml-2"></i></button>
 													</div>
 												</div>
-                                            </div>
+											</div>
 											
-                                        </fieldset>
-                                    </div>
+										</fieldset>
+									</div>
 								</div>	
-								<br>
+							</div>	
+						</div>	
 								
+						<div class="card">
+							<div class="card-header">
+								<legend class="font-weight-semibold"><i class="icon-list mr-2"></i>List Transfer In Inter Outlet</legend>
+							</div>
+							<div class="card-body">			
 								<table id="table-transferininteroutlet" class="table table-striped " style="width:100%">
 									<thead>
 										<tr>
@@ -113,10 +132,9 @@
 									<tbody>
 									</tbody>
 								</table>
-                            </form>
-                        
-                        </div>
-                    </div>
+							</div>
+						</div>
+					</form>
 				</div>
 				<?php  $this->load->view("_template/footer.php")?>
 			</div>

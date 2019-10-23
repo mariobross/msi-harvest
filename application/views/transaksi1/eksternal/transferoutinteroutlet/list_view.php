@@ -59,7 +59,9 @@
 								</div>
 							</form>
                         </div>                        
+                    </div>                        
                     
+                    <div class="card">
                         <div class="card-header">
                             <a href="<?php echo site_url('transaksi1/transferoutinteroutlet/add') ?>" class="btn btn-primary"> Add New</a>
                             <input type="button" value="Delete" class="btn btn-danger" id="deleteRecord">  
@@ -90,7 +92,7 @@
                                 </div>
                             </div>
                         </div>
-                        </div>                   
+                    </div>                   
 				</div>
 				<?php  $this->load->view("_template/footer.php")?>
 			</div>
