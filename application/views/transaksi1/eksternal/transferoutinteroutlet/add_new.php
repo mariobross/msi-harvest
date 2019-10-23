@@ -98,7 +98,13 @@
 								<legend class="font-weight-semibold"><i class="icon-list mr-2"></i>List Transfer Out Inter Outlet</legend>
 							</div>
 							<div class="card-body">
-								<table id="table-manajemen" class="table table-striped " style="width:100%">
+								<div class="col-md-12 mb-2">
+									<div class="text-left">
+										<input type="button" class="btn btn-primary" value="Add" id="addTable"> 
+										<input type="button" value="Delete" class="btn btn-danger" id="deleteRecord"> 
+									</div>
+								</div>
+								<table id="tblWhole" class="table table-striped " style="width:100%">
 									<thead>
 										<tr>
 											<th style="text-align: left">*</th>
@@ -124,29 +130,29 @@
 		<?php  $this->load->view("_template/js.php")?>
 		<script>
             $(document).ready(function(){
-                $('#table-manajemen').DataTable({
-                    "ordering":false,  "paging": true, "searching":true,
-                    "ajax": {
-                        "url":"<?php echo site_url('transaksi1/transferoutinteroutlet/showAllData');?>",
-                        "type":"POST"
-                    },
-                    "columns": [
-                        {"data":"no"},
-						{"data":"material_no", "className":"dt-center", "colspan":"2", render:function(data, type, row, meta){
-                            rr=`<select class="form-control"><option value="variance" selected>Variance</option><option value="rmbeverage">RM Beverage</option></select>`;
-                            return rr;
-                        }},
-                        {"data":"material_desc"},
-                        {"data":"whs_qty"},
-						{"data":"gr_qty"},
-						{"data":"quantity", "className":"dt-center", render:function(data, type, row, meta){
-                            rr=`<input type="text" class="form-control" value="">`;
-                            return rr;
-                        }},
-                        {"data":"uom_reg"},
-                        {"data":"uom"},
-                    ]
-                });
+                var table = $("#tblWhole").DataTable({
+					"ordering":false
+				});
+				count = 1;
+
+				$("#addTable").on('click', function() {
+					table.row.add([
+						count,
+						`<select class="form-control form-control-select2" data-live-search="true">
+							<option value="">Select Item</option>
+							<option value="1">Pilih 1</option>
+							<option value="2">Pilih 2</option>
+						</select>`,
+						``,
+						'',
+						'',
+						'<input type="text" name="qty[]" id="qty[]">',
+						'',
+						''
+					]).draw(false);
+					count++;
+				});
+				$("#addTable").click();
             });
         
         </script>
