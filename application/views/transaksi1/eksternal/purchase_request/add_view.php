@@ -18,14 +18,17 @@
 			<div class="content-wrapper">
                 <!-- <?php  $this->load->view("_template/breadcrumb.php")?> -->
 				<div class="content">
-					<form action="#" method="POST">
-						<div class="card">
-							<div class="card-body">
-								<div class="row">
-									<div class="col-md-12">
-										<fieldset>
-											<legend class="font-weight-semibold"><i class="icon-reading mr-2"></i>Tambah Purchase Request (PR)</legend>
-											<div class="form-group row">
+
+                    <form action="#" method="POST">
+					<div class="card">
+                        <div class="card-body">
+                            
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <fieldset>
+                                            <legend class="font-weight-semibold"><i class="icon-reading mr-2"></i>Tambah Purchase Request (PR)</legend>
+                                            <div class="form-group row">
+
 												<label class="col-lg-3 col-form-label">ID Transaksi</label>
 												<div class="col-lg-9">
 													<input type="text" class="form-control" placeholder="ID Transaksi" readOnly>
@@ -94,48 +97,57 @@
 												</div>
 											</div>
 
-											<div class="text-right">
-												<button type="submit" class="btn btn-primary">Save<i class="icon-paperplane ml-2"></i></button>
+
+                                            <div class="text-right">
+                                                <button type="submit" class="btn btn-primary">Save<i class="icon-safe ml-2"></i></button>
+
 												<button type="submit" class="btn btn-success">Approve SAP<i class="icon-paperplane ml-2"></i></button>
 											</div>
 
 											
-										</fieldset>
-									</div>
+
+                                        </fieldset>
+                                    </div>
+                                </div>
 								</div>
-							</div>
-						</div> 
-						
-						<div class="card">
-							<div class="card-header">
-								<legend class="font-weight-semibold"><i class="icon-list mr-2"></i>List Purchase Request (PR)</legend>
-							</div>
-							<div class="card-body">
-								<table class="table table-bordered table-striped" id="tblWhole">
-									<thead>
-										<tr>
-											<th></th>
-											<th>No</th>
-											<th>Material No</th>
-											<th>Material Desc</th>
-											<th>Quantity</th>
-											<th>Price / Item</th>
-											<th>Last Vendor</th>
-											<th>Last Price</th>
-											<th>UOM</th>
-											<th>On Hand</th>
-										</tr>
-									</thead>
-								</table>
-								<div class="col-md-12">
-									<div class="text-left">
-										<input type="button" class="btn btn-primary" value="Add" id="addTable"> 
-										<input type="button" value="Delete" class="btn btn-danger" id="deleteRecord"> 
+                                </div>
+								<br>
+								<div class="card">
+                        <div class="card-body">
+                            
+								<div class="row">
+								<legend class="font-weight-semibold"><i class="icon-list mr-2"></i>List Item</legend>
+								<div class="col-md-12 mb-2">
+										<div class="text-left">
+											<input type="button" class="btn btn-primary" value="Add" id="addTable"> 
+											<input type="button" value="Delete" class="btn btn-danger" id="deleteRecord"> 
+										</div>
 									</div>
+									<div class="col-md-12" style="overflow: auto">
+										<table class="table table-striped" id="tblWhole">
+											<thead>
+												<tr>
+													<th></th>
+													<th>No</th>
+													<th>Material No</th>
+													<th>Material Desc</th>
+													<th>Quantity</th>
+													<th>Price / Item</th>
+													<th>Last Vendor</th>
+													<th>Last Price</th>
+													<th>UOM</th>
+													<th>On Hand</th>
+												</tr>
+											</thead>
+										</table>
+									</div>
+									
 								</div>
-							</div>	
-						</div>
-					</form>
+								</div>
+                    </div> 
+                            </form>
+                                           
+
 				</div>
 				<?php  $this->load->view("_template/footer.php")?>
 			</div>
