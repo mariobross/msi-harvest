@@ -44,6 +44,13 @@
 													<input type="text" class="form-control" >
 												</div>
 											</div>
+											
+											<div class="form-group row">
+												<label class="col-lg-3 col-form-label">PLant Terdaftar:</label>
+												<div class="col-lg-9">
+													<input type="text" class="form-control" readonly="readonly" value="0 plants">
+												</div>
+											</div>
 
                                             <div class="form-group row">
 												<label class="col-lg-3 col-form-label">Password:</label>
@@ -60,13 +67,12 @@
 											</div>
 
                                             <div class="form-group row">
-												<label class="col-lg-3 col-form-label">Pilih Plant:</label>
+												<label class="col-lg-3 col-form-label">Pilihan Plant:</label>
 												<div class="col-lg-9">
-                                                    <select class="form-control multiselect-select-all-filtering" multiple="multiple" data-fouc>
-                                                        <option value="cheese">pilih 1</option>
-                                                        <option value="tomatoes">pilih 2</option>
-                                                        <option value="mozarella">pilih 3</option>
-                                                        <option value="mushrooms">pilih 4</option>
+                                                    <select class="form-control">
+                                                        <option value="1">- Ampera - Block Stock (WDFGAMBS)</option>
+                                                        <option value="1">- Ampera - PM (WDFGAMPM)</option>
+                                                        <option value="1">- Bekasi - (WDFGBKS)</option>
                                                     </select>
 												</div>
 											</div>
@@ -75,10 +81,10 @@
 												<label class="col-lg-3 col-form-label">Group Hak Akses:</label>
 												<div class="col-lg-9">
                                                     <select class="form-control multiselect-select-all-filtering" multiple="multiple" data-fouc>
-                                                        <option value="cheese">pilih 1</option>
-                                                        <option value="tomatoes">pilih 2</option>
-                                                        <option value="mozarella">pilih 3</option>
-                                                        <option value="mushrooms">pilih 4</option>
+                                                        <option value="cheese">Outlet Staff</option>
+                                                        <option value="tomatoes">HQ Inventory</option>
+                                                        <option value="mozarella">HQ Controlling</option>
+                                                        <option value="mushrooms">HQ - Manager</option>
                                                     </select>
 												</div>
 											</div>

@@ -130,8 +130,11 @@
                         {"data":"material_no"},
                         {"data":"material_desc"},
                         {"data":"whs_qty"},
-                        {"data":"quantity"},
 						{"data":"gr_qty"},
+						{"data":"quantity", "className":"dt-center", render:function(data, type, row, meta){
+                            rr=`<input type="text" class="" id="" value="">`;
+                            return rr;
+                        }},
                         {"data":"uom_reg"},
                         {"data":"uom"},
 						{"data":"cancel", "className":"dt-center", render:function(data, type, row, meta){

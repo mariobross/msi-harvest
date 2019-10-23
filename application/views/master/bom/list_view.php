@@ -50,6 +50,9 @@
                         </div>
                     </div>   
 					<div class="card">
+						<div class="card-header">
+                            <a href="<?php echo site_url('master/bom/add') ?>" class="btn btn-primary"> Add New</a> 
+                        </div>
 						<div class="card-body">
 							<div class="row">
 								<div class="col-md-12" style="overflow: auto">

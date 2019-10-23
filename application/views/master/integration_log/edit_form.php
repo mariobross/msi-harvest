@@ -16,18 +16,12 @@
                                 <div class="row">
                                     <div class="col-md-12">
                                         <fieldset>
-                                            <legend class="font-weight-semibold"><i class="icon-reading mr-2"></i>Edit Good Issue</legend>
+                                            <legend class="font-weight-semibold"><i class="icon-reading mr-2"></i>Edit</legend>
+											
                                             <div class="form-group row">
 												<label class="col-lg-3 col-form-label">ID Transaksi:</label>
 												<div class="col-lg-9">
 													<input type="text" class="form-control" readonly="" value="42159">
-												</div>
-											</div>
-
-                                            <div class="form-group row">
-												<label class="col-lg-3 col-form-label">Issue No:</label>
-												<div class="col-lg-9">
-													<input type="text" class="form-control" readonly="" value="1630286">
 												</div>
 											</div>
 
@@ -39,9 +33,9 @@
 											</div>
 
                                             <div class="form-group row">
-												<label class="col-lg-3 col-form-label">Storage Location:</label>
+												<label class="col-lg-3 col-form-label">Item Produksi:</label>
 												<div class="col-lg-9">
-													<input type="text" class="form-control" readonly="" value="WMSICKST - MSI Cikarang">
+													<input type="text" class="form-control" readonly="" value="1TC0002 - Triple Chocolate 20x20-TH (Active) ">
 												</div>
 											</div>
 
@@ -92,7 +86,7 @@
 
 					<div class="card">
                         <div class="card-header">
-                            <legend class="font-weight-semibold"><i class="icon-list mr-2"></i>List Manajemen Pengguna</legend>
+                            <legend class="font-weight-semibold"><i class="icon-list mr-2"></i>List </legend>
                         </div>
                         <div class="card-body">
                             <table id="table-manajemen" class="table table-striped " style="width:100%">

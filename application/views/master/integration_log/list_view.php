@@ -12,7 +12,7 @@
 				<div class="content">
                     <div class="card">
                         <div class="card-header">
-                            <legend class="font-weight-semibold"><i class="icon-list mr-2"></i>List Manajemen Pengguna</legend>
+                            <legend class="font-weight-semibold"><i class="icon-list mr-2"></i>List Error Log Manajemen</legend>
                         </div>
                         <div class="card-body">
                             <table id="table-manajemen" class="table table-striped " style="width:100%">

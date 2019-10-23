@@ -63,6 +63,10 @@ class Manajemen extends CI_Controller
     public function edit(){
         $this->load->view('master/manajemen_pengguna/edit_form');
     }
+	
+	public function ubahpass(){
+        $this->load->view('master/manajemen_pengguna/ubah_pass');
+    }
 
 }
 ?>

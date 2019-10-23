@@ -27,46 +27,38 @@
                                             <div class="form-group row">
 												<label class="col-lg-3 col-form-label">Username:</label>
 												<div class="col-lg-9">
-													<input type="text" class="form-control" >
+													<input type="text" class="form-control" readonly="readonly" value="SX_Alam">
 												</div>
 											</div>
 
                                             <div class="form-group row">
 												<label class="col-lg-3 col-form-label">Nama Lengkap:</label>
 												<div class="col-lg-9">
-													<input type="text" class="form-control" >
+													<input type="text" class="form-control" value="Alam Sutera Manager">
 												</div>
 											</div>
 
                                             <div class="form-group row">
 												<label class="col-lg-3 col-form-label">Email:</label>
 												<div class="col-lg-9">
-													<input type="text" class="form-control" >
+													<input type="text" class="form-control" value="alam@yahoo.com">
+												</div>
+											</div>
+											
+											<div class="form-group row">
+												<label class="col-lg-3 col-form-label">Plant Terdaftar:</label>
+												<div class="col-lg-9">
+													<input type="text" class="form-control" value="0">
 												</div>
 											</div>
 
                                             <div class="form-group row">
-												<label class="col-lg-3 col-form-label">Password:</label>
+												<label class="col-lg-3 col-form-label">Pilihan Plant:</label>
 												<div class="col-lg-9">
-													<input type="text" class="form-control" >
-												</div>
-											</div>
-
-                                            <div class="form-group row">
-												<label class="col-lg-3 col-form-label">Konfirmasi Password:</label>
-												<div class="col-lg-9">
-													<input type="text" class="form-control" >
-												</div>
-											</div>
-
-                                            <div class="form-group row">
-												<label class="col-lg-3 col-form-label">Pilih Plant:</label>
-												<div class="col-lg-9">
-                                                    <select class="form-control multiselect-select-all-filtering" multiple="multiple" data-fouc>
-                                                        <option value="cheese">pilih 1</option>
-                                                        <option value="tomatoes">pilih 2</option>
-                                                        <option value="mozarella">pilih 3</option>
-                                                        <option value="mushrooms">pilih 4</option>
+                                                    <select class="form-control">
+                                                        <option value="1">- Ampera - Block Stock (WDFGAMBS)</option>
+                                                        <option value="1">- Ampera - PM (WDFGAMPM)</option>
+                                                        <option value="1">- Bekasi - (WDFGBKS)</option>
                                                     </select>
 												</div>
 											</div>
@@ -75,16 +67,17 @@
 												<label class="col-lg-3 col-form-label">Group Hak Akses:</label>
 												<div class="col-lg-9">
                                                     <select class="form-control multiselect-select-all-filtering" multiple="multiple" data-fouc>
-                                                        <option value="cheese">pilih 1</option>
-                                                        <option value="tomatoes">pilih 2</option>
-                                                        <option value="mozarella">pilih 3</option>
-                                                        <option value="mushrooms">pilih 4</option>
+                                                        <option value="cheese">Outlet Staff</option>
+                                                        <option value="tomatoes">HQ Inventory</option>
+                                                        <option value="mozarella">HQ Controlling</option>
+                                                        <option value="mushrooms">HQ - Manager</option>
                                                     </select>
 												</div>
 											</div>
 
                                             <div class="text-right">
-                                                <button type="submit" class="btn btn-primary">Ubah<i class="icon-paperplane ml-2"></i></button>
+                                                <button type="submit" class="btn btn-primary">Submit</button>
+                                                <button type="submit" class="btn btn-success">Cancel</button>
                                             </div>
                                         </fieldset>
                                     </div>
