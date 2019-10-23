@@ -13,10 +13,6 @@ class Bom extends CI_Controller
     {
         $this->load->view('master/bom/list_view');
     }
-
-    public function add(){
-        $this->load->view('master/bom/add_form');
-    }
 	
 	public function edit(){
         $this->load->view('master/bom/edit_form');
@@ -114,6 +110,10 @@ class Bom extends CI_Controller
         ];
         
         echo json_encode($data);
+    }
+	
+	public function add(){
+        $this->load->view('master/bom/add_form');
     }
 }
 ?>

@@ -50,6 +50,9 @@
                         </div>
                     </div>   
 					<div class="card">
+						<div class="card-header">
+                            <a href="<?php echo site_url('master/bom/add') ?>" class="btn btn-primary"> Add New</a> 
+                        </div>
 						<div class="card-body">
 							<div class="row">
 								<div class="col-md-12" style="overflow: auto">
@@ -57,7 +60,7 @@
 									<table class="table table-bordered table-striped" id="table-bom">
 										<thead>
 											<tr>
-												<th style="text-align: left">*</th>
+												<th></th>
 												<th>Action</th>
 												<th>BOM Item No</th>
 												<th>BOM Item Description</th>
@@ -84,7 +87,10 @@
                         "type":"POST"
                     },
                     "columns": [
-                        {"data":"no"},
+                        {"data":"no", "className":"dt-center", render:function(data, type, row, meta){
+                            rr=`<input type="checkbox" class="check_delete" id="chk_${data}" value="${data}" onclick="checkcheckbox();">`;
+                            return rr;
+                        }},
 						{"data":"no","className":"dt-center", render:function(data, type, row, meta){
                                 rr = `<a href='<?php echo site_url('master/bom/edit')?>' ><i class='icon-file-check2' title="Edit"></i></a>&nbsp;`;
                                 return rr;
