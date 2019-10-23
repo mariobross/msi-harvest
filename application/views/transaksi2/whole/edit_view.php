@@ -18,9 +18,10 @@
 			<div class="content-wrapper">
                 <!-- <?php  $this->load->view("_template/breadcrumb.php")?> -->
 				<div class="content">
-                    <div class="card">
+                    <form action="#" method="POST">
+					<div class="card">
                         <div class="card-body">
-                            <form action="#" method="POST">
+                            
                                 <div class="row">
                                     <div class="col-md-12">
                                         <fieldset>
@@ -59,7 +60,7 @@
 											</div>
 
                                             <div class="text-right">
-                                                <button type="submit" class="btn btn-primary">Update<i class="icon-paperplane ml-2"></i></button>
+                                                <button type="submit" class="btn btn-primary">Save<i class="icon-safe ml-2"></i></button>
 												<button type="submit" class="btn btn-success">Approve SAP<i class="icon-paperplane ml-2"></i></button>
                                             </div>
 
@@ -67,10 +68,21 @@
                                         </fieldset>
                                     </div>
                                 </div>
-								<br>
+								</div>
+                    </div>
+					<div class="card">
+                        <div class="card-body">
+                            
 								<div class="row">
+								<legend class="font-weight-semibold"><i class="icon-list mr-2"></i>List Item</legend>
+								<div class="col-md-12 mb-2">
+										<div class="text-left">
+											<input type="button" class="btn btn-primary" value="Add" id="addTable"> 
+											<input type="button" value="Delete" class="btn btn-danger" id="deleteRecord"> 
+										</div>
+									</div>
 									<div class="col-md-12" style="overflow: auto">
-										<table class="table table-bordered table-striped" id="tblWhole">
+										<table class="table table-striped" id="tblWhole">
 											<thead>
 												<tr>
 													<th colspan="7" >BOM ITEM</th>
@@ -87,16 +99,12 @@
 											</thead>
 										</table>
 									</div>
-									<div class="col-md-12">
-										<div class="text-left">
-											<input type="button" class="btn btn-primary" value="Add" id="addTable"> 
-											<input type="button" value="Delete" class="btn btn-danger" id="deleteRecord"> 
-										</div>
-									</div>
+									
 								</div>
+								</div>
+                    </div>
                             </form>
-                        </div>
-                    </div>                    
+                                            
 				</div>
 				<?php  $this->load->view("_template/footer.php")?>
 			</div>
@@ -113,12 +121,12 @@
 				table.row.add([
 					`<input type="checkbox"  value="dt_${count}" class="check_delete" id="dt_${count}" onclick="checkcheckbox();">`,
 					count,
-					'',
 					`<select class="form-control form-control-select2" data-live-search="true">
 						<option value="">Select Item</option>
 						<option value="1">Pilih 1</option>
 						<option value="2">Pilih 2</option>
 					</select>`,
+					'',
 					`<input type="text" name="qty[]" id="qty[]">`,
 					'',
 					''
