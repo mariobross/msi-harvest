@@ -132,11 +132,17 @@
                     },
                     "columns": [
                         {"data":"no"},
-                        {"data":"material_no"},
+						{"data":"material_no", "className":"dt-center", "colspan":"2", render:function(data, type, row, meta){
+                            rr=`<select class="form-control"><option value="variance" selected>Variance</option><option value="rmbeverage">RM Beverage</option></select>`;
+                            return rr;
+                        }},
                         {"data":"material_desc"},
                         {"data":"whs_qty"},
-                        {"data":"quantity"},
 						{"data":"gr_qty"},
+						{"data":"quantity", "className":"dt-center", render:function(data, type, row, meta){
+                            rr=`<input type="text" class="form-control" value="">`;
+                            return rr;
+                        }},
                         {"data":"uom_reg"},
                         {"data":"uom"},
                     ]
