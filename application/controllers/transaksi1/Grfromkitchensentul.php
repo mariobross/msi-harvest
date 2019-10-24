@@ -94,43 +94,12 @@ class Grfromkitchensentul extends CI_Controller
        $dt= array(
            array(
             "no" => "1",
-            "material_no" => "AT-FDG0159",
-            "material_desc"=>"Blueberry Jam @5000gr/pail (Almondtree)",
-            "quantity"=> "15,000.00",
-            "gr_qty"=> "15000.00",
+            "item_no" => "AT-MBP0001",
+            "item_desc"=>"Box 10x20-AT (Active)",
+            "gi_qty"=> "200.00",
+            "gr_qty"=> "200.00",
+            "rcv_qty"=> "",
             "uom"=> "pcs",
-            "val"=> "",
-            "variance"=> "0.00"
-           ),
-		   array(
-            "no" => "2",
-            "material_no" => "AT-FDG0159",
-            "material_desc"=>"Blueberry Jam @5000gr/pail (Almondtree)",
-            "quantity"=> "15,000.00",
-            "gr_qty"=> "15000.00",
-            "uom"=> "pcs",
-            "val"=> "",
-            "variance"=> "0.00"
-           ),
-		   array(
-            "no" => "3",
-            "material_no" => "AT-FDG0159",
-            "material_desc"=>"Blueberry Jam @5000gr/pail (Almondtree)",
-            "quantity"=> "15,000.00",
-            "gr_qty"=> "15000.00",
-            "uom"=> "pcs",
-            "val"=> "",
-            "variance"=> "0.00"
-           ),
-		   array(
-            "no" => "4",
-            "material_no" => "AT-FDG0159",
-            "material_desc"=>"Blueberry Jam @5000gr/pail (Almondtree)",
-            "quantity"=> "15,000.00",
-            "gr_qty"=> "15000.00",
-            "uom"=> "pcs",
-            "val"=> "",
-            "variance"=> "0.00"
            ),
 		   
         ); 
