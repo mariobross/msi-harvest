@@ -119,14 +119,13 @@
 								<table id="table-transferininteroutlet" class="table table-striped " style="width:100%">
 									<thead>
 										<tr>
-											<th style="text-align: left">*</th>
-											<th>Material No</th>
-											<th>Material Desc</th>
-											<th>Good Issue Qty</th>
-											<th>Actual GR. Qty</th>
-											<th>Uom</th>
-											<th>Val</th>
-											<th>Variance</th>
+											<th>No</th>
+											<th>Item No</th>
+											<th>Item Desc</th>
+											<th>SR Qty</th>
+											<th>TF Qty</th>
+											<th>Rcv Qty</th>
+											<th>UOM</th>
 										</tr>
 									</thead>
 									<tbody>
@@ -150,22 +149,15 @@
                     },
                     "columns": [
                         {"data":"no"},
-                        {"data":"material_no"},
-                        {"data":"material_desc"},
+                        {"data":"item_no"},
+                        {"data":"item_desc"},
                         {"data":"gi_qty"},
-						{"data":"gr_qty", "className":"dt-center", render:function(data, type, row, meta){
+                        {"data":"gr_qty"},
+						{"data":"rcv_qty", "className":"dt-center", render:function(data, type, row, meta){
                             rr=`<input type="text" class="form-control" value="${data}">`;
                             return rr;
                         }},
-                        {"data":"uom"},
-						{"data":"val", "className":"dt-center", render:function(data, type, row, meta){
-                            rr=`<select class="form-control"><option value="variance" selected>Variance</option><option value="rmbeverage">RM Beverage</option></select>`;
-                            return rr;
-                        }},
-						{"data":"variance", "className":"dt-center", render:function(data, type, row, meta){
-                            rr=`<input type="text" class="form-control" value="${data}">`;
-                            return rr;
-                        }},
+						{"data":"uom"},
                     ]
                 });
             });
