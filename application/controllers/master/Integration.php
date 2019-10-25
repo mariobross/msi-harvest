@@ -21,6 +21,7 @@ class Integration extends CI_Controller
     }
 	
 	public function showAllData(){
+		
 		$this->load->model('master/integration_model');
 		
         $data['data'] = $this->integration_model->showIntegration();

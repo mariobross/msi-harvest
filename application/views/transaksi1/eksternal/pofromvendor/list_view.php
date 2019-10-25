@@ -44,7 +44,7 @@
                                         <label class="col-lg-3 col-form-label">Status</label>
                                         <div class="col-lg-9">
                                             <select class="form-control form-control-select2" data-live-search="true">
-                                                <option value="">none selected</option>
+                                                <option value="">None selected</option>
                                                 <option value="approved">Approved</option>
                                                 <option value="notapproved">Not Approved</option>
                                             </select>
@@ -111,30 +111,27 @@
                         "type":"POST"
                     },
                     "columns": [
-                        {"data":"no", "className":"dt-center", render:function(data, type, row, meta){
+                        {"data":"id", "className":"dt-center", render:function(data, type, row, meta){
                             rr=`<input type="checkbox" class="check_delete" id="chk_${data}" value="${data}" onclick="checkcheckbox();">`;
                             return rr;
                         }},
-                        {"data":"action", "className":"dt-center", render:function(data, type, row, meta){
+                        {"data":"id", "className":"dt-center", render:function(data, type, row, meta){
                             rr = `<div style="width:100px">
-
-                                        
-                                        <a href='<?php echo site_url('transaksi1/pofromvendor/edit')?>' ><i class='icon-file-plus2' title="Edit"></i></a>&nbsp;
-
-                                    </div>`;
-                                        return rr;
+									<a href='<?php echo site_url('transaksi1/pofromvendor/edit')?>' ><i class='icon-file-plus2' title="Edit"></i></a>&nbsp;
+								  </div>`;
+                            return rr;
                         }},
                         {"data":"id"},
                         {"data":"gr_no"},
                         {"data":"po_no"},
                         {"data":"vendor_code"},
                         {"data":"vendor_name"},
-                        {"data":"delivery_date"},
-                        {"data":"posting_date"},
+                        {"data":"dev_date"},
+                        {"data":"pos_date"},
                         {"data":"status"},
                         {"data":"created_by"},
-                        {"data":"approved_by"},
-                        {"data":"last_modified"},
+                        {"data":"app_by"},
+                        {"data":"last_modif"},
                         {"data":"log"}
                     ]
                 });

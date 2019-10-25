@@ -24,7 +24,7 @@
                                 <div class="row">
                                     <div class="col-md-12">
                                         <fieldset>
-                                            <legend class="font-weight-semibold"><i class="icon-reading mr-2"></i>Tambah Retur Out</legend>
+                                            <legend class="font-weight-semibold"><i class="icon-reading mr-2"></i>Tambah Retur In</legend>
                                             <div class="form-group row">
 												<label class="col-lg-3 col-form-label">ID Transaksi</label>
 												<div class="col-lg-9">
