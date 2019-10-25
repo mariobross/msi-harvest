@@ -27,51 +27,6 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-								<?php 
-									$i = 1;
-									if(isset($data)){
-										foreach($data as $_data){ 
-											$mod =$_data->modul;
-											if ($mod=='Good Issue from Production' || $mod=='Good Receipt Produksi'){
-												$modul='produksi';
-											}else if ($mod=='Purchase Request'){
-												$modul='pr';
-											}else if ($mod=='Store Room Request'){
-												$modul='stdstock';
-											}else if ($mod=='GR PO From Vendor'){
-												$modul='grpo';
-											}else if ($mod=='Good Issue'){
-												$modul='issue';
-											}else if ($mod=='Good Receipt Whole to Slice'||$mod=='Good Issue from Whole Outlet'){
-												$modul='twtsnew';
-											}else if ($mod=='Transfer Out Inter Outlet'){
-												$modul='gistonew_out';
-											}else if ($mod=='Retur'){
-												$modul='gisto_dept';
-											}else if ($mod=='Purchase Request'){
-												$modul='pr';
-											}else if ($mod=='Store Room Request'){
-												$modul='stdstock';
-											}else if ($mod=='GR From Sentul'){
-												$modul='grpodlv';
-											}else if ($mod=='Stock Counting Opname'){
-												$modul='opname';
-											}else if ($mod=='Transfer In Inter Outlet'){
-												$modul='grsto';
-											}
-								?> 
-									<tr>
-										<td><?php echo $i++; ?></td>
-										<td><?php echo $_data->modul; ?></td>
-										<td><?php echo $_data->message; ?></td>
-										<td><?php echo $_data->time_error; ?></td>
-										<td><?php echo $_data->id_trans; ?></td>
-										<td><a href='<?php echo site_url('master/'.$modul.'/edit/'.$_data->id_trans)?>' ><i class='icon-file-plus2' title="Edit"></i></a></td>
-									</tr>
-								<?php
-										}
-									}
-								?>
                                 </tbody>
                             </table>
                         </div>
@@ -83,9 +38,31 @@
         <?php  $this->load->view("_template/js.php")?>
         <script>
             $(document).ready(function(){
-                $('#table-manajemen').DataTable({
-                    "ordering":false,  "paging": true, "searching":true
+                var table = $('#table-manajemen').DataTable({
+                    "ordering":false,  "paging": true, "searching":true,
+                    "ajax": {
+                        "url":"<?php echo site_url('master/integration/showAllData');?>",
+                        "type":"POST"
+                    },
+					"order": [[ 0, 'asc' ]],
+                    "columns": [
+                        {"data":"modul"},
+                        {"data":"modul"},
+                        {"data":"message"},
+                        {"data":"time_error"},
+                        {"data":"id_trans"},
+                        {"data":"id_error","className":"dt-center", render:function(data, type, row, meta){
+                                rr = `<a href='<?php echo site_url('master/integration/edit')?>' ><i class='icon-file-plus2' title="Edit"></i></a>&nbsp;`;
+                                return rr;
+                            }
+                        }
+                    ]
                 });
+				table.on( 'order.dt search.dt', function () {
+					table.column(0, {search:'applied', order:'applied'}).nodes().each( function (cell, i) {
+						cell.innerHTML = i+1;
+					} );
+				} ).draw();
             });
         </script>
 	</body>

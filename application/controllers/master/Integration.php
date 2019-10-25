@@ -8,11 +8,8 @@ class Integration extends CI_Controller
     }
 
     public function index(){
-		$this->load->model('master/integration_model');
-
-		$data['data'] = $this->integration_model->showIntegration();
 		
-        $this->load->view('master/integration_log/list_view',$data);
+		$this->load->view('master/integration_log/list_view');
     }
 
     public function add(){
@@ -21,6 +18,14 @@ class Integration extends CI_Controller
 	
 	public function edit(){
         $this->load->view('master/integration_log/edit_form');
+    }
+	
+	public function showAllData(){
+		$this->load->model('master/integration_model');
+		
+        $data['data'] = $this->integration_model->showIntegration();
+		
+		echo json_encode($data);
     }
 	
 	public function goodIssueData(){
