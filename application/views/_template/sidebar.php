@@ -84,7 +84,7 @@
 						<li class="nav-item"><a href="<?php echo base_url('/master/akses');?>" class="nav-link">Hak Akses</a></li>
 						<li class="nav-item"><a href="<?php echo base_url('/master/integration');?>" class="nav-link">Integration Log</a></li>
 						<!--<li class="nav-item"><a href="../seed/layout_boxed.html" class="nav-link">Master Konversi Item Whole ke Slice</a></li>-->
-						<li class="nav-item"><a href="<?php echo base_url('/master/bom');?>" class="nav-link">Master Bill Of Materials</a></li>
+						<!--<li class="nav-item"><a href="<?php //echo base_url('/master/bom');?>" class="nav-link">Master Bill Of Materials</a></li>-->
 						
 					</ul>
 				</li>
