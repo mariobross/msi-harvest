@@ -12,13 +12,13 @@
 				<div class="content">
                     <div class="card">
                         <div class="card-header">
-                            <legend class="font-weight-semibold"><i class="icon-list mr-2"></i>List Manajemen Pengguna</legend>
+                            <legend class="font-weight-semibold"><i class="icon-list mr-2"></i>List Integration Log</legend>
                         </div>
                         <div class="card-body">
                             <table id="table-manajemen" class="table table-striped " style="width:100%">
                                 <thead>
                                     <tr>
-                                        <th style="text-align: left">*</th>
+                                        <th></th>
                                         <th>Modul</th>
                                         <th>Message</th>
                                         <th>Error Time</th>
@@ -38,30 +38,31 @@
         <?php  $this->load->view("_template/js.php")?>
         <script>
             $(document).ready(function(){
-                $('#table-manajemen').DataTable({
+                var table = $('#table-manajemen').DataTable({
                     "ordering":false,  "paging": true, "searching":true,
                     "ajax": {
                         "url":"<?php echo site_url('master/integration/showAllData');?>",
                         "type":"POST"
                     },
+					"order": [[ 0, 'asc' ]],
                     "columns": [
-                        {"data":"no"},
+                        {"data":"modul"},
                         {"data":"modul"},
                         {"data":"message"},
-                        {"data":"error_time"},
-                        {"data":"trans_id"},
-                        {"data":"no","className":"dt-center", render:function(data, type, row, meta){
+                        {"data":"time_error"},
+                        {"data":"id_trans"},
+                        {"data":"id_error","className":"dt-center", render:function(data, type, row, meta){
                                 rr = `<a href='<?php echo site_url('master/integration/edit')?>' ><i class='icon-file-plus2' title="Edit"></i></a>&nbsp;`;
                                 return rr;
                             }
                         }
                     ]
                 });
-
-                deleteConfirm = (url)=>{
-                    $('#btn-delete').attr('href', url);
-	                $('#deleteModal').modal();
-                }
+				table.on( 'order.dt search.dt', function () {
+					table.column(0, {search:'applied', order:'applied'}).nodes().each( function (cell, i) {
+						cell.innerHTML = i+1;
+					} );
+				} ).draw();
             });
         </script>
 	</body>
