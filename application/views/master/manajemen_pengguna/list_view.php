@@ -27,10 +27,34 @@
                                     </tr>
                                 </thead>
                                 <tbody>
+
+                                <?php
+                                    $i = 1;
+                                    foreach($admins as $value):?>
+                                    <tr>
+                                        <td><?= $i++?></td>
+                                        <td><?= $value['admin_username']?></td>
+                                        <td><?= $value['admin_realname']?></td>
+                                        <?php
+                                            $perm_groups = $this->manajemen_model->showPermGroup($value['admin_id']);
+                                        ?>
+                                        <td>
+                                        <?php foreach($perm_groups as $perm_group): ?>
+                                        <?=$perm_group['group_name'];?><br />
+                                        <?php endforeach; ?>
+                                        </td>
+                                        <td>
+                                            <a href='<?php echo site_url('master/manajemen/edit/'.$value['admin_id'])?>' ><i class='icon-file-plus2' title="Edit"></i></a>&nbsp;
+                                            <a onClick="deleteConfirm('<?php echo site_url('master/manajemen/delete/'.$value['admin_id'])?>')" href="#!"><i class='icon-cross2' title="Delete"></i></a>
+                                        </td>
+
+                                    </tr>
+                                <?php endforeach;?>
+
                                 </tbody>
                             </table>
                         </div>
-                    </div>                    
+                    </div>
 				</div>
 				<?php  $this->load->view("_template/footer.php")?>
 			</div>
@@ -40,23 +64,7 @@
         <script>
             $(document).ready(function(){
                 $('#table-manajemen').DataTable({
-                    "ordering":false,  "paging": true, "searching":true,
-                    "ajax": {
-                        "url":"<?php echo site_url('master/manajemen/showAllData');?>",
-                        "type":"POST"
-                    },
-                    "columns": [
-                        {"data":"no"},
-                        {"data":"username"},
-                        {"data":"nama_lengkap"},
-                        {"data":"grup_hak_akses"},
-                        {"data":"no","className":"dt-center", render:function(data, type, row, meta){
-                                rr = `<a href='<?php echo site_url('master/manajemen/edit')?>' ><i class='icon-file-plus2' title="Edit"></i></a>&nbsp;
-                                        <a onClick="deleteConfirm('<?php echo site_url('master/manajemen/delete')?>')" href="#!"><i class='icon-cross2' title="Delete"></i></a>`;
-                                return rr;
-                            }
-                        }
-                    ]
+                    "ordering":false,  "paging": true, "searching":true
                 });
 
                 deleteConfirm = (url)=>{
@@ -64,7 +72,7 @@
 	                $('#deleteModal').modal();
                 }
             });
-        
+
         </script>
 	</body>
 </html>
