@@ -5,13 +5,11 @@ class Integration extends CI_Controller
     public function __construct(){
         parent::__construct();
         $this->load->library('form_validation');
-        //load model
-        // $this->load->model('integration_model');
     }
 
-    public function index()
-    {
-        $this->load->view('master/integration_log/list_view');
+    public function index(){
+		
+		$this->load->view('master/integration_log/list_view');
     }
 
     public function add(){
@@ -23,49 +21,11 @@ class Integration extends CI_Controller
     }
 	
 	public function showAllData(){
-       $dt= array(
-           array(
-            "no" => "1",
-            "modul" => "Good Issue",
-            "message"=>"Quantity falls into negative inventory [IGE1.ItemCode][line: 42]",
-            "error_time"=> "2019-10-13 21:35:04",
-            "trans_id"=> "42377"
-           ),
-		   array(
-            "no" => "2",
-            "modul" => "Good Issue from Production",
-            "message"=>"Quantity falls into negative inventory [IGE1.ItemCode][line: 2]",
-            "error_time"=> "2019-10-12 14:49:09",
-            "trans_id"=> "1449245"
-           ),
-		   array(
-            "no" => "3",
-            "modul" => "Good Issue",
-            "message"=>"Quantity falls into negative inventory [IGE1.ItemCode][line: 28]",
-            "error_time"=> "2019-10-09 21:25:04",
-            "trans_id"=> "42159"
-           ),
-		   array(
-            "no" => "4",
-            "modul" => "Good Issue",
-            "message"=>"Quantity falls into negative inventory [IGE1.ItemCode][line: 26]",
-            "error_time"=> "2019-10-07 19:55:05",
-            "trans_id"=> "41939"
-           ),
-		   array(
-            "no" => "5",
-            "modul" => "Good Issue from Whole Outlet",
-            "message"=>"Quantity falls into negative inventory [IGE1.ItemCode][line: 1]",
-            "error_time"=> "2019-10-06 20:04:06",
-            "trans_id"=> "138497"
-           ),
-        ); 
-
-        $data = [
-            "data"=> $dt
-        ];
-        
-        echo json_encode($data);
+		$this->load->model('master/integration_model');
+		
+        $data['data'] = $this->integration_model->showIntegration();
+		
+		echo json_encode($data);
     }
 	
 	public function goodIssueData(){
