@@ -103,34 +103,63 @@
             $(document).ready(function(){
                 $('#fromDate').datepicker();
                 $('#toDate').datepicker();
+				$.fn.dataTableExt.oApi.fnPagingInfo = function(oSettings){
+					return {
+						"iStart": oSettings._iDisplayStart,
+						"iEnd": oSettings.fnDisplayEnd(),
+						"iLength": oSettings._iDisplayLength,
+						"iTotal": oSettings.fnRecordsTotal(),
+						"iFilteredTotal": oSettings.fnRecordsDisplay(),
+						"iPage": Math.ceil(oSettings._iDisplayStart / oSettings._iDisplayLength),
+						"iTotalPages": Math.ceil(oSettings.fnRecordsDisplay() / oSettings._iDisplayLength)
+					};
+				};
 
                 dataTable = $('#tableWhole').DataTable({
-                    "ordering":false,  "paging": true, "searching":true,
+					"initComplete": function() {
+                        var api = this.api();
+                        $('#mytable_filter input')
+                                .off('.DT')
+                                .on('keyup.DT', function(e) {
+                                    if (e.keyCode == 13) {
+                                        api.search(this.value).draw();
+                            }
+                        });
+                    },
+                    "ordering":false,  "paging": true, "searching":true, "serverSide": true,
                     "ajax": {
                         "url":"<?php echo site_url('transaksi1/wo/showAllData');?>",
                         "type":"POST"
                     },
                     "columns": [
-                        {"data":"no", "className":"dt-center", render:function(data, type, row, meta){
+                        {"data":"id_produksi_header", "className":"dt-center", render:function(data, type, row, meta){
                             rr=`<input type="checkbox" class="check_delete" id="chk_${data}" value="${data}" onclick="checkcheckbox();">`;
                             return rr;
                         }},
-                        {"data":"action", "className":"dt-center", render:function(data, type, row, meta){
+                        {"data":"id_produksi_header", "className":"dt-center", render:function(data, type, row, meta){
                                 rr = `<a href='<?php echo site_url('transaksi1/wo/edit')?>' ><i class='icon-file-plus2' title="Edit"></i></a>`;
                                 return rr;
                         }},
-                        {"data":"id"},
-                        {"data":"item_no"},
-                        {"data":"item_description"},
+                        {"data":"id_produksi_header"},
+                        {"data":"kode_paket"},
+                        {"data":"nama_paket"},
                         {"data":"posting_date"},
                         {"data":"status"},
-                        {"data":"created_by"},
-                        {"data":"approved_by"},
-                        {"data":"last_modified"},
-                        {"data":"receipt_number"},
-                        {"data":"issue_number"},
+                        {"data":"user_input"},
+                        {"data":"user_approve"},
+                        {"data":"lastmodified"},
+                        {"data":"produksi_no"},
+                        {"data":"doc_issue"},
                         {"data":"log"}
-                    ]
+                    ],
+					"order": [[1, 'asc']],
+					 "rowCallback": function(row, data, iDisplayIndex) {
+                        var info = this.fnPagingInfo();
+                        var page = info.iPage;
+                        var length = info.iLength;
+                        var index = page * length + (iDisplayIndex + 1);
+                        $('td:eq(0)', row).html(index);
+                    }
                 });
 
                 // untuk check all
