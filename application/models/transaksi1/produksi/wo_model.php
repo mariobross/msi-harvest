@@ -36,19 +36,6 @@ class Wo_model extends CI_Model{
 				}
 				$status_string = ($data['status'] == '2') ? 'Approved' : 'Not Approved';
 				
-				/*$nestedData['id_produksi_header'] = $data['id_produksi_header'];
-				$nestedData['kode_paket'] = $data['kode_paket'];
-				$nestedData['nama_paket'] = $data['nama_paket'];
-				$nestedData['posting_date'] = $data['posting_date'];
-				$nestedData['status'] = $status_string;
-				$nestedData['user_input'] = $createdBy[0]->admin_realname;
-				$nestedData['user_approve'] = $approvedBy[0]->admin_realname;
-				$nestedData['lastmodified'] = $data['lastmodified'];
-				$nestedData['produksi_no'] = $data['produksi_no'];
-				$nestedData['doc_issue'] = $docIssue[0]->doc_issue;
-				$nestedData['log'] = $log;
-				$data = $nestedData;*/
-				
 				array_push($nestedData,
 					array(
 						"id_produksi_header" 	=> $data['id_produksi_header'],
