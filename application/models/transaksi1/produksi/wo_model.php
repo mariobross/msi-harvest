@@ -7,7 +7,6 @@ class Wo_model extends CI_Model{
     }
 
     public function showList(){
-		
 		$query			=	$this->db->query('SELECT * FROM t_produksi_header WHERE plant = "WMSIBSST"');
 		
 		if($query->num_rows() > 0){
