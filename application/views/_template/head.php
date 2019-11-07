@@ -17,14 +17,8 @@
 <link href="<?php echo base_url('/files/');?>global_assets/js/plugins/datepicker/datepicker3.css" rel="stylesheet" type="text/css">
 <!-- /global stylesheets -->
 
-
-<!--dataTable-->
 <link href="<?php echo base_url('/files/');?>assets/css/jquery.dataTables.min.css" rel="stylesheet" type="text/css">
-<!-- /dataTable -->
-
-<!-- custom CSS -->
 <link href="<?php echo base_url('/files/');?>assets/css/custom.css" rel="stylesheet" type="text/css">
-<!-- /custom CSS -->
 
 <!-- Core JS files -->
 <script src="<?php echo base_url('/files/');?>global_assets/js/main/jquery.min.js"></script>
@@ -34,7 +28,6 @@
 <script src="<?php echo base_url('/files/');?>global_assets/js/plugins/forms/styling/uniform.min.js"></script>
 
 <script src="<?php echo base_url('/files/');?>global_assets/js/demo_pages/form_layouts.js"></script>
-
 
 <!-- /core JS files -->
 
