@@ -74,9 +74,9 @@
                                                 <th style="text-align: left"><input type="checkbox" name="checkall" id="checkall"></th>
                                                 <th style="text-align: center">Action</th>
                                                 <th style="text-align: center">ID</th>
-                                                <th style="text-align: center">Date</th>
                                                 <th style="text-align: center">Item No</th>
                                                 <th style="text-align: center">Item Description</th>
+                                                <th style="text-align: center">Posting Date</th>
                                                 <th style="text-align: center">Quantity</th>
                                                 <th style="text-align: center">Status</th>
                                                 <th style="text-align: center">Created by</th>
