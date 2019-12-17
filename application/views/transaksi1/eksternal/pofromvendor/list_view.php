@@ -14,6 +14,16 @@
 			<div class="content-wrapper">
                 <!-- <?php  $this->load->view("_template/breadcrumb.php")?> -->
 				<div class="content">
+                <?php if ($this->session->flashdata('success')): ?>
+						<div class="alert alert-success" role="alert">
+							<?php echo $this->session->flashdata('success'); ?>
+						</div>
+					<?php endif; ?>
+					<?php if ($this->session->flashdata('failed')): ?>
+						<div class="alert alert-danger" role="alert">
+							<?php echo $this->session->flashdata('failed'); ?>
+						</div>
+					<?php endif; ?>
                     <div class="card">
                         <div class="card-header">
                             <legend class="font-weight-semibold"><i class="icon-search4 mr-2"></i>Search of Good Receive PO from Vendor</legend>  
@@ -184,6 +194,7 @@
                 // end check all
                 $("#deleteRecord").click(function(){
                     let deleteidArr=[];
+                    let getTable = $("#tableWhole").DataTable();
                     $("input:checkbox[class=check_delete]:checked").each(function(){
                         deleteidArr.push($(this).val());
                     })
@@ -192,11 +203,12 @@
                         var confirmDelete = confirm("Do you really want to Delete records?");
                         if(confirmDelete == true){
                             $.ajax({
-                                url:"", //masukan url untuk delete
+                                url:"<?php echo site_url('transaksi1/pofromvendor/deleteData');?>", //masukan url untuk delete
                                 type: "post",
                                 data:{deleteArr: deleteidArr},
                                 success:function(res) {
-                                    dataTable.ajax.reload();
+                                    location.reload(true);
+                                    getTable.row($(this).closest("tr")).remove().draw();
                                 }
                             });
                         }

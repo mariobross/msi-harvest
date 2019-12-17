@@ -139,7 +139,7 @@ class Pofromvendor extends CI_Controller
         }
 
         
-        if($fromDate != '') {
+        if($toDate != '') {
 			$year = substr($toDate, 6);
 			$month = substr($toDate, 3,2);
 			$day = substr($toDate, 0,2);
@@ -196,9 +196,23 @@ class Pofromvendor extends CI_Controller
         $grpo_header['storage_location'] = 'WMSITJST';
         $grpo_header['posting_date'] = $this->l_general->str_to_date($this->input->post('posting_date'));
         $grpo_header['id_grpo_plant'] = $this->povendor->id_grpo_plant_new_select($grpo_header['plant'],$grpo_header['posting_date']);
-        $grpo_header['status'] = $this->input->post('status');
+        $grpo_header['status'] = $this->input->post('app') == "2" ? "2" : $this->input->post('status');
         $grpo_header['item_group_code'] = $this->input->post('item_group_code');
         $grpo_header['id_user_input'] = '2392';
+
+        $web_trans_id = $this->l_general->_get_web_trans_id($grpo_header['plant'],$grpo_header['posting_date'],$grpo_header['id_grpo_plant'],'01');
+
+        //approve
+        if( $this->input->post('app') == "2" ){
+            $grpo_to_approve = array (
+                'plant' => $grpo_header['plant'],
+                'po_no' => $grpo_header['po_no'],
+                'posting_date' => date('Ymd',strtotime($grpo_header['posting_date'])),
+                'id_user_input' => $grpo_header['id_user_input'],
+                'web_trans_id' => $web_trans_id,
+            );
+        }
+        //end approve
 
         $grpo_details = $this->povendor->sap_grpo_details_select_by_po_no($this->input->post('poNo'));
        
@@ -206,22 +220,37 @@ class Pofromvendor extends CI_Controller
             $input_detail_success = false;
             foreach($grpo_details as $key=>$val ){
                     
-                    $grpo_detail['id_grpo_header'] = $id_grpo_header;
-                    $grpo_detail['id_grpo_h_detail'] = $val['id_grpo_h_detail'];
-                    $grpo_detail['item'] = $val['EBELP'];
-                    $grpo_detail['material_no'] = $val['MATNR'];
-                    $grpo_detail['material_desc'] = $val['MAKTX'];
-                    $grpo_detail['outstanding_qty'] = number_format($val['BSTMG'],4,'.','');
-                    $grpo_detail['gr_quantity'] = $this->input->post('detail_grQty')[$key-1];
-                    $grpo_detail['uom'] = $val['BSTME'];
-                    
-                    $grpo_detail['ok'] = '1';
-                    $grpo_detail['ok_cancel'] = '0';
-                    
-                    $grpo_detail['qc'] = $this->input->post('remark')[$key-1];
-            
-                    if($this->povendor->grpo_detail_insert($grpo_detail))
-                    $input_detail_success = TRUE;
+                $grpo_detail['id_grpo_header']      = $id_grpo_header;
+                $grpo_detail['id_grpo_h_detail']    = $val['id_grpo_h_detail'];
+                $grpo_detail['item']                = $val['EBELP'];
+                $grpo_detail['material_no']         = $val['MATNR'];
+                $grpo_detail['material_desc']       = $val['MAKTX'];
+                $grpo_detail['outstanding_qty']     = number_format($val['BSTMG'],4,'.','');
+                $grpo_detail['gr_quantity']         = $this->input->post('detail_grQty')[$key-1];
+                $grpo_detail['uom']                 = $val['BSTME'];
+                $grpo_detail['ok']                  = '1';
+                $grpo_detail['ok_cancel']           = '0';
+                $grpo_detail['qc']                  = $this->input->post('remark')[$key-1];
+
+                //for batch and batch1
+                $batch['BaseEntry']     = $id_grpo_header;
+                $batch['BaseLinNum']    = $val['id_grpo_h_detail'];
+                $batch['ItemCode']      = $val['MATNR'];
+                $batch1['ItemCode']     = $val['MATNR'];
+                $batch['Createdate']    = $grpo_header['posting_date'];
+                $batch['BaseType']      = 3;
+                $batch['Quantity']      = $this->input->post('detail_grQty')[$key-1];
+                $batch1['Quantity']     = $this->input->post('detail_grQty')[$key-1];
+                $batch1['Whs']          = $grpo_header['plant'];
+
+                //for grpo_approve
+                $grpo_to_approve['item'][$i] = $grpo_detail['item'];
+                $grpo_to_approve['material_no'][$i] = $grpo_detail['material_no'];
+                $grpo_to_approve['gr_quantity'][$i] = $grpo_detail['gr_quantity'];
+                $grpo_to_approve['uom'][$i] = $grpo_detail['uom'];
+        
+                if($this->povendor->grpo_detail_insert($grpo_detail))
+                $input_detail_success = TRUE;
             }
         }
         if($input_detail_success){
@@ -270,6 +299,21 @@ class Pofromvendor extends CI_Controller
         }else{
             return $this->session->set_flashdata('failed', "In PO From Vendor Gagal di Cancel");
         }  
+    }
+
+    public function deleteData(){
+        $id_grpo_header = $this->input->post('deleteArr');
+        $deleteData = false;
+        foreach($id_grpo_header as $id){
+            if($this->povendor->grpo_header_delete($id))
+            $deleteData = true;
+        }
+        
+        if($deleteData){
+            return $this->session->set_flashdata('success', "In PO From Vendor Berhasil dihapus");
+        }else{
+            return $this->session->set_flashdata('failed', "In PO From Vendor Gagal dihapus");
+        }
     }
 }
 ?>

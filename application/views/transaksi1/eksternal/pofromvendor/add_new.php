@@ -142,7 +142,7 @@
 												<div class="col-lg-12 text-right">
 													<div class="text-right">
 														<button type="button" class="btn btn-primary" name="save" id="save" onclick="addDatadb()">Save <i class="icon-pencil5 ml-2"></i></button>
-														<button type="submit" class="btn btn-success" name="approve" id="approve">Approve <i class="icon-paperplane ml-2" ></i></button>
+														<button type="button" class="btn btn-success" name="approve" id="approve" onclick="addDatadb(2)" >Approve <i class="icon-paperplane ml-2" ></input></i>
 													</div>
 												</div>
 											</div>
@@ -252,7 +252,7 @@
 				})
 			}
 
-			function addDatadb(){
+			function addDatadb(id_approve = ''){
 				if($('#grOutstanding').val() ==''){
 					alert('Gr Quatity harus di isi');
 					return false;
@@ -269,6 +269,7 @@
 				matrialGrp 	= $('#MatrialGroup').val();
 				pstDate 	= $('#postingDate').val();
 				delvDate 	= $('#delivDate').val();
+				approve		= id_approve;
 
 				table = $('#table-manajemen > tbody');
 
@@ -282,10 +283,10 @@
 
 				$.post("<?php echo site_url('transaksi1/pofromvendor/addData')?>",
 					{
-						poNo:poEntry, docnum:poNumber, kd_vendor:kdVendor, nm_vendor:nmVendor, grpo_no:grNumber, plant:outlet, storage_location:sLocation, status:stts, item_group_code:matrialGrp, posting_date:pstDate, delivery_date:delvDate, detail_grQty: grQty,  remark: remark
+						poNo:poEntry, docnum:poNumber, kd_vendor:kdVendor, nm_vendor:nmVendor, grpo_no:grNumber, plant:outlet, storage_location:sLocation, status:stts, item_group_code:matrialGrp, posting_date:pstDate, delivery_date:delvDate, detail_grQty: grQty,  remark: remark, app: approve
 					},
 					function(res){
-						location.reload(true);
+						// location.reload(true);
 					}
 				);
 
