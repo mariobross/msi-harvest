@@ -5,19 +5,21 @@ class Pofromvendor_model extends CI_Model {
   public function getDataPoVendor_Header($fromDate='', $toDate='', $status=''){
       $this->db->from('t_grpo_header');
       $this->db->join('m_outlet', 'm_outlet.OUTLET = t_grpo_header.plant');
-      $this->db->where('plant','WMSITJST');
+      $this->db->where('plant','WMSIMBST');
       if((!empty($fromDate)) || (!empty($toDate))){
           if( (!empty($fromDate)) || (!empty($toDate)) ) {
-      $this->db->where("posting_date BETWEEN '$fromDate' AND '$toDate'");
-    } else if( (!empty($fromDate))) {
-      $this->db->where("posting_date >= '$fromDate'");
-    } else if( (!empty($toDate))) {
-      $this->db->where("posting_date <= '$toDate'");
-    }
+          $this->db->where("posting_date BETWEEN '$fromDate' AND '$toDate'");
+        } else if( (!empty($fromDate))) {
+          $this->db->where("posting_date >= '$fromDate'");
+        } else if( (!empty($toDate))) {
+          $this->db->where("posting_date <= '$toDate'");
+        }
       }
       if((!empty($status))){
           $this->db->where('status', $status);
       }
+
+      $this->db->order_by('id_grpo_header', 'desc');
       $query = $this->db->get();
       // echo $this->db->last_query();
       // die();
@@ -32,7 +34,7 @@ class Pofromvendor_model extends CI_Model {
                       MATNR,MAKTX,BSTMG,BSTME,
                       MATKL,DISPO,UNIT,UNIT_STEXT,DELIV_DATE,DOCNUM');
     $this->db->from('zmm_bapi_disp_po_outstanding');
-    $this->db->where('PLANT','WMSITJST');
+    $this->db->where('PLANT','WMSIMBST');
     $this->db->where('BSTMG >',0);
     
     if(!empty($po_no)) {
@@ -91,7 +93,7 @@ class Pofromvendor_model extends CI_Model {
   
     // $kd_plant = $this->session->userdata['ADMIN']['plant'];
     $this->db->from('m_item_group');
-        $this->db->where('kdplant', 'WMSITJST');
+        $this->db->where('kdplant', 'WMSIMBST');
 
     $query = $this->db->get();
     if(($query)&&($query->num_rows() > 0)) {
@@ -163,7 +165,7 @@ class Pofromvendor_model extends CI_Model {
     // $id_outlet = $this->session->userdata['ADMIN']['plant'];
     $this->db->select_max('posting_date');
     $this->db->from('t_posinc_header');
-    $this->db->where('plant', 'WMSITJST');
+    $this->db->where('plant', 'WMSIMBST');
     $this->db->where('status', 2);
   //		$this->db->where('waste_no is not null AND waste_no <> "" ');
 
@@ -257,4 +259,23 @@ class Pofromvendor_model extends CI_Model {
       return FALSE;
     }
   }
+
+  function grpo_header_delete($id_grpo_header){
+    if($this->grpo_details_delete($id_grpo_header)){
+      $this->db->where('id_grpo_header', $id_grpo_header);
+      if($this->db->delete('t_grpo_header'))
+          return TRUE;
+      else
+          return FALSE;
+      }
+  }
+
+  function grpo_details_delete($id_grpo_header) {
+  $this->db->where('id_grpo_header', $id_grpo_header);
+    if($this->db->delete('t_grpo_detail'))
+      return TRUE;
+    else
+      return FALSE;
+  }
+
 }
