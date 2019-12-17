@@ -2,6 +2,10 @@
 <html lang="en">
 	<head>
 		<?php  $this->load->view("_template/head.php")?>
+        <style type="text/css">
+            th { font-size: 13px; }
+            td { font-size: 12px; }	
+        </style>
 	</head>
 	<body>
 	<?php  $this->load->view("_template/nav.php")?>
@@ -10,18 +14,28 @@
 			<div class="content-wrapper">
                 <!-- <?php  $this->load->view("_template/breadcrumb.php")?> -->
 				<div class="content">
+                <?php if ($this->session->flashdata('success')): ?>
+						<div class="alert alert-success" role="alert">
+							<?php echo $this->session->flashdata('success'); ?>
+						</div>
+					<?php endif; ?>
+					<?php if ($this->session->flashdata('failed')): ?>
+						<div class="alert alert-danger" role="alert">
+							<?php echo $this->session->flashdata('failed'); ?>
+						</div>
+					<?php endif; ?>
                     <div class="card">
                         <div class="card-header">
                             <legend class="font-weight-semibold"><i class="icon-search4 mr-2"></i>Search of Good Receive PO from Vendor</legend>  
                         </div>
                         <div class="card-body">
-                        <form action="#" method="POST">
+                        <form method="POST">
                             <div class="row">
                                 <div class="col-md-12">
                                     <div class="form-group row">
                                         <label class="col-lg-3 col-form-label">Dari Tanggal</label>
                                         <div class="col-lg-3 input-group date">
-                                            <input type="text" class="form-control" id="fromDate">
+                                            <input type="text" class="form-control" id="fromDate" name="fromDate">
                                             <div class="input-group-prepend">
                                                 <span class="input-group-text" id="basic-addon1">
                                                     <i class="icon-calendar"></i>
@@ -30,7 +44,7 @@
                                         </div>
                                         <label class="col-lg-2 col-form-label">Sampai Tanggal</label>
                                         <div class="col-lg-4 input-group date">
-                                            <input type="text" class="form-control" id="toDate">
+                                            <input type="text" class="form-control" id="toDate" name="toDate">
                                             <div class="input-group-prepend">
                                                 <span class="input-group-text" id="basic-addon1">
                                                     <i class="icon-calendar"></i>
@@ -43,16 +57,16 @@
                                     <div class="form-group row">
                                         <label class="col-lg-3 col-form-label">Status</label>
                                         <div class="col-lg-9">
-                                            <select class="form-control form-control-select2" data-live-search="true">
-                                                <option value="">none selected</option>
-                                                <option value="approved">Approved</option>
-                                                <option value="notapproved">Not Approved</option>
+                                            <select class="form-control form-control-select2" data-live-search="true" name='status' id='status'>
+                                                <option value="">None selected</option>
+                                                <option value="2">Approved</option>
+                                                <option value="1">Not Approved</option>
                                             </select>
                                         </div>
                                     </div>
 
                                     <div class="text-right">
-                                        <button type="submit" class="btn btn-primary">Search<i class="icon-search4  ml-2"></i></button>
+                                        <button type="button" class="btn btn-primary" onclick="search()">Search<i class="icon-search4  ml-2" name="btnSearch" id="btnSearch"></i></button>
                                     </div>
                                 </div>
                             </div>
@@ -101,43 +115,74 @@
         <?php  $this->load->view("_template/modal_delete.php")?>
         <?php  $this->load->view("_template/js.php")?>
         <script>
-            $(document).ready(function(){
-                $('#fromDate').datepicker();
-                $('#toDate').datepicker();
+            
+
+            function search(){
+                const fromDate = $('#fromDate').val();
+                const toDate = $('#toDate').val();
+                const status = $('#status').val();
+                showDataList();
+
+                
+            };
+
+            function showDataList(){
+                const obj = $('#tableWhole tbody tr').length;
+
+                if(obj > 0){
+                    const dataTable = $('#tableWhole').DataTable();
+                    dataTable.destroy();
+                    $('#tableWhole > tbody > tr').remove();
+                    
+                }
+                
+
+                // console.log(fromDate, '----', toDate, '-------', status, '------'); 
+                const fromDate = $('#fromDate').val();
+                const toDate = $('#toDate').val();
+                const status = $('#status').val();           
+
                 dataTable = $('#tableWhole').DataTable({
                     "ordering":false,  "paging": true, "searching":true,
                     "ajax": {
                         "url":"<?php echo site_url('transaksi1/pofromvendor/showListData');?>",
-                        "type":"POST"
+                        "type":"POST",
+                        "data":{fDate: fromDate, tDate: toDate, stts: status}
                     },
                     "columns": [
-                        {"data":"no", "className":"dt-center", render:function(data, type, row, meta){
+                        {"data":"id_grpo_header", "className":"dt-center", render:function(data, type, row, meta){
                             rr=`<input type="checkbox" class="check_delete" id="chk_${data}" value="${data}" onclick="checkcheckbox();">`;
                             return rr;
                         }},
-                        {"data":"action", "className":"dt-center", render:function(data, type, row, meta){
+                        {"data":"id_grpo_header", "className":"dt-center", render:function(data, type, row, meta){
                             rr = `<div style="width:100px">
-
-                                        
-                                        <a href='<?php echo site_url('transaksi1/pofromvendor/edit')?>' ><i class='icon-file-plus2' title="Edit"></i></a>&nbsp;
-
+                                    <a href='<?php echo site_url('transaksi1/pofromvendor/edit/')?>${data}' ><i class='icon-file-plus2' title="Edit"></i></a>&nbsp;
                                     </div>`;
-                                        return rr;
+                            return rr;
                         }},
-                        {"data":"id"},
-                        {"data":"gr_no"},
-                        {"data":"po_no"},
-                        {"data":"vendor_code"},
-                        {"data":"vendor_name"},
+                        {"data":"id_grpo_header", "className":"dt-center"},
+                        {"data":"grpo_no", "className":"dt-center"},
+                        {"data":"po_no", "className":"dt-center"},
+                        {"data":"kd_vendor"},
+                        {"data":"nm_vendor"},
                         {"data":"delivery_date"},
                         {"data":"posting_date"},
                         {"data":"status"},
-                        {"data":"created_by"},
-                        {"data":"approved_by"},
-                        {"data":"last_modified"},
-                        {"data":"log"}
+                        {"data":"outlet_name"},
+                        {"data":"outlet_name"},
+                        {"data":"lastmodified"},
+                        {"data":"integrated"}
                     ]
                 });
+            }
+
+            $(function(){
+                
+                $('#fromDate').datepicker({autoclose:true});
+                $('#toDate').datepicker({autoclose:true});
+
+                showDataList();
+                
                 // untuk check all
                 $("#checkall").click(function(){
                     if($(this).is(':checked')){
@@ -149,6 +194,7 @@
                 // end check all
                 $("#deleteRecord").click(function(){
                     let deleteidArr=[];
+                    let getTable = $("#tableWhole").DataTable();
                     $("input:checkbox[class=check_delete]:checked").each(function(){
                         deleteidArr.push($(this).val());
                     })
@@ -157,11 +203,12 @@
                         var confirmDelete = confirm("Do you really want to Delete records?");
                         if(confirmDelete == true){
                             $.ajax({
-                                url:"", //masukan url untuk delete
+                                url:"<?php echo site_url('transaksi1/pofromvendor/deleteData');?>", //masukan url untuk delete
                                 type: "post",
                                 data:{deleteArr: deleteidArr},
                                 success:function(res) {
-                                    dataTable.ajax.reload();
+                                    location.reload(true);
+                                    getTable.row($(this).closest("tr")).remove().draw();
                                 }
                             });
                         }
@@ -188,7 +235,9 @@
                     $('#btn-delete').attr('href', url);
 	                $('#deleteModal').modal();
                 }
-            });
+        });
+
+            
         
         </script>
 	</body>

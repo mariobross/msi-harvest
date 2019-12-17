@@ -30,10 +30,12 @@
 <script src="<?php echo base_url('/files/');?>global_assets/js/main/jquery.min.js"></script>
 <script src="<?php echo base_url('/files/');?>global_assets/js/main/bootstrap.bundle.min.js"></script>
 <script src="<?php echo base_url('/files/');?>global_assets/js/plugins/loaders/blockui.min.js"></script>
+<script src="<?php echo base_url('/files/');?>global_assets/js/plugins/extensions/jquery_ui/interactions.min.js"></script>
 <script src="<?php echo base_url('/files/');?>global_assets/js/plugins/forms/selects/select2.min.js"></script>
 <script src="<?php echo base_url('/files/');?>global_assets/js/plugins/forms/styling/uniform.min.js"></script>
 
 <script src="<?php echo base_url('/files/');?>global_assets/js/demo_pages/form_layouts.js"></script>
+<script src="<?php echo base_url('/files/');?>global_assets/js/demo_pages/form_select2.js"></script>
 
 
 <!-- /core JS files -->
