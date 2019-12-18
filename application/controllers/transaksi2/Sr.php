@@ -66,7 +66,7 @@ class Sr extends CI_Controller{
             $nestedData['request_reason'] = $val['request_reason'];
             $nestedData['status'] = $val['status'] =='1'?'Not Apporeed':'Approved';
             $nestedData['admin_realname'] = $val['user_input'];
-            $nestedData['admin_realname(1)'] = $val['user_approved'];
+            $nestedData['admin_realname(1)'] = $val['user_approved'] ? $val['user_approved'] : '-';
             $nestedData['lastmodified'] = date("d-m-Y",strtotime($val['lastmodified']));
             $nestedData['back'] = $val['back'] =='1'?'Not Integrated':'Integrated';
             $nestedData['stts'] = $val['status'];
@@ -116,12 +116,13 @@ class Sr extends CI_Controller{
         $stdstock_header['item_group_code'] = $this->input->post('matGrp');
         $stdstock_header['to_plant'] = $this->input->post('reqToOutlet');
         $stdstock_header['created_date'] = $this->l_general->str_to_date($this->input->post('dateCreate'));
-        $stdstock_header['plant'] = 'WMSITJST';
-        $stdstock_header['storage_location'] = 'WMSITJST';
+        $stdstock_header['plant'] = 'WMSIMBST';
+        $stdstock_header['storage_location'] = 'WMSIMBST';
         $stdstock_header['id_stdstock_plant'] = $this->sr_model->id_stdstock_plant_new_select($stdstock_header['plant'],$stdstock_header['created_date']);
-        $stdstock_header['status'] = '1';
+        $stdstock_header['status'] = $this->input->post('appr')? $this->input->post('appr') : '1';
         $stdstock_header['id_user_input'] = '2392';
         $stdstock_header['pr_no'] = '';
+        $stdstock_header['id_user_approved'] = $this->input->post('appr')? '2392' : 0;
 
         $stdstock_details['material_no'] = $this->input->post('detMatrialNo');
         $count = count($stdstock_details['material_no']);
@@ -226,6 +227,8 @@ class Sr extends CI_Controller{
         $stdstock_header['id_stdstock_header'] = $this->input->post('idStdStock_header');
         $stdstock_header['delivery_date'] = $this->l_general->str_to_date($this->input->post('dateDeliv'));
         $stdstock_header['created_date'] = $this->l_general->str_to_date($this->input->post('dateCreate'));
+        $stdstock_header['status'] = $this->input->post('appr')? $this->input->post('appr') : '1';
+        $stdstock_header['id_user_approved'] = $this->input->post('appr')? '2392' : 0;
         
         $stdstock_details['material_no'] = $this->input->post('detMatrialNo');
         $count = count($stdstock_details['material_no']);
