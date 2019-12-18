@@ -24,9 +24,13 @@ class Pofromvendor extends CI_Controller
         if($data['po_nos'] != FALSE){
             $object['po_no']['-'] = '';
             foreach($data['po_nos'] as $po_no){
-                $object['po_no'][$po_no['EBELN']] = $po_no['EBELN'].' - '.$po_no['DOCNUM'].'()';
+                $po_nos = $this->povendor->sap_get_nopp($po_no['EBELN']);
+                $object['po_no'][$po_no['EBELN']] = $po_no['EBELN'].' - '.$po_no['DOCNUM'].' (PR ->'.$po_nos.')';
             }
         } 
+        // print_r($object);
+        // die();
+
         $this->load->view('transaksi1/eksternal/pofromvendor/add_new',$object);
     }
 
@@ -163,11 +167,11 @@ class Pofromvendor extends CI_Controller
             $nestedData['kd_vendor'] = $val['kd_vendor'];
             $nestedData['nm_vendor'] = $val['nm_vendor'];
             $nestedData['delivery_date'] = $val['delivery_date'];
-            $nestedData['posting_date'] = $val['posting_date'];
+            $nestedData['posting_date'] = date("d-m-Y",strtotime($val['posting_date']));
             $nestedData['status'] = $val['status'] =='1'?'Not Apporeed':'Approved';
             $nestedData['id_user_input'] = $val['id_user_input'];
             $nestedData['id_user_approved'] = $val['id_user_approved'];
-            $nestedData['lastmodified'] = $val['lastmodified'];
+            $nestedData['lastmodified'] = date("d-m-Y",strtotime($val['lastmodified']));
             $nestedData['integrated'] = 'Integrated';
             $nestedData['outlet_name'] = $val['OUTLET_NAME1'];
             $data[] = $nestedData;
@@ -192,26 +196,27 @@ class Pofromvendor extends CI_Controller
         $grpo_header['delivery_date'] = $this->l_general->str_to_date_clone($this->input->post('delivery_date'));
         $grpo_header['nm_vendor'] = $this->input->post('nm_vendor');
         $grpo_header['docnum'] = $this->input->post('docnum');
-        $grpo_header['plant'] = 'WMSITJST';
-        $grpo_header['storage_location'] = 'WMSITJST';
+        $grpo_header['plant'] = 'WMSIMBST';
+        $grpo_header['storage_location'] = 'WMSIMBST';
         $grpo_header['posting_date'] = $this->l_general->str_to_date($this->input->post('posting_date'));
         $grpo_header['id_grpo_plant'] = $this->povendor->id_grpo_plant_new_select($grpo_header['plant'],$grpo_header['posting_date']);
         $grpo_header['status'] = $this->input->post('app') == "2" ? "2" : $this->input->post('status');
+        $grpo_header['id_user_approved'] = $this->input->post('app') ? '2392' : '0';
         $grpo_header['item_group_code'] = $this->input->post('item_group_code');
         $grpo_header['id_user_input'] = '2392';
 
         $web_trans_id = $this->l_general->_get_web_trans_id($grpo_header['plant'],$grpo_header['posting_date'],$grpo_header['id_grpo_plant'],'01');
 
         //approve
-        if( $this->input->post('app') == "2" ){
-            $grpo_to_approve = array (
-                'plant' => $grpo_header['plant'],
-                'po_no' => $grpo_header['po_no'],
-                'posting_date' => date('Ymd',strtotime($grpo_header['posting_date'])),
-                'id_user_input' => $grpo_header['id_user_input'],
-                'web_trans_id' => $web_trans_id,
-            );
-        }
+        // if( $this->input->post('app') == "2" ){
+        //     $grpo_to_approve = array (
+        //         'plant' => $grpo_header['plant'],
+        //         'po_no' => $grpo_header['po_no'],
+        //         'posting_date' => date('Ymd',strtotime($grpo_header['posting_date'])),
+        //         'id_user_input' => $grpo_header['id_user_input'],
+        //         'web_trans_id' => $web_trans_id,
+        //     );
+        // }
         //end approve
 
         $grpo_details = $this->povendor->sap_grpo_details_select_by_po_no($this->input->post('poNo'));
@@ -244,10 +249,10 @@ class Pofromvendor extends CI_Controller
                 $batch1['Whs']          = $grpo_header['plant'];
 
                 //for grpo_approve
-                $grpo_to_approve['item'][$i] = $grpo_detail['item'];
-                $grpo_to_approve['material_no'][$i] = $grpo_detail['material_no'];
-                $grpo_to_approve['gr_quantity'][$i] = $grpo_detail['gr_quantity'];
-                $grpo_to_approve['uom'][$i] = $grpo_detail['uom'];
+                // $grpo_to_approve['item'][$i] = $grpo_detail['item'];
+                // $grpo_to_approve['material_no'][$i] = $grpo_detail['material_no'];
+                // $grpo_to_approve['gr_quantity'][$i] = $grpo_detail['gr_quantity'];
+                // $grpo_to_approve['uom'][$i] = $grpo_detail['uom'];
         
                 if($this->povendor->grpo_detail_insert($grpo_detail))
                 $input_detail_success = TRUE;
@@ -263,6 +268,8 @@ class Pofromvendor extends CI_Controller
     public function editTable(){
         $grpo_header['id_grpo_header'] = $this->input->post('id_grpo_header');
         $grpo_header['posting_date'] = $this->l_general->str_to_date($this->input->post('pstDate'));
+        $grpo_header['status'] = $this->input->post('appr') ? $this->input->post('appr') : '1';
+        $grpo_header['id_user_approved'] = $this->input->post('appr') ? '2392' : 0;
         $count = count($this->input->post('idGrpoDetails'));
         $grpo_h = $this->povendor->grpo_header_update($grpo_header);
 

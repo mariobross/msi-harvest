@@ -278,4 +278,20 @@ class Pofromvendor_model extends CI_Model {
       return FALSE;
   }
 
+  function sap_get_nopp($po_no){
+    $SAP_MSI = $this->load->database('SAP_MSI', TRUE);
+    $SAP_MSI->select('A.DocEntry');
+    $SAP_MSI->from('PRQ1 A');
+    $SAP_MSI->join('POR1 B','B.BaseRef=A.DocEntry');
+    $SAP_MSI->where('B.DocEntry',$po_no);
+    $query = $SAP_MSI->get();
+    $ret = $query->result_array();
+
+    if (count($ret) > 0){
+        return $ret[0]['DocEntry'];
+      }else{
+        return "none";
+      }
+  }
+
 }

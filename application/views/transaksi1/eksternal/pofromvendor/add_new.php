@@ -96,14 +96,14 @@
 											<div class="form-group row">
 												<label class="col-lg-3 col-form-label">Outlet</label>
 												<div class="col-lg-9">
-													<input type="text" class="form-control" placeholder="Outlet" readonly="" value="WMSITJST - Tajur" name="outlet" id="outlet">
+													<input type="text" class="form-control" placeholder="Outlet" readonly="" value="WMSIMBST - Mangga Besar" name="outlet" id="outlet">
 												</div>
 											</div>
 											
 											<div class="form-group row">
 												<label class="col-lg-3 col-form-label">Storage Location</label>
 												<div class="col-lg-9">
-													<input type="text" class="form-control" placeholder="Outlet" readonly="" value="WMSITJST - MSI Tajur" name="storageLocation" id="storageLocation">
+													<input type="text" class="form-control" placeholder="Outlet" readonly="" value="WMSIMBST - MSI Mangga Besar" name="storageLocation" id="storageLocation">
 												</div>
 											</div>
 											
@@ -286,7 +286,7 @@
 						poNo:poEntry, docnum:poNumber, kd_vendor:kdVendor, nm_vendor:nmVendor, grpo_no:grNumber, plant:outlet, storage_location:sLocation, status:stts, item_group_code:matrialGrp, posting_date:pstDate, delivery_date:delvDate, detail_grQty: grQty,  remark: remark, app: approve
 					},
 					function(res){
-						// location.reload(true);
+						location.reload(true);
 					}
 				);
 

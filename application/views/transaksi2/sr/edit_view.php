@@ -155,7 +155,7 @@
 											   <?php if($stdstock_header['status']=='2'):?>
 													<button type="button" class="btn btn-danger">Delete<i class="icon-trash-alt ml-2"></i></button>
 												<?php else :?>
-													<button type="submit" class="btn btn-success">Approve<i class="icon-paperplane ml-2"></i></button>
+													<button type="button" class="btn btn-success" name="approve" id="approve" onclick="addDatadb(2)">Approve<i class="icon-paperplane ml-2"></i></button>
 												<?php endif; ?>
                                             </div>
 
@@ -372,10 +372,11 @@
 			}, function(res){location.reload(true);});
 		}
 
-		function addDatadb(){
+		function addDatadb(id_approve=''){
 			const id_stdstock_header = $('#id_stdstock_header').val();
 			const delivDate= $('#deliveDate').val();
 			const createDate= $('#createdDate').val();
+			const approve = id_approve;
 			const tbodyTable = $("#tblWhole > tbody");
 			let matrial_no=[];
 			let detail_qty=[];
@@ -393,7 +394,7 @@
 			// let matrial_no = matrial_no_text.concat(matrial_no_select);
 			console.log(matrial_no);
 			$.post("<?php echo site_url('transaksi2/sr/addDataUpdate')?>", {
-				idStdStock_header: id_stdstock_header, dateDeliv: delivDate, dateCreate: createDate, detMatrialNo: matrial_no, detMatrialDesc: matrialDesc, detQty: qty, detUom: uom,
+				idStdStock_header: id_stdstock_header, appr: approve, dateDeliv: delivDate, dateCreate: createDate, detMatrialNo: matrial_no, detMatrialDesc: matrialDesc, detQty: qty, detUom: uom,
 			}, function(res){
 				location.reload(true);
 				}
