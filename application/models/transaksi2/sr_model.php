@@ -28,11 +28,11 @@ class Sr_model extends CI_Model {
     }
 
     function stdstock_headers($fromDate='', $toDate='', $status='',$rto=''){
-        $this->db->select('t_stdstock_header.*,m_outlet.OUTLET_NAME1, d_admin.admin_realname as user_input, c.admin_realname as user_approved');
+        $this->db->select('* ,(select OUTLET_NAME1 from m_outlet where OUTLET = t_stdstock_header.to_plant) as OUTLET_NAME1,(select admin_realname from d_admin where admin_id = t_stdstock_header.id_user_input) as user_input, (select admin_realname from d_admin where admin_id = t_stdstock_header.id_user_approved) as user_approved');
         $this->db->from('t_stdstock_header');
-        $this->db->join('m_outlet', 'm_outlet.OUTLET = t_stdstock_header.to_plant');
-        $this->db->join('d_admin','t_stdstock_header.id_user_input = d_admin.admin_id','left');
-        $this->db->join('d_admin c','t_stdstock_header.id_user_approved = c.admin_id','left');
+        // $this->db->join('m_outlet', 'm_outlet.OUTLET = t_stdstock_header.to_plant');
+        // $this->db->join('d_admin','t_stdstock_header.id_user_input = d_admin.admin_id','left');
+        // $this->db->join('d_admin c','t_stdstock_header.id_user_approved = c.admin_id','left');
         $this->db->where('t_stdstock_header.plant','WMSIMBST');
         if((!empty($fromDate)) || (!empty($toDate))){
             if( (!empty($fromDate)) || (!empty($toDate)) ) {

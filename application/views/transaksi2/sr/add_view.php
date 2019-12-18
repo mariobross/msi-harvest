@@ -138,7 +138,7 @@
 
                                             <div class="text-right">
                                                 <button type="button" class="btn btn-primary" name="save" id="save" onclick="addDatadb()">Save <i class="icon-pencil5 ml-2"></i></button>
-												<button type="submit" class="btn btn-success">Approve SAP<i class="icon-paperplane ml-2"></i></button>
+												<button type="button" class="btn btn-success" name="approve" id="approve" onclick="addDatadb(2)">Approve SAP<i class="icon-paperplane ml-2"></i></button>
                                             </div>
 
 											
@@ -338,12 +338,13 @@
 			});			
 		}
 
-		function addDatadb(){
+		function addDatadb(id_approve=''){
 			const requestRespon= document.getElementById('rr').value;
 			const matrialGroup= document.getElementById('materialGroup').value;
 			const requestToOutlet= document.getElementById('rto').value;
 			const delivDate= document.getElementById('deliveDate').value;
 			const createDate= document.getElementById('createdDate').value;
+			const approve = id_approve;
 			const tbodyTable = $('#tblWhole > tbody');
 			let matrialNo =[];
 			let matrialDesc =[];
@@ -361,7 +362,7 @@
 
 			// console.log(requestRespon,'-',matrialGroup,'-',requestToOutlet,'-',delivDate,'-',createDate, matrialNo.join('/'), matrialDesc.join('^'), qty.join('%'), uom.join('*'));
 			$.post("<?php echo site_url('transaksi2/sr/addData')?>", {
-				reqRes: requestRespon, matGrp: matrialGroup, reqToOutlet: requestToOutlet, dateDeliv: delivDate, dateCreate: createDate, detMatrialNo: matrialNo, detMatrialDesc: matrialDesc, detQty: qty, detUom: uom,
+				reqRes: requestRespon, matGrp: matrialGroup, reqToOutlet: requestToOutlet, appr: approve, dateDeliv: delivDate, dateCreate: createDate, detMatrialNo: matrialNo, detMatrialDesc: matrialDesc, detQty: qty, detUom: uom,
 			}, function(res){location.reload(true);;});
 		}
 	

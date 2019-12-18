@@ -143,7 +143,7 @@
 												<div class="col-lg-12 text-right">
 													<div class="text-right">
 														<button type="button" class="btn btn-primary" id="btn-update">Save <i class="icon-pencil5 ml-2"></i></button>
-														<button type="submit" class="btn btn-success">Approve <i class="icon-paperplane ml-2"></i></button>
+														<button type="button" class="btn btn-success" id="btn-approve">Approve <i class="icon-paperplane ml-2"></i></button>
 													</div>
 												</div>
 											</div>
@@ -201,13 +201,13 @@
                         {"data":"material_desc"},
                         {"data":"outstanding_qty", "className":"dt-center"},
                         {"data":"gr_quantity", "className":"dt-center", render:function(data, type, row, meta){
-							rr= row['status'] == 1 ? `<input type="text" class="form-control" id="gr_qty_${data}" value="">`: `${row['gr_quantity']}`;
+							rr= row['status'] == 1 ? `<input type="text" class="form-control" id="gr_qty_${data}" value="${data}">`: `${row['gr_quantity']}`;
                             return rr;
 						}},
                         {"data":"uom", "className":"dt-center"},
 						{"data":"qc", "className":"dt-center", render:function(data, type, row, meta){
 							// console.log(row);
-                            rr=`<input type="text" class="form-control" value="" id="${row['id_grpo_detail']}">`;
+                            rr=`<input type="text" class="form-control" value="${data}" id="${row['id_grpo_detail']}">`;
                             return rr;
                         }},
 
@@ -243,6 +243,40 @@
 							url:"<?php echo site_url('transaksi1/pofromvendor/editTable');?>",
 							type:"POST",
 							data:{id_grpo_header:idGrpoHeader, pstDate:postingDate, detail_grQty:grQty, remark:remark, idGrpoDetails:id_grpo_detail },
+							success:function(res){
+								location.reload(true);
+							}
+						});
+					}
+					
+				});
+
+				$("#btn-approve").click(function(){
+					const postingDate = $('#postingDate').val();
+					const idGrpoHeader = $('#id_grpo_header').val();
+					const approve = '2'
+					table = $('#table-manajemen > tbody');
+
+					let grQty=[];
+					let remark=[];
+					let id_grpo_detail=[];
+					let emptygrpo = true;
+					table.find('tr').each(function(i, el){
+						let td = $(this).find('td');
+						if(td.eq(4).find('input').val()==''){
+							alert('Gr Quatity harus di isi');
+							emptygrpo = false;
+							return emptygrpo;
+						}
+						grQty.push(td.eq(4).find('input').val());
+						remark.push(td.eq(6).find('input').val());
+						id_grpo_detail.push(td.eq(6).find('input').attr('id'));	
+					})
+					if(emptygrpo){
+						$.ajax({
+							url:"<?php echo site_url('transaksi1/pofromvendor/editTable');?>",
+							type:"POST",
+							data:{id_grpo_header:idGrpoHeader, appr:approve, pstDate:postingDate, detail_grQty:grQty, remark:remark, idGrpoDetails:id_grpo_detail },
 							success:function(res){
 								location.reload(true);
 							}
