@@ -21,14 +21,15 @@ class Pofromvendor extends CI_Controller
 	public function add()
     {
         $data['po_nos'] = $this->povendor->sap_grpo_headers_select_by_kd_vendor();
+        $object['po_no']['-'] = '';
         if($data['po_nos'] != FALSE){
-            $object['po_no']['-'] = '';
+            // $object['po_no']['-'] = '';
             foreach($data['po_nos'] as $po_no){
                 $po_nos = $this->povendor->sap_get_nopp($po_no['EBELN']);
                 $object['po_no'][$po_no['EBELN']] = $po_no['EBELN'].' - '.$po_no['DOCNUM'].' (PR ->'.$po_nos.')';
             }
         } 
-        // print_r($object);
+        // print_r($data['po_nos']);
         // die();
 
         $this->load->view('transaksi1/eksternal/pofromvendor/add_new',$object);
