@@ -30,23 +30,30 @@ class Pofromvendor_model extends CI_Model {
   public function sap_grpo_headers_select_by_kd_vendor($kd_vendor="",$kd_plant="",$po_no="",$po_item="")
   {
     # code...
-    $this->db->select('EBELN,EBELP,VENDOR,VENDOR_NAME,
-                      MATNR,MAKTX,BSTMG,BSTME,
-                      MATKL,DISPO,UNIT,UNIT_STEXT,DELIV_DATE,DOCNUM');
-    $this->db->from('zmm_bapi_disp_po_outstanding');
-    $this->db->where('PLANT','WMSIMBST');
-    $this->db->where('BSTMG >',0);
+    $SAP_MSI = $this->load->database('SAP_MSI', TRUE);
+    
+    $SAP_MSI->select('POR1.DocEntry as EBELN,LineNum as EBELP,OPOR.CardCode as VENDOR, OPOR.CardName as VENDOR_NAME,
+    POR1.ItemCode as MATNR,Dscription as MAKTX,OpenQty as BSTMG,
+    unitMsr as BSTME, ItmsGrpCod as DISPO,CONVERT(VARCHAR(8),POR1.ShipDate,112) as DELIV_DATE, 
+    SeriesName + RIGHT(00000  + CONVERT(varchar, OPOR.DocNum), 5) as DOCNUM');
+    $SAP_MSI->from('POR1');
+    $SAP_MSI->join('OPOR','POR1.DocEntry = OPOR.DocEntry');
+    $SAP_MSI->join('OITM','POR1.ItemCode = OITM.ItemCode');
+    $SAP_MSI->join('NNM1','OPOR.Series = NNM1.Series');
+    $SAP_MSI->where('WhsCode','WMSIMBST');
+    // $SAP_MSI->where('BSTMG >',0);
     
     if(!empty($po_no)) {
-        $this->db->where('EBELN',$po_no);
+        $SAP_MSI->where('EBELN',$po_no);
     }
     if(!empty($po_item)) {
-        $this->db->where('EBELP',$po_item);
+        $SAP_MSI->where('EBELP',$po_item);
     }
     if(empty($po_no)&&empty($po_item)) {
     }
 
-    $query = $this->db->get();
+    $query = $SAP_MSI->get();
+    // echo $SAP_MSI->last_query();
 
     if(($query)&&($query->num_rows() > 0)) {
         $pos = $query->result_array();
