@@ -10,6 +10,7 @@
 			<div class="content-wrapper">
                 <!-- <?php  $this->load->view("_template/breadcrumb.php")?> -->
 				<div class="content">
+
 					<?php if ($this->session->flashdata('success')): ?>
 						<div class="alert alert-success" role="alert">
 							<?php echo $this->session->flashdata('success'); ?>
@@ -20,6 +21,7 @@
 							<?php echo $this->session->flashdata('failed'); ?>
 						</div>
 					<?php endif; ?>
+
 						<div class="card">
 							<div class="card-body">
 								<div class="row">
@@ -134,7 +136,6 @@
 								</table>
 							</div>
 						</div>
-					
 				</div>
 				<?php  $this->load->view("_template/footer.php")?>
 			</div>

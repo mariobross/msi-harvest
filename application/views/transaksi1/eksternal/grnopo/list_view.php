@@ -21,7 +21,7 @@
                                 <div class="form-group row">
                                         <label class="col-lg-3 col-form-label">Dari Tanggal</label>
                                         <div class="col-lg-3 input-group date">
-                                            <input type="text" class="form-control" id="fromDate">
+                                            <input type="text" class="form-control" id="fromDate" name="fromDate">
                                             <div class="input-group-prepend">
                                                 <span class="input-group-text" id="basic-addon1">
                                                     <i class="icon-calendar"></i>
@@ -30,7 +30,7 @@
                                         </div>
                                         <label class="col-lg-2 col-form-label">Sampai Tanggal</label>
                                         <div class="col-lg-4 input-group date">
-                                            <input type="text" class="form-control" id="toDate">
+                                            <input type="text" class="form-control" id="toDate" name="toDate">
                                             <div class="input-group-prepend">
                                                 <span class="input-group-text" id="basic-addon1">
                                                     <i class="icon-calendar"></i>
@@ -42,7 +42,7 @@
                                     <div class="form-group row">
                                         <label class="col-lg-3 col-form-label">Status</label>
                                         <div class="col-lg-9">
-                                            <select class="form-control form-control-select2" data-live-search="true">
+                                            <select class="form-control form-control-select2" data-live-search="true" name='status' id='status'>
                                                 <option value="">none selected</option>
                                                 <option value="approved">Approved</option>
                                                 <option value="notapproved">Not Approved</option>
@@ -51,7 +51,7 @@
                                     </div>
 
                                     <div class="text-right">
-                                        <button type="submit" class="btn btn-primary">Search<i class="icon-search4  ml-2"></i></button>
+                                        <button type="button" class="btn btn-primary">Search<i class="icon-search4  ml-2" name="btnSearch" id="btnSearch"></i></button>
                                     </div>
                                 </div>
                             </div>

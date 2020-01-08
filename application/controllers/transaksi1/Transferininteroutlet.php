@@ -28,45 +28,13 @@ class Transferininteroutlet extends CI_Controller
        $dt= array(
            array(
             "no" => "1",
-            "material_no" => "AT-MBP0001",
-            "material_desc"=>"Box 10x20-AT (Active)",
+            "item_no" => "AT-MBP0001",
+            "item_desc"=>"Box 10x20-AT (Active)",
             "gi_qty"=> "200.00",
             "gr_qty"=> "200.00",
+            "rcv_qty"=> "",
             "uom"=> "pcs",
-            "val"=> "",
-            "variance"=> "0.00",
            ),
-		   array(
-            "no" => "2",
-            "material_no" => "AT-MBP0029",
-            "material_desc"=>"Polly Bag Small 2018-AT (Active)",
-            "gi_qty"=> "200.00",
-            "gr_qty"=> "200.00",
-            "uom"=> "pcs",
-            "val"=> "",
-            "variance"=> "0.00",
-           ),
-		   array(
-            "no" => "3",
-            "material_no" => "AT-MBP0009",
-            "material_desc"=>"Underliner 10x20 @1pcs/pcs-AT (Active)",
-            "gi_qty"=> "200.00",
-            "gr_qty"=> "200.00",
-            "uom"=> "pcs",
-            "val"=> "",
-            "variance"=> "0.00",
-           ),
-		   array(
-            "no" => "4",
-            "material_no" => "AT-MBP0010",
-            "material_desc"=>" 	Underliner 20x20 @1pcs/pcs-AT (Active)",
-            "gi_qty"=> "100.00",
-            "gr_qty"=> "100.00",
-            "uom"=> "pcs",
-            "val"=> "",
-            "variance"=> "0.00",
-           ),
-		   
 		   
         ); 
 

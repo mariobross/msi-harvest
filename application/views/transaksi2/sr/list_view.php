@@ -10,6 +10,16 @@
 			<div class="content-wrapper">
                 <!-- <?php  $this->load->view("_template/breadcrumb.php")?> -->
 				<div class="content">
+                <?php if ($this->session->flashdata('success')): ?>
+						<div class="alert alert-success" role="alert">
+							<?php echo $this->session->flashdata('success'); ?>
+						</div>
+					<?php endif; ?>
+					<?php if ($this->session->flashdata('failed')): ?>
+						<div class="alert alert-danger" role="alert">
+							<?php echo $this->session->flashdata('failed'); ?>
+						</div>
+					<?php endif; ?>
                     <div class="card">
                         <div class="card-header">
                             <legend class="font-weight-semibold"><i class="icon-search4 mr-2"></i>Search Store Room Request (SR)</legend>  
@@ -43,10 +53,10 @@
                                     <div class="form-group row">
                                         <label class="col-lg-3 col-form-label">Status</label>
                                         <div class="col-lg-9">
-                                            <select class="form-control form-control-select2" data-live-search="true">
+                                            <select class="form-control form-control-select2" data-live-search="true" id="status" name="status">
                                                 <option value="">none selected</option>
-                                                <option value="approved">Approved</option>
-                                                <option value="notapproved">Not Approved</option>
+                                                <option value="2">Approved</option>
+                                                <option value="1">Not Approved</option>
                                             </select>
                                         </div>
                                     </div>
@@ -54,16 +64,17 @@
                                     <div class="form-group row">
                                         <label class="col-lg-3 col-form-label">Request To</label>
                                         <div class="col-lg-9">
-                                            <select class="form-control form-control-select2" data-live-search="true">
+                                            <select class="form-control form-control-select2" data-live-search="true" id="rto" name="rto">
                                                 <option value="">none selected</option>
-                                                <option value="approved">Approved</option>
-                                                <option value="notapproved">Not Approved</option>
+                                                <?php foreach($plants as $key=>$val):?>
+                                                    <option value="<?=$val['OUTLET']?>"><?=$val['OUTLET_NAME1'].'('.$val['OUTLET'].')'?></option>
+												<?php endforeach;?>
                                             </select>
                                         </div>
                                     </div>
 
                                     <div class="text-right">
-                                        <button type="submit" class="btn btn-primary">Search<i class="icon-search4  ml-2"></i></button>
+                                    <button type="button" class="btn btn-primary" onclick="onSearch()">Search<i class="icon-search4  ml-2"></i></button>
                                     </div>
                                 </div>
                             </div>
@@ -75,7 +86,7 @@
                             <legend class="font-weight-semibold"><i class="icon-list mr-2"></i>List of Store Room Request (SR)</legend>
                             <a href="<?php echo site_url('transaksi2/sr/add') ?>" class="btn btn-primary"> Add New</a>
                             <input type="button" value="Delete" class="btn btn-danger" id="deleteRecord">
-                            <input type="button" value="Export To Excel" class="btn btn-success" id="btnExpExcel">  
+                            <!-- <input type="button" value="Export To Excel" class="btn btn-success" id="btnExpExcel">   -->
                         </div>
                         <div class="card-body">
                             <div class="row">
@@ -112,36 +123,9 @@
         <?php  $this->load->view("_template/js.php")?>
         <script>
             $(document).ready(function(){
-                dataTable = $('#tableWhole').DataTable({
-                    "ordering":false,  "paging": true, "searching":true,
-                    "ajax": {
-                        "url":"<?php echo site_url('transaksi2/sr/showAllData');?>",
-                        "type":"POST"
-                    },
-                    "columns": [
-                        {"data":"no", "className":"dt-center", render:function(data, type, row, meta){
-                            rr=`<input type="checkbox" class="check_delete" id="chk_${data}" value="${data}" onclick="checkcheckbox();">`;
-                            return rr;
-                        }},
-                        {"data":"action", "className":"dt-center", render:function(data, type, row, meta){
-                                rr = `<a href='<?php echo site_url('transaksi2/sr/edit')?>' ><i class='icon-file-plus2' title="Edit"></i></a>&nbsp;
-                                        <a onClick="deleteConfirm('<?php echo site_url('transaksi2/sr/delete')?>')" href="#!"><i class='icon-printer' title="Print"></i></a>`;
-                                return rr;
-                        }},
-                        {"data":"id"},
-                        {"data":"date"},
-                        {"data":"item_no"},
-                        {"data":"item_description"},
-                        {"data":"quatity"},
-                        {"data":"status"},
-                        {"data":"created_by"},
-                        {"data":"approved_by"},
-                        {"data":"receipt_number"},
-                        {"data":"issue_number"},
-                        {"data":"log"}
-                    ]
-                });
 
+                showListData();
+                
                 // untuk check all
                 $("#checkall").click(function(){
 
@@ -155,6 +139,7 @@
 
                 $("#deleteRecord").click(function(){
                     let deleteidArr=[];
+                    let getTable = $("#tableWhole").DataTable();
                     $("input:checkbox[class=check_delete]:checked").each(function(){
                         deleteidArr.push($(this).val());
                     })
@@ -165,11 +150,13 @@
                         var confirmDelete = confirm("Do you really want to Delete records?");
                         if(confirmDelete == true){
                             $.ajax({
-                                url:"", //masukan url untuk delete
+                                url:"<?php echo site_url('transaksi2/sr/deleteData');?>", //masukan url untuk delete
                                 type: "post",
                                 data:{deleteArr: deleteidArr},
                                 success:function(res) {
-                                    dataTable.ajax.reload();
+                                    // dataTable.ajax.reload();
+                                    location.reload(true);
+                                    getTable.row($(this).closest("tr")).remove().draw();
                                 }
                             });
                         }
@@ -196,15 +183,97 @@
 
                 }
 
+                checkcheckbox = () => {
+                    
+                    const lengthcheck = $(".check_delete").length;
+                    
+                    let totalChecked = 0;
+                    $(".check_delete").each(function(){
+                        if($(this).is(":checked")){
+                            totalChecked += 1;
+                        }
+                    });
+                    if(totalChecked == lengthcheck){
+                        $("#checkall").prop('checked', true);
+                    }else{
+                        $("#checkall").prop('checked', false);
+                    }
+                }
+
                 deleteConfirm = (url)=>{
                     $('#btn-delete').attr('href', url);
 	                $('#deleteModal').modal();
                 }
 
                 $('#fromDate').datepicker();
-			    $('#toDate').datepicker();
+                $('#toDate').datepicker();
+                
+                printPdf = (data)=>{
+                    // console.log(data);
+                    uri = "<?php echo site_url('transaksi2/sr/printpdf/')?>"+data
+                    // console.log(uri);
+                    window.open(uri);
+
+                }
 
             });
+
+            function onSearch(){
+                const fromDate = $('#fromDate').val();
+                const toDate = $('#toDate').val();
+                const status = $('#status').val();
+                const rto = $('#rto').val();
+
+                showListData();
+            }
+
+            function showListData(){
+                const obj = $('#tableWhole tbody tr').length;
+
+                if(obj > 0){
+                    const dataTable = $('#tableWhole').DataTable();
+                    dataTable.destroy();
+                    $('#tableWhole > tbody > tr').remove();
+                    
+                }
+
+                const fromDate = $('#fromDate').val();
+                const toDate = $('#toDate').val();
+                const status = $('#status').val();
+                const rto = $('#rto').val();
+
+
+                dataTable = $('#tableWhole').DataTable({
+                    "ordering":false,  "paging": true, "searching":true,
+                    "ajax": {
+                        "url":"<?php echo site_url('transaksi2/sr/showAllData');?>",
+                        "type":"POST",
+                        "data":{fDate: fromDate, tDate: toDate, stts: status, reqToOutlet: rto}
+                    },
+                    "columns": [
+                        {"data":"id_stdstock_header", "className":"dt-center", render:function(data, type, row, meta){
+                            rr=`<input type="checkbox" class="check_delete" id="chk_${data}" value="${data}" onclick="checkcheckbox();">`;
+                            return rr;
+                        }},
+                        {"data":"id_stdstock_header", "className":"dt-center", render:function(data, type, row, meta){
+                                rr = `<a href='<?php echo site_url('transaksi2/sr/edit/')?>${data}'><i class='icon-file-plus2' title="Edit"></i></a>&nbsp;
+                                        <a onClick="printPdf(${data})" href="#"><i class='icon-printer' title="Print"></i></a>`;
+                                return rr;
+                        }},
+                        {"data":"id_stdstock_header", "className":"dt-center"},
+                        {"data":"pr_no", "className":"dt-center"},
+                        {"data":"request_to"},
+                        {"data":"created_date"},
+                        {"data":"delivery_date"},
+                        {"data":"request_reason"},
+                        {"data":"status"},
+                        {"data":"admin_realname"},
+                        {"data":"admin_realname(1)"},
+                        {"data":"lastmodified"},
+                        {"data":"back"}
+                    ]
+                });
+            }
         
         </script>
 	</body>

@@ -5,172 +5,343 @@ class Transferoutinteroutlet extends CI_Controller
     public function __construct(){
         parent::__construct();
         $this->load->library('form_validation');
-        //load model
-        // $this->load->model('bom_model');
+        $this->load->library('l_general');
+        
+        // load model
+        $this->load->model('transaksi1/transferout_model', 'tout_model');
     }
 
     public function index()
     {
         $this->load->view('transaksi1/eksternal/transferoutinteroutlet/list_view');
+	}
+	
+	public function showListData(){
+		$fromDate = $this->input->post('fDate');
+        $toDate = $this->input->post('tDate');
+        $status = $this->input->post('stts');
+
+        $date_from2;
+        $date_to2;
+
+        if($fromDate != '') {
+			$year = substr($fromDate, 6);
+			$month = substr($fromDate, 3,2);
+			$day = substr($fromDate, 0,2);
+			$date_from2 = $year.'-'.$day.'-'.$month.' 00:00:00';
+        }else{
+            $date_from2='';
+        }
+
+        
+        if($toDate != '') {
+			$year = substr($toDate, 6);
+			$month = substr($toDate, 3,2);
+			$day = substr($toDate, 0,2);
+			$date_to2 = $year.'-'.$day.'-'.$month.' 23:59:59';
+        }else{
+            $date_to2='';
+        }
+
+        $rs = $this->tout_model->t_gistonew_out_headers($date_from2, $date_to2, $status);
+		$data = array();
+		
+		// print_r($rs[0]);
+		$status_string='';
+
+        foreach($rs as $key=>$val){
+			if($val['status'] =='1'){
+				$status_string= 'Not Apporeed';
+			}else if($val['status'] =='2'){
+				$status_string= 'Apporeed';
+			}else{
+				$status_string= 'Cancel';
+			}
+
+            $nestedData = array();
+            $nestedData['id_gistonew_out_header'] = $val['id_gistonew_out_header'];
+            $nestedData['gistonew_out_no'] = $val['gistonew_out_no'];
+			$nestedData['po_no'] = $val['po_no'];
+			$nestedData['posting_date'] = date("d-m-Y",strtotime($val['posting_date']));
+            $nestedData['request_to'] = $val['to_plant'].' - '.$val['OUTLET_NAME1'];
+			$nestedData['status'] = $status_string; //$val['status'] =='1'?'Not Apporeed':'Approved';
+            $nestedData['created_by'] = $val['user_input'];
+            $nestedData['approved_by'] = $val['user_approved'];
+            $nestedData['last_modified'] = date("d-m-Y",strtotime($val['lastmodified']));
+            $nestedData['back'] = $val['back'] =='1'?'Not Integrated':'Integrated';;
+            $data[] = $nestedData;
+
+        }
+
+        $json_data = array(
+            "recordsTotal"    =>  10, 
+            "recordsFiltered" => 12,
+            "data"            => $data 
+        );
+        echo json_encode($json_data);
     }
 	
 	public function add()
     {
-        $this->load->view('transaksi1/eksternal/transferoutinteroutlet/add_new');
+		$data['do_nos'] = $this->tout_model->sap_do_select_all();
+		if($data['do_nos'] !== FALSE) {
+			$object['do_no'][0] = '';
+			foreach ($data['do_nos'] as $do_no) {
+				$object['do_no'][$do_no['VBELN']] = $do_no['VBELN'].' - '.$do_no['ABC'];
+			}
+		}
+
+        $this->load->view('transaksi1/eksternal/transferoutinteroutlet/add_new', $object);
+	}
+
+	public function getHeaderTransferOut(){
+		$srNumber = $this->input->post('srNumberHeader');
+		$data = $this->tout_model->sap_gistonew_out_header_select_by_do_no($srNumber);
+		$dataOption = $this->tout_model->sap_gistonew_out_select_item_group_do($srNumber);
+		
+		if (count($data) > 0) {
+
+            $json_data = array(
+                "data" => $data,
+                "dataOption" => $dataOption
+            );
+            echo json_encode($json_data) ;
+        }
+	}
+	
+	public function getDetailsTransferOut(){
+        $item_group_code = $this->input->post('cboMatrialGroup');
+        
+		$do_no = $this->input->post('doNo');
+
+		if ((!empty($item_group_code)) || (trim($item_group_code)!="")) {
+			if($item_group_code == 'all') {
+				$gistonew_out_details = $this->tout_model->sap_gistonew_out_details_select_by_do_no($do_no);
+				
+			} else {
+				$gistonew_out_details= $this->tout_model->sap_gistonew_out_details_select_by_do_and_item_group($do_no, $item_group_code);
+			}
+			
+			echo json_encode($gistonew_out_details);
+		}
+	}
+
+	function getdataDetailMaterialSelect(){
+		$itemSelect = $this->input->post('MATNR');
+		$po_no = $this->input->post('do_no');
+        
+        $dataMatrialSelect = $this->tout_model->getDataMaterialGroupSelect($po_no, $itemSelect);
+        // print_r($dataMatrialSelect);
+        // die();
+		
+        echo json_encode($dataMatrialSelect) ;
+        
+    }
+
+	public function addData(){
+		$gistonew_out_header['po_no'] = $this->input->post('reqRes');
+		$gistonew_out_header['posting_date'] = $this->l_general->str_to_date($this->input->post('pstDate'));
+        $gistonew_out_header['item_group_code'] = $this->input->post('matGrp');
+        $gistonew_out_header['status'] = $this->input->post('stss');
+		$gistonew_out_header['receiving_plant'] = $this->input->post('Rto');
+        $gistonew_out_header['plant'] = 'WMSIMBST';
+        $gistonew_out_header['storage_location'] = 'WMSIMBST';
+        $gistonew_out_header['id_gistonew_out_plant'] = $this->tout_model->id_stdstock_plant_new_select($gistonew_out_header['plant'],$gistonew_out_header['posting_date']);
+        $gistonew_out_header['status'] = $this->input->post('appr')? $this->input->post('appr') : '1';
+
+        $gistonew_out_header['id_user_input'] = '2392';
+        $gistonew_out_header['to_plant'] = $this->input->post('Rto');
+
+        $gistonew_out_details['material_no'] = $this->input->post('detMatrialNo');
+        $count = count($gistonew_out_details['material_no']);
+
+        // print_r($count);
+        if($id_gistonew_out_header= $this->tout_model->gistonew_out_header_insert($gistonew_out_header)){
+            $input_detail_success = false;
+            for($i =0; $i < $count; $i++){
+                $gistonew_out_detail['id_gistonew_out_header'] = $id_gistonew_out_header;
+				$gistonew_out_detail['id_gistonew_out_h_detail'] = $i+1;
+                $gistonew_out_detail['material_no'] = $this->input->post('detMatrialNo')[$i];
+                $gistonew_out_detail['material_desc'] = $this->input->post('detMatrialDesc')[$i];
+                $gistonew_out_detail['outstanding_qty'] = $this->input->post('detOutStdQty')[$i];
+                $gistonew_out_detail['gr_quantity'] = $this->input->post('detQty')[$i];
+				$gistonew_out_detail['uom'] = $this->input->post('detUom')[$i];
+				$gistonew_out_detail['uom_req'] = $this->input->post('detUomReg')[$i];
+
+                if($this->tout_model->gistonew_out_detail_insert($gistonew_out_detail))
+                $input_detail_success = TRUE;
+            }
+        }
+
+        if($input_detail_success){
+            return $this->session->set_flashdata('success', "Transfer Out Inter Outlet Telah Terbentuk");
+        }else{
+            return $this->session->set_flashdata('failed', "Transfer Out Inter Outlet Gagal Terbentuk");
+        }
     }
 	
 	public function edit()
     {
-        $this->load->view('transaksi1/eksternal/transferoutinteroutlet/edit_view');
+		$id_gistonew_out_header = $this->uri->segment(4);
+		$object['data'] = $this->tout_model->gistonew_out_header_select($id_gistonew_out_header);
+
+		$object['gistonew_out_header']['id_gistonew_out_header'] = $id_gistonew_out_header;
+
+		if($object['data']['status'] == '1'){
+            $object['gistonew_out_header']['status_string'] = 'Not Approved';                              
+        }else if($object['data']['status'] == '2'){
+            $object['gistonew_out_header']['status_string'] = 'Approved';
+        }else{
+            $object['gistonew_out_header']['status_string'] = 'Cancel';
+		}
+		
+		$object['gistonew_out_header']['plant'] = $object['data']['plant'];
+		$object['gistonew_out_header']['po_no'] = $object['data']['po_no'];
+		$object['gistonew_out_header']['transfer_slip_number'] = $object['data']['gistonew_out_no'];
+		$object['gistonew_out_header']['storage_location'] = $object['data']['storage_location'];
+		$object['gistonew_out_header']['to_plant'] = $object['data']['to_plant'].' - '.$object['data']['STOR_LOC_NAME'];
+        $object['gistonew_out_header']['posting_date'] = $object['data']['posting_date'];
+        $object['gistonew_out_header']['item_group_code'] = $object['data']['item_group_code'];
+        $object['gistonew_out_header']['status'] = $object['data']['status'];
+
+        $this->load->view('transaksi1/eksternal/transferoutinteroutlet/edit_view', $object);
+    }
+    
+    public function addDataUpdate(){
+        $gistonew_out_header['id_gistonew_out_header'] = $this->input->post('idGistonew_out_header');
+        $gistonew_out_header['status'] = $this->input->post('aapr') ? $this->input->post('aapr') : '1';
+        
+        $gistonew_out_details['material_no'] = $this->input->post('detMatrialNo');
+       
+        $count = count($gistonew_out_details['material_no']);
+        if($this->tout_model->gistonew_out_header_update($gistonew_out_header)){
+            $update_detail_success = false;
+            if($this->tout_model->gistonew_out_details_delete($gistonew_out_header['id_gistonew_out_header'])){
+                for($i =0; $i < $count; $i++){
+                    $gistonew_out_details['id_gistonew_out_header'] = $gistonew_out_header['id_gistonew_out_header'];
+                    $gistonew_out_details['id_gistonew_out_h_detail'] = $i+1;
+                    $gistonew_out_details['material_no'] = $this->input->post('detMatrialNo')[$i];
+                    $gistonew_out_details['material_desc'] = $this->input->post('detMatrialDesc')[$i];
+                    $gistonew_out_details['outstanding_qty'] = $this->input->post('detOutQty')[$i];
+                    $gistonew_out_details['gr_quantity'] = $this->input->post('detQty')[$i];
+                    $gistonew_out_details['uom'] = $this->input->post('detUom')[$i];
+                    $gistonew_out_details['uom_req'] = $this->input->post('detUomReg')[$i];
+
+                    if($this->tout_model->gistonew_out_detail_insert($gistonew_out_details))
+                    $update_detail_success = TRUE;
+                }
+            }
+        }
+
+        if($update_detail_success){
+            return $this->session->set_flashdata('success', "Transfer Out Inter Outlet Berhasil di Update");
+        }else{
+            return $this->session->set_flashdata('failed', "Transfer Out Inter Outlet Gagal di Update");
+        }
+    }
+
+	public function showGistonewOutDetail(){
+        $id_gistonew_out_header = $this->input->post('id');
+        $stts = $this->input->post('status');
+        $rs = $this->tout_model->stdstock_details_select($id_gistonew_out_header);
+        $dt = array();
+        $i = 1;
+        if($rs){
+            foreach($rs as $key=>$value){
+                $inwhs = $this->tout_model->in_whs_qty('WMSIMBST',$value['material_no']);
+                // print_r($inwhs);
+                // // die();
+                $nestedData=array();
+                $nestedData['id_gistonew_out_detail'] = $value['id_gistonew_out_detail'];
+                $nestedData['no'] = $i;
+                $nestedData['material_no'] = $value['material_no'];
+				$nestedData['material_desc'] = $value['material_desc'];
+				$nestedData['in_whs_qty'] = $inwhs[0]['OnHand'];
+				$nestedData['outstanding_qty'] = $value['outstanding_qty'];
+				$nestedData['gr_quantity'] = $value['gr_quantity'];
+                $nestedData['uom'] = $value['uom'];
+                $nestedData['uom_req'] = $value['uom_req'];
+                $dt[] = $nestedData;
+                $i++;
+            }
+        }
+
+        $json_data = array(
+                "data" => $dt
+            );
+            echo json_encode($json_data) ;
+	}
+	
+	public function cancelGistonewOut(){
+        $gistonew_out_header['id_gistonew_out_header'] = $this->input->post('id_gistonew_out_header');
+        $gistonew_out_details = $this->input->post('deleteArr');
+
+        if($this->tout_model->cancelHeaderPoFromVendor($gistonew_out_header)){
+            $succes_cancel_po_from_vendor = false;
+            for($i=0; $i<count($gistonew_out_details); $i++){
+                if($this->tout_model->cancelDetailsPoFromVendor($gistonew_out_details[$i]))
+                $succes_cancel_po_from_vendor = true;
+            }
+        }
+        if($succes_cancel_po_from_vendor){
+            return $this->session->set_flashdata('success', "In PO From Vendor Berhasil di Cancel");
+        }else{
+            return $this->session->set_flashdata('failed', "In PO From Vendor Gagal di Cancel");
+        }  
     }
 	
-	public function showAllData(){
-       $dt= array(
-           array(
-            "no" => "1",
-            "material_no" => "ATK0216 ",
-            "material_desc"=>"Label Tom & Jerry No. 103 @1Pcs/Pcs (Ina",
-            "quantity"=> "1.0000",
-            "whs_qty"=> "1.0000",
-            "gr_qty"=> "1.000",
-            "uom"=> "pcs",
-			"uom_reg"=> "pcs",
-            "cancel"=> ""
-           ),
-		   array(
-            "no" => "2",
-            "material_no" => "EAT0001",
-            "material_desc"=>"ABC Alkaline AAA (Active)",
-            "quantity"=> "1.0000",
-            "whs_qty"=> "1.0000",
-            "gr_qty"=> "1.000",
-            "uom"=> "pcs",
-			"uom_reg"=> "pcs",
-			"cancel"=> ""
-           ),
-		   array(
-            "no" => "3",
-            "material_no" => "EAT0002 ",
-            "material_desc"=>"ABC Battery AA Kecil (Active)",
-            "quantity"=> "1.0000",
-            "whs_qty"=> "1.0000",
-            "gr_qty"=> "1.000",
-            "uom"=> "pcs",
-			"uom_reg"=> "pcs",
-			"cancel"=> ""
-           ),
-		   array(
-            "no" => "4",
-            "material_no" => "EAT0007",
-            "material_desc"=>"Amplop Cashier Remitance (Active)",
-            "quantity"=> "4.0000",
-            "whs_qty"=> "4.0000",
-            "gr_qty"=> "4.000",
-            "uom"=> "pcs",
-			"uom_reg"=> "pcs",
-			"cancel"=> ""
-           ),
-		   array(
-            "no" => "5",
-            "material_no" => "EAT0008",
-            "material_desc"=>" 	Amplop coklat folio (Active)",
-            "quantity"=> "1.0000",
-            "whs_qty"=> "1.0000",
-            "gr_qty"=> "1.000",
-            "uom"=> "pcs",
-            "uom_reg"=> "pcs",
-			"cancel"=> ""
-           ),
-		   
-        ); 
-
-        $data = [
-            "data"=> $dt
-        ];
+	public function deleteData(){
+        $id_gistonew_out_header = $this->input->post('deleteArr');
+        $deleteData = false;
+        foreach($id_gistonew_out_header as $id){
+            if($this->tout_model->t_gistonew_out_header_delete($id))
+            $deleteData = true;
+        }
         
-        echo json_encode($data);
-    }
+        if($deleteData){
+            return $this->session->set_flashdata('success', "SR Berhasil dihapus");
+        }else{
+            return $this->session->set_flashdata('failed', "SR Gagal dihapus");
+        }
+	}
 	
-	public function showListData(){
-       $dt= array(
-           array(
-            "no" => "4711",
-			"action" => "4711",
-			"id" => "4711",
-			"tf_slip_number" => "8649",
-			"sr_req_number"=>"6329",
-			"posting_date"=> "03-05-2018",
-			"tf_out_to_outlet"=> "WDFGCPST-Ciputat",
-			"status" => "Approved",
-			"created_by"=>"Admin Outlet Bintaro (AT)",
-			"approved_by"=> "Admin Outlet Bintaro (AT)",
-			"last_modified" => "2018-05-31 08:16:41",
-			"log"=> "Integrated"
-           ),
-		   array(
-            "no" => "4711",
-			"action" => "4711",
-			"id" => "4711",
-			"tf_slip_number" => "8649",
-			"sr_req_number"=>"6329",
-			"posting_date"=> "03-05-2018",
-			"tf_out_to_outlet"=> "WDFGCPST-Ciputat",
-			"status" => "Approved",
-			"created_by"=>"Admin Outlet Bintaro (AT)",
-			"approved_by"=> "Admin Outlet Bintaro (AT)",
-			"last_modified" => "2018-05-31 08:16:41",
-			"log"=> "Integrated"
-           ),
-		   array(
-            "no" => "4711",
-			"action" => "4711",
-			"id" => "4711",
-			"tf_slip_number" => "8649",
-			"sr_req_number"=>"6329",
-			"posting_date"=> "03-05-2018",
-			"tf_out_to_outlet"=> "WDFGCPST-Ciputat",
-			"status" => "Approved",
-			"created_by"=>"Admin Outlet Bintaro (AT)",
-			"approved_by"=> "Admin Outlet Bintaro (AT)",
-			"last_modified" => "2018-05-31 08:16:41",
-			"log"=> "Integrated"
-           ),
-		   array(
-            "no" => "4711",
-			"action" => "4711",
-			"id" => "4711",
-			"tf_slip_number" => "8649",
-			"sr_req_number"=>"6329",
-			"posting_date"=> "03-05-2018",
-			"tf_out_to_outlet"=> "WDFGCPST-Ciputat",
-			"status" => "Approved",
-			"created_by"=>"Admin Outlet Bintaro (AT)",
-			"approved_by"=> "Admin Outlet Bintaro (AT)",
-			"last_modified" => "2018-05-31 08:16:41",
-			"log"=> "Integrated"
-           ),
-		   array(
-            "no" => "4711",
-			"action" => "4711",
-			"id" => "4711",
-			"tf_slip_number" => "8649",
-			"sr_req_number"=>"6329",
-			"posting_date"=> "03-05-2018",
-			"tf_out_to_outlet"=> "WDFGCPST-Ciputat",
-			"status" => "Approved",
-			"created_by"=>"Admin Outlet Bintaro (AT)",
-			"approved_by"=> "Admin Outlet Bintaro (AT)",
-			"last_modified" => "2018-05-31 08:16:41",
-			"log"=> "Integrated"
-           ),
-		   
-        ); 
+	public function printpdf()
+	{
+		$id_gistonew_out_header = $this->uri->segment(4);
+		$data['data'] = $this->tout_model->tampil($id_gistonew_out_header);
 
-        $data = [
-            "data"=> $dt
-        ];
-        
-        echo json_encode($data);
-    }
+		// print_r($data);
+		// die();
+		
+		ob_start();
+		$content = $this->load->view('transaksi1/eksternal/transferoutinteroutlet/printpdf_view',$data);
+		$content = ob_get_clean();		
+		// $this->load->library('html2pdf');
+		require_once(APPPATH.'libraries/html2pdf/html2pdf.class.php');
+		try
+		{
+			$html2pdf = new HTML2PDF('P', 'F4', 'en');
+			$html2pdf->setTestTdInOnePage(false);
+			$html2pdf->pdf->SetDisplayMode('fullpage');
+			$html2pdf->writeHTML($content, isset($_GET['vuehtml']));
+			$html2pdf->Output('print.pdf');
+		}
+		catch(HTML2PDF_exception $e) {
+			echo $e;
+			exit;
+		}
+		
+	}
+
+	public function excel()
+	{
+		$id_gistonew_out_header = $this->uri->segment(4);
+		$data['data'] = $this->tout_model->tampil($id_gistonew_out_header);
+		
+		ob_start();
+	   	$this->load->view('transaksi1/eksternal/transferoutinteroutlet/printexcel_view',$data);
+		
+		
+	}
 }
 ?>

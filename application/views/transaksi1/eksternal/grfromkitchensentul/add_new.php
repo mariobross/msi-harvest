@@ -10,6 +10,7 @@
 			<div class="content-wrapper">
                 <!-- <?php  $this->load->view("_template/breadcrumb.php")?> -->
 				<div class="content">
+
 				<?php if ($this->session->flashdata('success')): ?>
 					<div class="alert alert-success" role="alert">
 						<?php echo $this->session->flashdata('success'); ?>
@@ -21,6 +22,7 @@
 					</div>
 				<?php endif; ?>
 					<!-- <form action="#"> -->
+
 						<div class="card">
 							<div class="card-body">
 								
@@ -128,14 +130,14 @@
 
 														</div>
 													</div>
-												</div>
-											
+												</div>											
 										</fieldset>
 									</div>
 								</div>	
 							</div>	
 						</div>	
 								
+
 						<div class='hide' id="form3">	
 							<div class="card">
 								<div class="card-header">
@@ -156,13 +158,15 @@
 											</tr>
 										</thead>
 										
-										<tbody id="DetLisItem">
-                                		</tbody>
+										<tbody id="DetLisItem"></tbody>
+                    
 									</table>
 								</div>
 							</div>
 						</div>
-					<!-- </form> -->
+						
+					</form>
+
 				</div>
 				<?php  $this->load->view("_template/footer.php")?>
 			</div>
@@ -368,6 +372,7 @@
 				})
 			}
             $(document).ready(function(){
+
 				const date = new Date();
 				const today = new Date(date.getFullYear(), date.getMonth(), date.getDate());
 				var optSimple = {
@@ -381,6 +386,7 @@
 				$('#delivDate').datepicker(optSimple);
 
 			})
+
         </script>
 	</body>
 </html>

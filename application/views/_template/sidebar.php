@@ -18,37 +18,38 @@
 	<div class="sidebar-content">
 
 		<!-- Main navigation -->
+		<div class="sidebar-user">
+			<div class="card-body">
+				<div class="media">
+
+					<div class="media-body">
+						<div class="media-title font-weight-semibold">Bintaro</div>
+						<div class="font-size-md opacity-50">
+							Bintaro / WDFGBNST <a href="#" style="color:white;"><i class="icon-git-compare"></i></a>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		
 		<div class="card card-sidebar-mobile">
 			<ul class="nav nav-sidebar" data-nav-type="accordion" id="nav">
 
 				<!-- Main -->
 				<li class="nav-item-header"><div class="text-uppercase font-size-xs line-height-xs">Main</div> <i class="icon-menu" title="Main"></i></li>
-				<li class="nav-item">
-					<a href="index.html" class="nav-link">
-						<i class="icon-home4"></i>
-						<span>
-							Home
-						</span>
-					</a>
-				</li>
-
+				
 				<li class="nav-item nav-item-submenu">
 					<a href="#" class="nav-link"><i class="icon-copy"></i> <span>Transaksi 1</span></a>
 					<ul class="nav nav-group-sub" data-submenu-title="Transaksi 1">
 						<li class="nav-item nav-item-submenu"><a href="#" class="nav-link active">EKSTERNAL</a>
 							<ul class="nav nav-group-sub">
 								<li class="nav-item"><a href="<?php echo base_url('/transaksi1/pofromvendor');?>" class="nav-link">In PO from Vendor</a></li>
-								<li class="nav-item"><a href="<?php echo base_url('/transaksi1/grfromkitchensentul');?>" class="nav-link">Good Receipt from Central Kitchen Sentul</a></li>
+								<li class="nav-item"><a href="<?php echo base_url('/transaksi1/grfromkitchensentul');?>" class="nav-link">Good Receipt from Central Kitchen</a></li>
 								<li class="nav-item"><a href="<?php echo base_url('/transaksi1/transferoutinteroutlet');?>" class="nav-link">Transfer Out Inter Outlet</a></li>
                 				<li class="nav-item"><a href="<?php echo base_url('/transaksi1/transferininteroutlet');?>" class="nav-link">Transfer In Inter Outlet</a></li>
 								<li class="nav-item"><a href="<?php echo base_url('/transaksi1/purchase_request');?>" class="nav-link">Purchase Request (PR)</a></li>
 								<li class="nav-item"><a href="<?php echo site_url('/transaksi1/returnout');?>" class="nav-link">Retur Out</a></li>
-<<<<<<< HEAD
-								<li class="nav-item"><a href="../seed/sidebar_right.html" class="nav-link">Retur In</a></li>
-=======
-
 								<li class="nav-item"><a href="<?php echo site_url('/transaksi1/returnin');?>" class="nav-link">Retur In</a></li>
->>>>>>> 4394ee0651f446f1b410bb2f314affa0ad9931b6
 								<li class="nav-item"><a href="<?php echo site_url('/transaksi1/goodissue');?>" class="nav-link">Good Issue</a></li>
 								<li class="nav-item"><a href="<?php echo site_url('/transaksi1/grnopo');?>" class="nav-link">Good Receipt Non PO</a></li>
 							</ul>
@@ -83,7 +84,7 @@
 						<li class="nav-item"><a href="<?php echo base_url('/master/akses');?>" class="nav-link">Hak Akses</a></li>
 						<li class="nav-item"><a href="<?php echo base_url('/master/integration');?>" class="nav-link">Integration Log</a></li>
 						<!--<li class="nav-item"><a href="../seed/layout_boxed.html" class="nav-link">Master Konversi Item Whole ke Slice</a></li>-->
-						<li class="nav-item"><a href="<?php echo base_url('/master/bom');?>" class="nav-link">Master Bill Of Materials</a></li>
+						<!--<li class="nav-item"><a href="<?php //echo base_url('/master/bom');?>" class="nav-link">Master Bill Of Materials</a></li>-->
 						
 					</ul>
 				</li>
