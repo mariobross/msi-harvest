@@ -15,7 +15,8 @@
                             <legend class="font-weight-semibold"><i class="icon-search4 mr-2"></i>Search of GR from Central Kitchen</legend>  
                         </div>
                         <div class="card-body">
-                        <form action="#" method="POST">
+                        
+                        <form action="#" method="POST" class="form-horizontal">
                             <div class="row">
                                 <div class="col-md-12">
                                     <div class="form-group row">
@@ -43,16 +44,16 @@
                                     <div class="form-group row">
                                         <label class="col-lg-3 col-form-label">Status</label>
                                         <div class="col-lg-9">
-                                            <select class="form-control form-control-select2" data-live-search="true">
+                                            <select class="form-control form-control-select2" id="status" data-live-search="true">
                                                 <option value="">none selected</option>
-                                                <option value="approved">Approved</option>
-                                                <option value="notapproved">Not Approved</option>
+                                                <option value="2">Approved</option>
+                                                <option value="1">Not Approved</option>
                                             </select>
                                         </div>
                                     </div>
 
                                     <div class="text-right">
-                                        <button type="submit" class="btn btn-primary">Search<i class="icon-search4  ml-2"></i></button>
+                                    <button type="submit" class="btn btn-primary" onclick="search()">Search<i class="icon-search4  ml-2"></i></button>
                                     </div>
                                 </div>
                             </div>
@@ -71,7 +72,7 @@
                                     <table id="tableWhole" class="table table-striped" style="width:100%" >
                                         <thead>
                                             <tr>
-                                                <th style="text-align: left"></th>
+                                                <th style="text-align: left"><input type="checkbox" name="checkall" id="checkall"></th>
                                                 <th style="text-align: center">Action</th>
                                                 <th style="text-align: center">ID</th>
                                                 <th style="text-align: center">Transfer Slip Number</th>
@@ -96,37 +97,70 @@
         <?php  $this->load->view("_template/modal_delete.php")?>
         <?php  $this->load->view("_template/js.php")?>
         <script>
-            $(document).ready(function(){
-                dataTable = $('#tableWhole').DataTable({
-                    "ordering":false,  "paging": true, "searching":true,
+            function search(){
+                const fromDate = $('#fromDate').val();
+                const toDate = $('#toDate').val();
+                const status = $('#status').val();
+                showDataList();
+            };
+            function showDataList(){
+                const obj = $('#tableWhole tbody tr').length;
+
+                if(obj > 0){
+                    const dataTable = $('#tableWhole').DataTable();
+                    dataTable.destroy();
+                    $('#tableWhole > tbody > tr').remove();
+                    
+                }
+                
+                const fromDate = $('#fromDate').val();
+                const toDate = $('#toDate').val();
+                const status = $('#status').val();
+                // console.log(fromDate, toDate, status);   
+
+                $('#tableWhole').dataTable({
+                    "ordering":false,  
+                    "paging": true, 
+                    "searching":true,
                     "ajax": {
-                        "url":"<?php echo site_url('transaksi1/grfromkitchensentul/showListData');?>",
-                        "type":"POST"
+                        "url": "<?php echo site_url('transaksi1/grfromkitchensentul/showListData');?>",
+                        "type": "POST",
+                        "data":{fDate: fromDate, tDate: toDate, stts: status}
                     },
-					"columnDefs": [
-						{"className": "dt-center", "targets": "_all"}
-					],
-                    "columns": [
+                    "columnDefs": [
+			 			{"className": "dt-center", "targets": "_all"}
+			 		],
+                     "columns": [
                         {"data":"no", "className":"dt-center", render:function(data, type, row, meta){
                             rr=`<input type="checkbox" class="check_delete" value="${data}">`;
                             return rr;
                         }},
                         {"data":"action", "className":"dt-center", render:function(data, type, row, meta){
+                            let urlEdit = '<?php echo site_url('transaksi1/grfromkitchensentul/edit/') ?>';
+                            let urlPrint = '<?php echo site_url('transaksi1/grfromkitchensentul/printpdf/') ?>';
                             rr = `<div style="width:100px">
-                                        <a href='<?php echo site_url('transaksi1/grfromkitchensentul/edit')?>' ><i class='icon-file-plus2' title="Edit"></i></a>&nbsp;
-                                        <a href='#' ><i class='icon-printer' title="Print"></i></a>&nbsp;
+                                        <a href=${urlEdit}${data}><i class='icon-file-plus2' title="Edit"></i></a>&nbsp;
+                                        <a href=${urlPrint}${data}><i class='icon-printer' title="Print"></i></a>&nbsp;
                                     </div>`;
                                         return rr;
                         }},
-                        {"data":"id"},
-                        {"data":"transfer_slip_no"},
-                        {"data":"gr_no"},
-                        {"data":"delivery_date"},
+                        {"data":"id_grpodlv_header", "className":"dt-center"},
+                        {"data":"grpodlv_no"},
+                        {"data":"do_no"},
+                        {"data":"posting_date"},
                         {"data":"posting_date"},
                         {"data":"status"},
-                        {"data":"log"}
+                        {"data":"integrated"}
                     ]
-                });
+                })
+            }
+            $(function(){
+                
+                $('#fromDate').datepicker({autoclose:true});
+                $('#toDate').datepicker({autoclose:true});
+
+                showDataList();
+                
                 // untuk check all
                 $("#checkall").click(function(){
                     if($(this).is(':checked')){
@@ -156,12 +190,28 @@
                         }
                     }
                 });
+                // ini adalah function versi ES6
+                checkcheckbox = () => {
+                    
+                    const lengthcheck = $(".check_delete").length;
+                    
+                    let totalChecked = 0;
+                    $(".check_delete").each(function(){
+                        if($(this).is(":checked")){
+                            totalChecked += 1;
+                        }
+                    });
+                    if(totalChecked == lengthcheck){
+                        $("#checkall").prop('checked', true);
+                    }else{
+                        $("#checkall").prop('checked', false);
+                    }
+                }
                 deleteConfirm = (url)=>{
                     $('#btn-delete').attr('href', url);
-	                $('#deleteModal').modal();
+                    $('#deleteModal').modal();
                 }
             });
-        
         </script>
 	</body>
 </html>
