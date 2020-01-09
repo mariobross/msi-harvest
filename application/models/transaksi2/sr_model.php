@@ -33,7 +33,7 @@ class Sr_model extends CI_Model {
         // $this->db->join('m_outlet', 'm_outlet.OUTLET = t_stdstock_header.to_plant');
         // $this->db->join('d_admin','t_stdstock_header.id_user_input = d_admin.admin_id','left');
         // $this->db->join('d_admin c','t_stdstock_header.id_user_approved = c.admin_id','left');
-        $this->db->where('t_stdstock_header.plant','WMSIMBST');
+        $this->db->where('t_stdstock_header.plant','WMSISNST');
         if((!empty($fromDate)) || (!empty($toDate))){
             if( (!empty($fromDate)) || (!empty($toDate)) ) {
             $this->db->where("delivery_date BETWEEN '$fromDate' AND '$toDate'");
@@ -67,9 +67,9 @@ class Sr_model extends CI_Model {
         $this->db->join('m_map_item_trans','m_map_item_trans.MATNR = m_item.MATNR','inner');
         $this->db->join('m_item_group','m_item_group.DISPO = m_item.DISPO','inner');
         $this->db->where('transtype', 'stdstock');
-        $this->db->where('m_item_group.kdplant','WMSIMBST');
+        $this->db->where('m_item_group.kdplant','WMSISNST');
         
-        $this->db->limit(100);
+        // $this->db->limit(10000);
         if($item_group_code !='all'){
             $this->db->where('m_item_group.DSNAM', $item_group_code);
         }
@@ -91,10 +91,10 @@ class Sr_model extends CI_Model {
             $this->db->join('m_map_item_trans','m_map_item_trans.MATNR = m_item.MATNR','inner');
             $this->db->join('m_item_group','m_item_group.DISPO = m_item.DISPO','inner');
             $this->db->where('transtype', 'stdstock');
-            $this->db->where('m_item_group.kdplant','WMSIMBST');
+            $this->db->where('m_item_group.kdplant','WMSISNST');
             $this->db->where('m_item.MATNR',$itemSelect);
 
-            $this->db->limit(100);
+            // $this->db->limit(10000);
             $query = $this->db->get();
             return $query->result_array();
         }else{
@@ -147,7 +147,7 @@ class Sr_model extends CI_Model {
         $this->db->from('t_stdstock_header');
         $this->db->join('m_outlet', 'm_outlet.OUTLET = t_stdstock_header.to_plant');
         $this->db->where('id_stdstock_header', $id_stdstock_header);
-        $this->db->where('t_stdstock_header.plant','WMSIMBST');
+        $this->db->where('t_stdstock_header.plant','WMSISNST');
         
         $query = $this->db->get();
     
