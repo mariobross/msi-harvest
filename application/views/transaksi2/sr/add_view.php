@@ -55,14 +55,14 @@
                                             <div class="form-group row">
 												<label class="col-lg-3 col-form-label">Outlet From</label>
 												<div class="col-lg-9">
-													<input type="text" class="form-control" placeholder="WMSITJST - Tajur" readOnly>
+													<input type="text" class="form-control" placeholder="WMSISNST - Senopati" readOnly>
 												</div>
                                             </div>
                                             
                                             <div class="form-group row">
 												<label class="col-lg-3 col-form-label">Storage Location</label>
 												<div class="col-lg-9">
-													<input type="text" class="form-control" placeholder="WMSITJST - MSI Tajur" readOnly>
+													<input type="text" class="form-control" placeholder="WMSISNST - MSI Senopati" readOnly>
 												</div>
                                             </div>
                                             
