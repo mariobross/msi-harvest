@@ -54,14 +54,14 @@
                                             <div class="form-group row">
 												<label class="col-lg-3 col-form-label">Outlet From</label>
 												<div class="col-lg-9">
-													<input type="text" class="form-control"value="WMSICKST - Tajur" readOnly>
+													<input type="text" class="form-control"value="WMSISNST - Senopati" readOnly>
 												</div>
                                             </div>
                                             
                                             <div class="form-group row">
 												<label class="col-lg-3 col-form-label">Storage Location</label>
 												<div class="col-lg-9">
-													<input type="text" class="form-control" value="WMSICKST - Tajur" readOnly>
+													<input type="text" class="form-control" value="WMSISNST - Senopati" readOnly>
 												</div>
                                             </div>
                                             

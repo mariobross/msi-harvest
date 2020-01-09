@@ -65,6 +65,7 @@ class Sr extends CI_Controller{
             $nestedData['delivery_date'] = date("d-m-Y",strtotime($val['delivery_date']));
             $nestedData['request_reason'] = $val['request_reason'];
             $nestedData['status'] = $val['status'] =='1'?'Not Apporeed':'Approved';
+            // $nestedData['status_string'] = $val['status'] =='1'?'Not Apporeed':'Approved';
             $nestedData['admin_realname'] = $val['user_input'];
             $nestedData['admin_realname(1)'] = $val['user_approved'] ? $val['user_approved'] : '-';
             $nestedData['lastmodified'] = date("d-m-Y",strtotime($val['lastmodified']));
@@ -172,6 +173,9 @@ class Sr extends CI_Controller{
         $object['stdstock_header']['request_reason'] = $object['data']['request_reason'];
         $object['stdstock_header']['item_group_code'] = $object['data']['item_group_code'];
         $object['stdstock_header']['status'] = $object['data']['status'];
+
+        // print_r($object['data']);
+        // die();
 
         $this->load->view('transaksi2/sr/edit_view', $object);
     }
