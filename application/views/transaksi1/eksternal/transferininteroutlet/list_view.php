@@ -22,7 +22,7 @@
 					<?php endif; ?>
                     <div class="card">
                         <div class="card-header">
-                            <legend class="font-weight-semibold"><i class="icon-search4 mr-2"></i>Search of Transfer Out Inter Outlet</legend>  
+                            <legend class="font-weight-semibold"><i class="icon-search4 mr-2"></i>Search of Transfer In Inter Outlet</legend>  
                         </div>
                         <div class="card-body">
 
