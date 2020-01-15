@@ -185,6 +185,22 @@
 		</div>
 		<?php  $this->load->view("_template/js.php")?>
 		<script>
+			$(document).ready(function(){
+
+				const date = new Date();
+				const today = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+				var optSimple = {
+					format: 'dd-mm-yyyy',
+					todayHighlight: true,
+					orientation: 'bottom right',
+					autoclose: true
+				};
+				$('#postingDate').datepicker(optSimple);
+				$('#postingDate').datepicker( 'setDate', today );
+
+				$('#delivDate').datepicker(optSimple);
+			});
+			
 			function getDataHeader(poNumber){
 				$.post("<?php echo site_url('transaksi1/pofromvendor/getDataPoHeader');?>",{poNumberHeader: poNumber},(data)=>{
 					
@@ -291,22 +307,6 @@
 				);
 
 			}
-
-            $(document).ready(function(){
-
-				const date = new Date();
-				const today = new Date(date.getFullYear(), date.getMonth(), date.getDate());
-				var optSimple = {
-					format: 'dd-mm-yyyy',
-					todayHighlight: true,
-					orientation: 'bottom right',
-					autoclose: true
-				};
-				$('#postingDate').datepicker(optSimple);
-				$('#postingDate').datepicker( 'setDate', today );
-
-				$('#delivDate').datepicker(optSimple);
-            });
         
         </script>
 	</body>

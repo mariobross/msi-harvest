@@ -162,7 +162,7 @@ class Transferininteroutlet extends CI_Controller
     }
 
 	public function addData(){
-        if($this->input->post("Rto")!= ''){
+        if($this->input->post("plant")!= ''){
             $strPlant = explode("-",$this->input->post("plant"));
             $plant = trim($strPlant[0]);
             $plant_name = trim($strPlant[1]);
@@ -216,6 +216,7 @@ class Transferininteroutlet extends CI_Controller
 
         $grsto_details['material_no'] = $this->input->post('detMatrialNo');
         $count = count($grsto_details['material_no']);
+
 
         if($id_grsto_header= $this->tIn_model->grsto_header_insert($grsto_header)){
             $input_detail_success = false;

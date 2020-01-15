@@ -168,7 +168,7 @@ class TransferIn_model extends CI_Model {
           }
         }
         if (count($item_groups_filter) > 0) {
-          $item_groups_filter = array_unique($item_groups_filter);
+          $item_groups_filter = array_unique($item_groups_filter, SORT_REGULAR);
           return $item_groups_filter;
         }
         else {
@@ -549,15 +549,15 @@ class TransferIn_model extends CI_Model {
 			return FALSE;
 	}
   
-    function t_grsto_header_delete($id_grsto_header){
-        if($this->t_grsto_details_delete($id_grsto_header)){
-            $this->db->where('id_grsto_header', $id_grsto_header);
-            if($this->db->delete('t_grsto_header'))
-                return TRUE;
-            else
-                return FALSE;
-        }
-    }
+  function t_grsto_header_delete($id_grsto_header){
+      if($this->t_grsto_details_delete($id_grsto_header)){
+          $this->db->where('id_grsto_header', $id_grsto_header);
+          if($this->db->delete('t_grsto_header'))
+              return TRUE;
+          else
+              return FALSE;
+      }
+  }
 
     function t_grsto_details_delete($id_grsto_header) {
         $this->db->where('id_grsto_header', $id_grsto_header);
@@ -567,14 +567,19 @@ class TransferIn_model extends CI_Model {
             return FALSE;
     }
 
+    
+
     function tampil($id_grsto_header){
-      $this->db->select('a.gistonew_out_no,a.po_no,a.posting_date,b.material_no,b.material_desc,b.uom,b.gr_quantity,b.num,a.plant,a.receiving_plant,(SELECT OUTLET_NAME1 FROM m_outlet WHERE OUTLET=a.plant) as NAME1, (SELECT OUTLET FROM m_outlet WHERE TRANSIT=a.receiving_plant) as PLANT_REC,
-      (SELECT OUTLET_NAME1 FROM m_outlet WHERE TRANSIT=a.receiving_plant) as PLANT_REC_NAME');
+      $this->db->select('a.po_no, a.grsto_no, a.delivery_date,a.delivery_plant,a.delivery_plant_name,b.material_no,b.material_desc,b.uom,b.outstanding_qty,b.gr_quantity,a.plant,
+      (SELECT OUTLET_NAME1 FROM m_outlet WHERE OUTLET=a.plant) as NAME1,
+  (SELECT OUTLET FROM m_outlet WHERE OUTLET=a.delivery_plant) as PLANT_REC,
+  (SELECT OUTLET_NAME1 FROM m_outlet WHERE OUTLET=a.delivery_plant) as PLANT_REC_NAME');
       $this->db->from('t_grsto_header a');
       $this->db->join('t_grsto_detail b','a.id_grsto_header = b.id_grsto_header','left');
       $this->db->where('a.id_grsto_header',$id_grsto_header);
 
       $query = $this->db->get();
+      // echo $this->db->last_query();
 
       return $query->result_array();
 	}

@@ -131,7 +131,7 @@ class Transferout_model extends CI_Model {
           }
         }
         if (count($item_groups_filter) > 0) {
-          $item_groups_filter = array_unique($item_groups_filter);
+          $item_groups_filter = array_unique($item_groups_filter, SORT_REGULAR);
           return $item_groups_filter;
         }
         else {
