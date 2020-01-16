@@ -117,8 +117,8 @@ class Sr extends CI_Controller{
         $stdstock_header['item_group_code'] = $this->input->post('matGrp');
         $stdstock_header['to_plant'] = $this->input->post('reqToOutlet');
         $stdstock_header['created_date'] = $this->l_general->str_to_date($this->input->post('dateCreate'));
-        $stdstock_header['plant'] = 'WMSIMBST';
-        $stdstock_header['storage_location'] = 'WMSIMBST';
+        $stdstock_header['plant'] = 'WMSISNST';
+        $stdstock_header['storage_location'] = 'WMSISNST';
         $stdstock_header['id_stdstock_plant'] = $this->sr_model->id_stdstock_plant_new_select($stdstock_header['plant'],$stdstock_header['created_date']);
         $stdstock_header['status'] = $this->input->post('appr')? $this->input->post('appr') : '1';
         $stdstock_header['id_user_input'] = '2392';
