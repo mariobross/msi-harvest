@@ -52,7 +52,8 @@ class Grnopo extends CI_Controller{
 		$data = array();
 		
 		// print_r($rs[0]);
-		$status_string='';
+        $status_string='';
+        $log='';
 
         foreach($rs as $key=>$val){
 			if($val['status'] =='1'){
@@ -97,7 +98,94 @@ class Grnopo extends CI_Controller{
     public function add()
     {
         # code...
-        $this->load->view('transaksi1/eksternal/grnopo/add_view');
+        $object['plant'] = 'WMSIRHBD'; 
+        $object['plant_name'] = 'Rmh Hamper Dago';
+        $object['storage_location'] = 'WMSIRHBD'; 
+        $object['storage_location_name'] = 'Rmh Hamper Dago';
+        $object['cost_center'] = 'MSI0132'; 
+        $object['cost_center_name'] = 'MSI OPERASIONAL';
+        $object['matrialGroup'] = $this->gnon_model->showMatrialGroup();
+        $this->load->view('transaksi1/eksternal/grnopo/add_view', $object);
+    }
+
+    function getdataDetailMaterial(){
+        $item_group_code = $this->input->post('matGroup');
+        
+        $data = $this->gnon_model->getDataMaterialGroup($item_group_code);
+        echo json_encode($data);
+
+    }
+
+    public function addData(){
+        if($this->input->post("Plant")!= ''){
+            $strPlant = explode("-",$this->input->post("Plant"));
+            $plant = trim($strPlant[0]);
+            $plant_name = trim($strPlant[1]);
+        }else{
+            $plant = '';
+            $plant_name = '';
+        }
+
+        if($this->input->post("costCenter")!= ''){
+            $str = explode("-",$this->input->post('costCenter'));
+            $cost_center = trim($str[0]);
+            $cost_center_name = trim($str[1]);
+        }else{
+            $cost_center = '';
+            $cost_center_name = '';
+        }
+
+        if($this->input->post("StorageLoc")!= ''){
+            $strStorage = explode("-",$this->input->post("StorageLoc"));
+            $storage_location = trim($strStorage[0]);
+            $storage_location_name = trim($strStorage[1]);
+        }else{
+            $storage_location = '';
+            $storage_location_name = '';
+        }
+
+        
+        $grnonpo_header['posting_date'] = $this->l_general->str_to_date($this->input->post('posting_date'));
+        $grnonpo_header['item_group_code'] = $this->input->post('matGroup');
+        $grnonpo_header['plant'] = $plant;
+        $grnonpo_header['plant_name'] = $plant_name;
+        $grnonpo_header['storage_location'] = $storage_location;
+        $grnonpo_header['storage_location_name'] = $storage_location_name;
+        $grnonpo_header['cost_center'] = $cost_center;
+        $grnonpo_header['id_grnonpo_plant'] = $this->gnon_model->id_grnonpo_plant_new_select($grnonpo_header['plant'],$grnonpo_header['posting_date']);
+        $grnonpo_header['status'] = $this->input->post('appr')? $this->input->post('appr') : '1';
+        $grnonpo_header['id_user_input'] = '2392';
+        $grnonpo_header['grnonpo_no'] = '';
+        $grnonpo_header['back'] = 0;
+        $grnonpo_header['id_user_approved'] = $this->input->post('appr')? '2392' : 0;
+
+        $grnonpo_detail['material_no'] = $this->input->post('detMatrialNo');
+        $count = count($grnonpo_detail['material_no']);
+        // print_r($count);
+        if($id_grnonpo_header= $this->gnon_model->grnonpo_header_insert($grnonpo_header)){
+            $input_detail_success = false;
+            for($i =0; $i < $count; $i++){
+                $grnonpo_details['id_grnonpo_header'] = $id_grnonpo_header;
+                $grnonpo_details['id_grnonpo_h_detail'] = $i+1;
+                $grnonpo_details['material_no'] = $this->input->post('detMatrialNo')[$i];
+                $grnonpo_details['material_desc'] = $this->input->post('detMatrialDesc')[$i];
+                $grnonpo_details['quantity'] = $this->input->post('detQty')[$i];
+                $grnonpo_details['uom'] = $this->input->post('detUom')[$i];
+                $grnonpo_details['additional_text'] = $this->input->post('detText')[$i];
+                $grnonpo_details['ok'] = 0;
+                $grnonpo_details['ok_cancel'] = 0;
+                $grnonpo_details['id_user_cancel'] = 0;
+
+                if($this->gnon_model->grnonpo_details_insert($grnonpo_details))
+                $input_detail_success = TRUE;
+            }
+        }
+
+        if($input_detail_success){
+            return $this->session->set_flashdata('success', "Goods Receipt Non PO Telah Terbentuk");
+        }else{
+            return $this->session->set_flashdata('failed', "Goods Receipt Non PO Gagal Terbentuk");
+        }
     }
 
     public function edit(){
@@ -210,10 +298,9 @@ class Grnopo extends CI_Controller{
 
     function getdataDetailMaterialSelect(){
 		$itemSelect = $this->input->post('MATNR');
-		$po_no = $this->input->post('do_no');
         
         $dataMatrialSelect = $this->gnon_model->getDataMaterialGroupSelect($itemSelect);
-		
+      
         echo json_encode($dataMatrialSelect) ;
     }
     

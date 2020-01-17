@@ -97,6 +97,7 @@ class Grnonpo_model extends CI_Model {
     }
     
     function getDataMaterialGroupSelect($itemSelect){
+        $trans_type = 'stdstock';
         $kd_plant = 'WMSIRHBD';
         if(($itemSelect != '') || ($itemSelect != null)){
             $this->db->select('m_item.MATNR,m_item.MAKTX,m_item.DISPO,m_item.UNIT,space(0) as DSNAM');
@@ -104,7 +105,7 @@ class Grnonpo_model extends CI_Model {
             $this->db->from('m_item');
             $this->db->join('m_map_item_trans','m_map_item_trans.MATNR = m_item.MATNR','inner');
             $this->db->join('m_item_group','m_item_group.DISPO = m_item.DISPO','inner');
-            $this->db->where('transtype', 'stdstock');
+            $this->db->where('transtype', $trans_type);
             $this->db->where('m_item_group.kdplant', $kd_plant );
             $this->db->where('m_item.MATNR',$itemSelect);
 
@@ -137,6 +138,33 @@ class Grnonpo_model extends CI_Model {
 			return TRUE;
 		else
 			return FALSE;
+    }
+
+    function id_grnonpo_plant_new_select($id_outlet,$created_date="",$id_grnonpo_header="") {
+
+        if (empty($created_date))
+           $created_date=$this->m_general->posting_date_select_max();
+        if (empty($id_outlet))
+           $id_outlet=$this->session->userdata['ADMIN']['plant'];
+
+		$this->db->select_max('id_grnonpo_plant');
+		$this->db->from('t_grnonpo_header');
+		$this->db->where('plant', $id_outlet);
+	  	$this->db->where('DATE(posting_date)', $created_date);
+        if (!empty($id_grnonpo_header)) {
+    		$this->db->where('id_grnonpo_header <> ', $id_grnonpo_header);
+        }
+
+		$query = $this->db->get();
+
+		if($query->num_rows() > 0) {
+			$stdstock = $query->row_array();
+			$id_stdstock_outlet = $stdstock['id_grnonpo_plant'] + 1;
+		}	else {
+			$id_stdstock_outlet = 1;
+		}
+
+		return $id_stdstock_outlet;
     }
 
     function getReturnFrom($ro){
@@ -320,6 +348,42 @@ class Grnonpo_model extends CI_Model {
             return FALSE;
         }
     }
+
+    function showMatrialGroup(){
+        $SAP_MSI = $this->load->database('SAP_MSI', TRUE);
+        $SAP_MSI->select('ItmsGrpNam');
+        $SAP_MSI->from('OITB');
+
+        $query = $SAP_MSI->get();
+        $ret = $query->result_array();
+        return $ret;
+    }
+
+    function getDataMaterialGroup($item_group_code ='all'){
+        $kd_plant = 'WMSIRHBD';
+        $trans_type = 'grnonpo';
+        $this->db->distinct();
+        $this->db->select('m_item.MATNR,m_item.MAKTX,m_item.DISPO,m_item.UNIT,m_item_group.DSNAM');
+        $this->db->select('(REPLACE(m_item.MATNR,REPEAT("0",(12)),SPACE(0))) AS MATNR1');
+        $this->db->from('m_item');
+        $this->db->join('m_map_item_trans','m_map_item_trans.MATNR = m_item.MATNR','inner');
+        $this->db->join('m_item_group','m_item_group.DISPO = m_item.DISPO','inner');
+        $this->db->where('transtype', $trans_type);
+        $this->db->where('m_item_group.kdplant',$kd_plant);
+        
+        $this->db->limit(10000);
+        if($item_group_code !='all'){
+            $this->db->where('m_item_group.DSNAM', $item_group_code);
+        }
+
+        $query = $this->db->get();
+        // echo $this->db->last_query();
+        
+        if(($query)&&($query->num_rows()>0))
+            return $query->result_array();
+		else
+			return FALSE;
+    }
   
     function cancelHeaderGrNonPo($data){
         // print_r($data);
@@ -436,29 +500,18 @@ class Grnonpo_model extends CI_Model {
           return FALSE;
     }
 
-    function retin_header_insert($data) {
-		if($this->db->insert('t_retin_header', $data))
+    function grnonpo_header_insert($data) {
+		if($this->db->insert('t_grnonpo_header', $data))
 			return $this->db->insert_id();
 		else
 			return FALSE;
     }
 
-    function retin_detail_insert($data) {
-        if($this->db->insert('t_retin_detail', $data))
-                return $this->db->insert_id();
-            else 
-                return FALSE;
-    }
-
-    function updateWtrGrQty($grQty, $po_no, $line){
-        $SAP_MSI = $this->load->database('SAP_MSI', TRUE);
-        $SAP_MSI->set('U_grqty_web', $grQty);
-        $SAP_MSI->where('DOcEntry', $po_no);
-        $SAP_MSI->where('LineNum', $line);
-        if($SAP_MSI->update('WTR1'))
-          return TRUE;
-        else
-          return FALSE;
+    function grnonpo_details_insert($data) {
+		if($this->db->insert('t_grnonpo_detail', $data))
+			return $this->db->insert_id();
+		else
+			return FALSE;
     }
 
     function tampil($id_retin_header){
