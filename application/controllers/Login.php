@@ -188,6 +188,7 @@ class Login extends CI_Controller {
 	}
 	
 	public function forgotPassword(){
+
 		
 		$password = $this->input->post('password');
 		$conf_password = $this->input->post('conf_password');
@@ -213,6 +214,7 @@ class Login extends CI_Controller {
 				'success' => false,
 				'message' => 'Ubah password tidak berhasil'
 			); 
+
 		}
 
 		echo json_encode($errMsg);   

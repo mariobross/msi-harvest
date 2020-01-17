@@ -4,6 +4,7 @@
 		<?php  $this->load->view("_template/head.php")?>
 	</head>
 	<body>
+
 		<!-- /php  $this->load->view("_template/nav.php")?> -->
 		<div class="page-content">
 			<div class="content-wrapper">
@@ -35,11 +36,13 @@
 
 										<div class="text-right">
 											<button type="button" class="btn btn-primary" id="BtnLogin">Masuk <i class="icon-user ml-2"></i></button>
+
 										</div>
 										<br>
 										<div class="text-right">
 											<a href="#" id="forgotPassword">Lupa Password</a>
 										</div>
+
 									<!-- </form> -->
 								</div>
 								
@@ -124,7 +127,6 @@
 					
 					
 				});
-
                 $("#forgotPassword").click(function(){
 				  $("#signinPage").hide();
 				  $("#forgotPassPage").show();
