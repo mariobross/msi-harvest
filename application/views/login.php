@@ -4,50 +4,46 @@
 		<?php  $this->load->view("_template/head.php")?>
 	</head>
 	<body>
-		<?php  $this->load->view("_template/nav.php")?>
+
+		<!-- /php  $this->load->view("_template/nav.php")?> -->
 		<div class="page-content">
 			<div class="content-wrapper">
 				<div class="content">
+					
 					<!-- Vertical form options -->
 					<div class="row">
+
 						<div class="col-md-6 offset-md-4" style="margin-top:100px;">
-							<?php 
-								if(!empty($this->session->flashdata('forgotpassword'))){
-									if($this->session->flashdata('forgotpassword')=='correct'){ ?>
-									<div class="alert alert-success" style="width:550px;">
-										<strong>Success!</strong> Password telah dikirim email Anda!
-									</div>
-							<?php }else{ ?>
-								<div class="alert alert-danger" style="width:550px;">
-									<strong>Error!</strong> Rubah Password gagal!
-								</div>
-							<?php }
-								}
-							?>
+
+							<div class="alert alert-danger errMsg" style="width:550px; display:none"></div>
+
+							<div class="alert alert-success errMsgSuccess" style="width:550px; display:none"></div>
 							<!-- Basic layout-->
 							<div class="card" style="width:550px;">
 
 								<div class="card-body" id="signinPage">
 									<legend class="font-weight-semibold"><i class="icon-reading mr-2"></i> Sign in ke YBC SAP Portal</legend>
-									<form action="<?php echo base_url('/msi/dashboard');?>" method="POST">
+									<!-- <form action="<?php echo base_url('/msi/dashboard');?>" method="POST"> -->
 										<div class="form-group">
 											<label>Name:</label>
-											<input type="text" class="form-control" name="name" id="name">
+											<input type="text" class="form-control" name="f_name" id="f_name">
 										</div>
 
 										<div class="form-group">
 											<label>Password:</label>
-											<input type="password" class="form-control" name="password" id="password">
+											<input type="password" class="form-control" name="f_password" id="f_password">
 										</div>
 
 										<div class="text-right">
-											<button type="submit" class="btn btn-primary" id="login">Submit form <i class="icon-user ml-2"></i></button>
+											<button type="button" class="btn btn-primary" id="BtnLogin">Masuk <i class="icon-user ml-2"></i></button>
+
 										</div>
 										<br>
 										<div class="text-right">
 											<a href="#" id="forgotPassword">Lupa Password</a>
 										</div>
-									</form>
+
+									<!-- </form> -->
 								</div>
 								
 								<div class="card-body" id="forgotPassPage" style="display:none;">
@@ -72,6 +68,65 @@
 		</div>
 		<script>
             $(document).ready(function(){
+
+				$(".errMsg").hide();
+
+				$("#BtnLogin").click(function(){ 
+					
+					
+					$(".errMsg").hide();
+					$('#BtnLogin').prop('disabled',true);
+					$("#BtnLogin").html("loading ..");
+
+					if($("#f_name").val() == "" || $("#f_password").val() == ""){
+						
+						alert("Username atau Password tidak boleh kosong");
+						$('#BtnLogin').prop('disabled',false);
+						$('#BtnLogin').html('Masuk');
+						
+						return;
+					}
+					let data = {
+						username : $("#f_name").val(),
+						password: $("#f_password").val()
+					}	
+
+					$.post("<?php echo site_url('login/userLogin'); ?>",{
+							data: data
+						},
+						(res)=>{
+							
+							if(res){
+								
+								let r = JSON.parse(res);
+								
+								if(r.success){
+									
+									$(".errMsgSuccess").html(r.message);
+									$(".errMsgSuccess").show();
+									$('#BtnLogin').prop('disabled',false);
+									$('#BtnLogin').html('Masuk');
+
+									setTimeout(function(){ 
+										window.location.href = '<?php echo site_url('msi/dashboard'); ?>'; 
+									}, 750);
+
+								} else {
+									$(".errMsg").html(r.message);
+									$(".errMsg").show();
+									$('#BtnLogin').prop('disabled',false);
+									$('#BtnLogin').html('Masuk');
+								}
+
+								
+							}
+							
+
+						}
+					)
+					
+					
+				});
                 $("#forgotPassword").click(function(){
 				  $("#signinPage").hide();
 				  $("#forgotPassPage").show();
