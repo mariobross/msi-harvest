@@ -4,7 +4,6 @@
 		<?php  $this->load->view("_template/head.php")?>
 	</head>
 	<body>
-
 		<!-- /php  $this->load->view("_template/nav.php")?> -->
 		<div class="page-content">
 			<div class="content-wrapper">
@@ -36,13 +35,11 @@
 
 										<div class="text-right">
 											<button type="button" class="btn btn-primary" id="BtnLogin">Masuk <i class="icon-user ml-2"></i></button>
-
 										</div>
 										<br>
 										<div class="text-right">
 											<a href="#" id="forgotPassword">Lupa Password</a>
 										</div>
-
 									<!-- </form> -->
 								</div>
 								
@@ -67,66 +64,85 @@
 			</div>
 		</div>
 		<script>
+
+			var input_name = document.getElementById("f_name");
+			var input_password = document.getElementById("f_password");
+
+			function ProcessLogin(){
+				$(".errMsg").hide();
+				$('#BtnLogin').prop('disabled',true);
+				$("#BtnLogin").html("loading ..");
+
+				if($("#f_name").val() == "" || $("#f_password").val() == ""){
+					
+					alert("Username atau Password tidak boleh kosong");
+					$('#BtnLogin').prop('disabled',false);
+					$('#BtnLogin').html('Masuk');
+					
+					return;
+				}
+				let data = {
+					username : $("#f_name").val(),
+					password: $("#f_password").val()
+				}	
+
+				$.post("<?php echo site_url('login/userLogin'); ?>",{
+						data: data
+					},
+					(res)=>{
+						
+						if(res){
+							
+							let r = JSON.parse(res);
+							
+							if(r.success){
+								
+								$(".errMsgSuccess").html(r.message);
+								$(".errMsgSuccess").show();
+								$('#BtnLogin').prop('disabled',false);
+								$('#BtnLogin').html('Masuk');
+
+								setTimeout(function(){ 
+									window.location.href = '<?php echo site_url('msi/dashboard'); ?>'; 
+								}, 750);
+
+							} else {
+								$(".errMsg").html(r.message);
+								$(".errMsg").show();
+								$('#BtnLogin').prop('disabled',false);
+								$('#BtnLogin').html('Masuk');
+							}
+
+							
+						}
+						
+
+					}
+				)
+			}
+
+			input_name.addEventListener("keyup", function(event) {
+				if (event.keyCode === 13) {
+					event.preventDefault();
+					document.getElementById("BtnLogin").click();
+				}
+			});
+
+			input_password.addEventListener("keyup", function(event) {
+				if (event.keyCode === 13) {
+					event.preventDefault();
+					document.getElementById("BtnLogin").click();
+				}
+			});
+
             $(document).ready(function(){
 
 				$(".errMsg").hide();
 
-				$("#BtnLogin").click(function(){ 
-					
-					
-					$(".errMsg").hide();
-					$('#BtnLogin').prop('disabled',true);
-					$("#BtnLogin").html("loading ..");
-
-					if($("#f_name").val() == "" || $("#f_password").val() == ""){
-						
-						alert("Username atau Password tidak boleh kosong");
-						$('#BtnLogin').prop('disabled',false);
-						$('#BtnLogin').html('Masuk');
-						
-						return;
-					}
-					let data = {
-						username : $("#f_name").val(),
-						password: $("#f_password").val()
-					}	
-
-					$.post("<?php echo site_url('login/userLogin'); ?>",{
-							data: data
-						},
-						(res)=>{
-							
-							if(res){
-								
-								let r = JSON.parse(res);
-								
-								if(r.success){
-									
-									$(".errMsgSuccess").html(r.message);
-									$(".errMsgSuccess").show();
-									$('#BtnLogin').prop('disabled',false);
-									$('#BtnLogin').html('Masuk');
-
-									setTimeout(function(){ 
-										window.location.href = '<?php echo site_url('msi/dashboard'); ?>'; 
-									}, 750);
-
-								} else {
-									$(".errMsg").html(r.message);
-									$(".errMsg").show();
-									$('#BtnLogin').prop('disabled',false);
-									$('#BtnLogin').html('Masuk');
-								}
-
-								
-							}
-							
-
-						}
-					)
-					
-					
+				$("#BtnLogin").click(function(){ 					
+					ProcessLogin();
 				});
+
                 $("#forgotPassword").click(function(){
 				  $("#signinPage").hide();
 				  $("#forgotPassPage").show();
