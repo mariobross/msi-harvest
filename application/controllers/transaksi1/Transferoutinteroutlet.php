@@ -84,7 +84,7 @@ class Transferoutinteroutlet extends CI_Controller
 	public function add()
     {
         $data['do_nos'] = $this->tout_model->sap_do_select_all();
-        
+        $object['po_no']['-'] = '';
 		if($data['do_nos'] !== FALSE) {
 			$object['do_no'][0] = '';
 			foreach ($data['do_nos'] as $do_no) {
