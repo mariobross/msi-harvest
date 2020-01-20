@@ -23,9 +23,11 @@
 				<div class="media">
 
 					<div class="media-body">
-						<div class="media-title font-weight-semibold">Bintaro</div>
+						<div class="media-title font-weight-semibold">
+							<?php echo $this->session->userdata["ADMIN"]["plant_name"]; ?>
+						</div>
 						<div class="font-size-md opacity-50">
-							Bintaro / WDFGBNST <a href="#" style="color:white;"><i class="icon-git-compare"></i></a>
+						<?php echo $this->session->userdata["ADMIN"]["plant_name"]; ?> / <?php echo $this->session->userdata["ADMIN"]["plant"]; ?> <a href="#" style="color:white;"><i class="icon-git-compare"></i></a>
 						</div>
 					</div>
 				</div>
@@ -44,7 +46,9 @@
 						<li class="nav-item nav-item-submenu"><a href="#" class="nav-link active">EKSTERNAL</a>
 							<ul class="nav nav-group-sub">
 								<li class="nav-item"><a href="<?php echo base_url('/transaksi1/pofromvendor');?>" class="nav-link">In PO from Vendor</a></li>
-								<li class="nav-item"><a href="<?php echo base_url('/transaksi1/grfromkitchensentul');?>" class="nav-link">Good Receipt from Central Kitchen</a></li>
+								<li class="nav-item">
+									<a href="<?php echo base_url('/transaksi1/grfromkitchensentul');?>" class="nav-link">Good Receipt from Central Kitchen Sentul</a>
+								</li>
 								<li class="nav-item"><a href="<?php echo base_url('/transaksi1/transferoutinteroutlet');?>" class="nav-link">Transfer Out Inter Outlet</a></li>
                 				<li class="nav-item"><a href="<?php echo base_url('/transaksi1/transferininteroutlet');?>" class="nav-link">Transfer In Inter Outlet</a></li>
 								<li class="nav-item"><a href="<?php echo base_url('/transaksi1/purchase_request');?>" class="nav-link">Purchase Request (PR)</a></li>
@@ -84,7 +88,7 @@
 						<li class="nav-item"><a href="<?php echo base_url('/master/akses');?>" class="nav-link">Hak Akses</a></li>
 						<li class="nav-item"><a href="<?php echo base_url('/master/integration');?>" class="nav-link">Integration Log</a></li>
 						<!--<li class="nav-item"><a href="../seed/layout_boxed.html" class="nav-link">Master Konversi Item Whole ke Slice</a></li>-->
-						<!--<li class="nav-item"><a href="<?php //echo base_url('/master/bom');?>" class="nav-link">Master Bill Of Materials</a></li>-->
+						<li class="nav-item"><a href="<?php echo base_url('/master/bom');?>" class="nav-link">Master Bill Of Materials</a></li>
 						
 					</ul>
 				</li>
