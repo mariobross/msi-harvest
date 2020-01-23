@@ -32,18 +32,19 @@ class Transferout_model extends CI_Model {
 
     public function sap_do_select_all($kd_plant="",$do_no="",$do_item=""){
         $SAP_MSI = $this->load->database('SAP_MSI', TRUE);
+        $kd_plant = 'WMSIMBST';
         
-        $SAP_MSI->select('t0.U_DocNum As VBELN, t0.U_DocDate as DELIVDATE, t0.ToWhsCode as RECEIVING_PLANT, t1.LineNum as PONSR, t4.ItmsGrpCod as DISPO, t1.ItemCode as MATNR, t2.ItemName as MAKTX, t1.Quantity as LFIMG, t1.unitMsr as VRKME,   t1.LineNum as item, t0.ToWhsCode as Plant,t0.Filler ,(SELECT WhsName FROM OWHS WHERE U_TransFor=ToWhsCode) as ABC');
+        $SAP_MSI->select('t0.DocEntry As VBELN, t0.DocDate as DELIVDATE, t0.ToWhsCode as RECEIVING_PLANT, t1.LineNum as PONSR, t4.ItmsGrpCod as DISPO, t1.ItemCode as MATNR, t2.ItemName as MAKTX, t1.Quantity as LFIMG, t1.unitMsr as VRKME,   t1.LineNum as item, t0.ToWhsCode as Plant,t0.Filler ,(SELECT WhsName FROM OWHS WHERE U_TransFor=ToWhsCode) as ABC');
         $SAP_MSI->from('ODRF t0');
         $SAP_MSI->join('DRF1 t1','t0.DocEntry = t1.DocEntry','inner');
         $SAP_MSI->join('OITM T2','t2.ItemCode = T1.ItemCode','inner');
         $SAP_MSI->join('OITB T4','T2.ItmsGrpCod = t4.ItmsGrpCod','inner');
-        $SAP_MSI->where_in('Filler','WMSIMBST');
+        $SAP_MSI->where_in('Filler', $kd_plant);
         $SAP_MSI->where('t0.ObjType','1250000001');
-        $SAP_MSI->where('t0.U_DocNum is not null', NULL, FALSE);
+        // $SAP_MSI->where('t0.U_DocNum is not null', NULL, FALSE);
 
         if(!empty($do_no)) {
-            $SAP_MSI->where('t0.U_DocNum',$do_no);
+            $SAP_MSI->where('t0.DocEntry',$do_no);
         }
 
         if(!empty($do_item)) {
@@ -179,14 +180,14 @@ class Transferout_model extends CI_Model {
     }
 
     function getDataMaterialGroupSelect($po_no, $itemSelect){
-      $plant = 'WMSISTRM';
+      $plant = 'WMSIMBST';
       $SAP_MSI = $this->load->database('SAP_MSI', TRUE);
 
       $dataHeader = $this->sap_do_select_all('',$po_no, $itemSelect);
       for($i = 1; $i <= count($dataHeader); $i++){
         $SAP_MSI->select('OnHand'); 
         $SAP_MSI->from('OITW');
-        $SAP_MSI->where('WhsCode', 'WMSIMBST');
+        $SAP_MSI->where('WhsCode', $plant);
         $SAP_MSI->where('ItemCode', $dataHeader[$i]['MATNR']);
 
         $query = $SAP_MSI->get();
@@ -207,6 +208,40 @@ class Transferout_model extends CI_Model {
       $query = $SAP_MSI->get();
       $inwhs = $query->result_array();
       return $inwhs;
+    }
+
+    function U_grqty_web($base,$line){
+      $SAP_MSI = $this->load->database('SAP_MSI', TRUE);
+      $SAP_MSI->select('U_grqty_web'); 
+      $SAP_MSI->from('WTQ1');
+      $SAP_MSI->where('DocEntry', $base);
+      $SAP_MSI->where('LineNum', $line);
+
+      $query = $SAP_MSI->get();
+      $inwhs = $query->result_array();
+      return $inwhs[0];
+
+    }
+
+    function updateOWTQ($base){
+      $SAP_MSI = $this->load->database('SAP_MSI', TRUE);
+      $SAP_MSI->set('U_Stat' , 1);
+      $SAP_MSI->where('DOcEntry', $base);
+      if($SAP_MSI->update('OWTQ'))
+        return TRUE;
+      else
+        return FALSE;
+    }
+
+    function updateWTQ1($gr_qty, $base, $line){
+      $SAP_MSI = $this->load->database('SAP_MSI', TRUE);
+      $SAP_MSI->set('U_grqty_web', $gr_qty);
+      $SAP_MSI->where('DOcEntry', $base);
+      $SAP_MSI->where('LineNum', $line);
+      if($SAP_MSI->update('WTQ1'))
+        return TRUE;
+      else
+        return FALSE;
     }
 
     function gistonew_out_header_update($data){

@@ -68,7 +68,7 @@ class Transferoutinteroutlet extends CI_Controller
             $nestedData['created_by'] = $val['user_input'];
             $nestedData['approved_by'] = $val['user_approved'];
             $nestedData['last_modified'] = date("d-m-Y",strtotime($val['lastmodified']));
-            $nestedData['back'] = $val['back'] =='1'?'Not Integrated':'Integrated';;
+            $nestedData['back'] = $val['back'] =='1'?'Integrated':'Not Integrated';;
             $data[] = $nestedData;
 
         }
@@ -83,7 +83,8 @@ class Transferoutinteroutlet extends CI_Controller
 	
 	public function add()
     {
-		$data['do_nos'] = $this->tout_model->sap_do_select_all();
+        $data['do_nos'] = $this->tout_model->sap_do_select_all();
+        $object['po_no']['-'] = '';
 		if($data['do_nos'] !== FALSE) {
 			$object['do_no'][0] = '';
 			foreach ($data['do_nos'] as $do_no) {
@@ -155,7 +156,9 @@ class Transferoutinteroutlet extends CI_Controller
         $gistonew_out_details['material_no'] = $this->input->post('detMatrialNo');
         $count = count($gistonew_out_details['material_no']);
 
-        // print_r($count);
+        $base = $gistonew_out_header['po_no'];
+
+        
         if($id_gistonew_out_header= $this->tout_model->gistonew_out_header_insert($gistonew_out_header)){
             $input_detail_success = false;
             for($i =0; $i < $count; $i++){
@@ -166,10 +169,29 @@ class Transferoutinteroutlet extends CI_Controller
                 $gistonew_out_detail['outstanding_qty'] = $this->input->post('detOutStdQty')[$i];
                 $gistonew_out_detail['gr_quantity'] = $this->input->post('detQty')[$i];
 				$gistonew_out_detail['uom'] = $this->input->post('detUom')[$i];
-				$gistonew_out_detail['uom_req'] = $this->input->post('detUomReg')[$i];
+                $gistonew_out_detail['uom_req'] = $this->input->post('detUomReg')[$i];
+                $gistonew_out_detail['posnr'] = $i;
+
+                $line = $gistonew_out_detail['posnr'];
+
+                $rem = $this->tout_model->U_grqty_web($base,$line);
+                $gr_qty1=$rem['U_grqty_web'];
+                $gr_qty = $gr_qty1 + $gistonew_out_detail['gr_quantity'];
+
+                $LFIMG = $this->tout_model->sap_do_select_all('',$gistonew_out_header['po_no'],$gistonew_out_detail['material_no']);
+                $outstanding = $LFIMG[1]['LFIMG'];
 
                 if($this->tout_model->gistonew_out_detail_insert($gistonew_out_detail))
                 $input_detail_success = TRUE;
+
+                if( $input_detail_success = TRUE){
+                    if($this->input->post('appr') == 2){
+                        if ($outstanding = 0){
+                            $this->tout_model->updateOWTQ($base);
+                        }
+                        $this->tout_model->updateWTQ1($gr_qty, $base, $line);
+                    }
+                }
             }
         }
 
@@ -210,9 +232,11 @@ class Transferoutinteroutlet extends CI_Controller
     public function addDataUpdate(){
         $gistonew_out_header['id_gistonew_out_header'] = $this->input->post('idGistonew_out_header');
         $gistonew_out_header['status'] = $this->input->post('aapr') ? $this->input->post('aapr') : '1';
-        
+        $gistonew_out_header['po_no'] = $this->input->post('poNo');
+
         $gistonew_out_details['material_no'] = $this->input->post('detMatrialNo');
-       
+        
+        $base = $gistonew_out_header['po_no'];
         $count = count($gistonew_out_details['material_no']);
         if($this->tout_model->gistonew_out_header_update($gistonew_out_header)){
             $update_detail_success = false;
@@ -226,6 +250,23 @@ class Transferoutinteroutlet extends CI_Controller
                     $gistonew_out_details['gr_quantity'] = $this->input->post('detQty')[$i];
                     $gistonew_out_details['uom'] = $this->input->post('detUom')[$i];
                     $gistonew_out_details['uom_req'] = $this->input->post('detUomReg')[$i];
+                    $gistonew_out_detail['posnr'] = $i;
+
+                    $line = $gistonew_out_detail['posnr'];
+                    $rem = $this->tout_model->U_grqty_web($base,$line);
+                    $gr_qty1=$rem['U_grqty_web'];
+                    $gr_qty = $gr_qty1 + $gistonew_out_detail['gr_quantity'];
+    
+                    $LFIMG = $this->tout_model->sap_do_select_all('',$gistonew_out_header['po_no'],$gistonew_out_detail['material_no']);
+                    $outstanding = $LFIMG[1]['LFIMG'];
+
+                    if($this->input->post('appr')){
+                        if ($outstanding = 0){
+                            $this->tout_model->updateOWTQ($base);
+                        }
+                        $this->tout_model->updateWTQ1($gr_qty, $base, $line);
+                    }
+                   
 
                     if($this->tout_model->gistonew_out_detail_insert($gistonew_out_details))
                     $update_detail_success = TRUE;

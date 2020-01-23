@@ -32,7 +32,7 @@
 								<div class="row">
 									<div class="col-md-12">
 										<fieldset>
-											<legend class="font-weight-semibold"><i class="icon-reading mr-2"></i>Transfer Out Inter Outlet</legend>
+											<legend class="font-weight-semibold"><i class="icon-reading mr-2"></i>Transfer In Inter Outlet</legend>
 
 											<div class="form-group row">
 												<label class="col-lg-3 col-form-label"><b>Data SAP per Tanggal/Jam</b></label>
@@ -72,7 +72,7 @@
 											<div class="form-group row">
 												<label class="col-lg-3 col-form-label">Outlet</label>
 												<div class="col-lg-9">
-													<input type="text" class="form-control" readonly="" value="WMSIMNST - MSI Modern Land" name="outlet" id="outlet">
+													<input type="text" class="form-control" readonly="" value="WMSISNST - MSI Senopati" name="outlet" id="outlet">
 												</div>
 											</div>
 											

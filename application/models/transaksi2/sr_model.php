@@ -50,7 +50,7 @@ class Sr_model extends CI_Model {
             $this->db->where('to_plant', $rto);
         }
 
-        $this->db->order_by('created_date', 'desc');
+        $this->db->order_by('id_stdstock_header', 'desc');
 
         $query = $this->db->get();
         // echo $this->db->last_query();
@@ -60,19 +60,23 @@ class Sr_model extends CI_Model {
     }
 
     function getDataMaterialGroup($item_group_code ='all'){
+        $kd_plant = 'WMSISNST';
+        $trans_type = 'stdstock';
         $this->db->distinct();
         $this->db->select('m_item.MATNR,m_item.MAKTX,m_item.DISPO,m_item.UNIT,space(0) as DSNAM');
         $this->db->select('(REPLACE(m_item.MATNR,REPEAT("0",(12)),SPACE(0))) AS MATNR1');
         $this->db->from('m_item');
         $this->db->join('m_map_item_trans','m_map_item_trans.MATNR = m_item.MATNR','inner');
         $this->db->join('m_item_group','m_item_group.DISPO = m_item.DISPO','inner');
-        $this->db->where('transtype', 'stdstock');
-        $this->db->where('m_item_group.kdplant','WMSISNST');
+        $this->db->where('transtype', $trans_type);
+        $this->db->where('m_item_group.kdplant', $kd_plant);
         
-        // $this->db->limit(10000);
+        $this->db->limit(500);
         if($item_group_code !='all'){
             $this->db->where('m_item_group.DSNAM', $item_group_code);
         }
+
+        $this->db->order_by('MATNR', 'desc');
 
         $query = $this->db->get();
         // echo $this->db->last_query();

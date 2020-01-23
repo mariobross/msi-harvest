@@ -328,6 +328,7 @@
 
 			function addDatadb(id_approve=''){
 				const id_gistonew_out_header = $('#id_gistonew_out_header').val();
+				const srEntry = $('#srEntry').val();
 				const approve = id_approve;
 				// const delivDate= $('#deliveDate').val();
 				// const createDate= $('#createdDate').val();
@@ -350,7 +351,7 @@
 				})
 				
 				$.post("<?php echo site_url('transaksi1/Transferoutinteroutlet/addDataUpdate')?>", {
-					idGistonew_out_header: id_gistonew_out_header, aapr:approve, detMatrialNo: matrial_no, detMatrialDesc: matrialDesc, detOutQty:out_qty, detQty: qty, detUom: uom, detUomReg:uom_reg
+					idGistonew_out_header: id_gistonew_out_header, poNo: srEntry, aapr:approve, detMatrialNo: matrial_no, detMatrialDesc: matrialDesc, detOutQty:out_qty, detQty: qty, detUom: uom, detUomReg:uom_reg
 				}, function(res){
 					location.reload(true);
 					}
