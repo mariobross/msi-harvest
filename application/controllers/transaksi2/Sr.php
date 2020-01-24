@@ -69,7 +69,7 @@ class Sr extends CI_Controller{
             $nestedData['admin_realname'] = $val['user_input'];
             $nestedData['admin_realname(1)'] = $val['user_approved'] ? $val['user_approved'] : '-';
             $nestedData['lastmodified'] = date("d-m-Y",strtotime($val['lastmodified']));
-            $nestedData['back'] = $val['back'] =='1'?'Not Integrated':'Integrated';
+            $nestedData['back'] = $val['back'] =='1'?'Integrated':'Not Integrated';
             $nestedData['stts'] = $val['status'];
             $data[] = $nestedData;
 

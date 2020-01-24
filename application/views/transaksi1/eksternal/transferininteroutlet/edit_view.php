@@ -358,6 +358,7 @@
 
 			function addDatadb(id_approve=''){
 				const id_grsto_header = $('#id_grsto_header').val();
+				const srEntry = $('#srEntry').val();
 				const approve = id_approve;
 				// const delivDate= $('#deliveDate').val();
 				// const createDate= $('#createdDate').val();
@@ -380,7 +381,7 @@
 				})
 				
 				$.post("<?php echo site_url('transaksi1/transferininteroutlet/addDataUpdate')?>", {
-					idgrsto_header: id_grsto_header, appr:approve, pstDate: postingDate, detMatrialNo: matrial_no, detMatrialDesc: matrialDesc, detSrQty:srQty, detTftQty:tfQty, detGrQty: grQty, detUom: uom
+					idgrsto_header: id_grsto_header, poNo: srEntry, appr:approve, pstDate: postingDate, detMatrialNo: matrial_no, detMatrialDesc: matrialDesc, detSrQty:srQty, detTftQty:tfQty, detGrQty: grQty, detUom: uom
 				}, function(res){
 					location.reload(true);
 					}
