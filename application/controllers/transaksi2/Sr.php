@@ -211,6 +211,7 @@ class Sr extends CI_Controller{
                 $nestedData['OnHand'] = $value['OnHand'];
                 $nestedData['MinStock'] = $value['MinStock'];
                 $nestedData['OpenQty'] = $value['OpenQty']; 
+                $nestedData['status'] = $stts; 
                 $dt[] = $nestedData;
                 $i++;
             }

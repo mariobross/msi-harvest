@@ -195,7 +195,8 @@
 					{"data":"material_no", "className":"dt-center"},
 					{"data":"material_desc"},
 					{"data":"requirement_qty", "className":"dt-center",render:function(data, type, row, meta){
-						rr=  `<input type="text" class="form-control" id="gr_qty_${data}" value="${data}">`;
+						rr=  `<input type="text" class="form-control" id="gr_qty_${data}" value="${data}"
+						${row['status']==1 ?'':'readonly'}>`;
 						return rr;
 					}},
 					{"data":"uom", "className":"dt-center"},
