@@ -121,7 +121,48 @@ class Transferoutinteroutlet extends CI_Controller
 				
 			} else {
 				$gistonew_out_details= $this->tout_model->sap_gistonew_out_details_select_by_do_and_item_group($do_no, $item_group_code);
-			}
+            }
+
+            $dt = array();
+            $i=1;
+            foreach($gistonew_out_details as $key=>$value){
+                $inWhsQty = $this->tout_model->getDataMaterialGroupSelect($value['VBELN'],$value['MATNR']);
+                $nestedData=array();
+                $nestedData['NO'] = $i;
+                $nestedData['MATNR'] = $value['MATNR'];
+                $nestedData['MAKTX'] = $value['MAKTX'];
+                $nestedData['inWhsQty'] = $inWhsQty[1]["In_Whs_Qty"] ? $inWhsQty[1]["In_Whs_Qty"] : 0 ;
+                $nestedData['LFIMG'] = $value["LFIMG"];
+                $nestedData['GRQUANTITY'] = '';
+                $nestedData['UOM_REG'] = $value['VRKME'];
+                $nestedData['UOM'] = $value['VRKME'];
+                $dt[] = $nestedData;
+                $i++;
+            }
+            
+            // print_r($gistonew_out_details);
+            // die();
+            $json_data = array(
+                "data" => $dt
+            );
+            echo json_encode($json_data) ;
+			
+			// echo json_encode($gistonew_out_details);
+		}
+    }
+    
+    public function getDetailsTransferOutEdit(){
+        $item_group_code = $this->input->post('cboMatrialGroup');
+        
+		$do_no = $this->input->post('doNo');
+
+		if ((!empty($item_group_code)) || (trim($item_group_code)!="")) {
+			if($item_group_code == 'all') {
+				$gistonew_out_details = $this->tout_model->sap_gistonew_out_details_select_by_do_no($do_no);
+				
+			} else {
+				$gistonew_out_details= $this->tout_model->sap_gistonew_out_details_select_by_do_and_item_group($do_no, $item_group_code);
+            }
 			
 			echo json_encode($gistonew_out_details);
 		}
@@ -289,6 +330,7 @@ class Transferoutinteroutlet extends CI_Controller
         $i = 1;
         if($rs){
             foreach($rs as $key=>$value){
+                // $kd_plant = $this->session->userdata['ADMIN']['plant'];
                 $inwhs = $this->tout_model->in_whs_qty('WMSIMBST',$value['material_no']);
                 // print_r($inwhs);
                 // // die();

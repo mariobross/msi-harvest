@@ -144,7 +144,7 @@
 							<div class="card-body">
 								<div class="col-md-12 mb-2">
 									<div class="text-left">
-										<input type="button" class="btn btn-primary" value="Add" id="addTable" onclick="onAddrow()"> 
+										<!-- <input type="button" class="btn btn-primary" value="Add" id="addTable" onclick="onAddrow()">  -->
 										<input type="button" value="Delete" class="btn btn-danger" id="deleteRecord"> 
 									</div>
 								</div>
@@ -162,7 +162,7 @@
 											<th>Uom</th>
 										</tr>
 									</thead>
-									<tbody>
+									<!-- <tbody>
 										<tr>
 											<td><input type="checkbox" id="record"/></td>
 											<td>1</td>
@@ -178,7 +178,7 @@
 											<td></td>
 											<td></td>
 										</tr>
-									</tbody>
+									</tbody> -->
 								</table>
 							</div>
 						</div>
@@ -232,40 +232,40 @@
 				
 			});
 
-			function onAddrow(){
-				let getTable = $("#tblWhole").DataTable();
-				count = getTable.rows().count() + 1;
-				let elementSelect = document.getElementsByClassName(`dt_${count}`);
-				var doNo = $('#srEntry').val();
-				const matrialGroup = $('#MatrialGroup').val();
+			// function onAddrow(){
+			// 	let getTable = $("#tblWhole").DataTable();
+			// 	count = getTable.rows().count() + 1;
+			// 	let elementSelect = document.getElementsByClassName(`dt_${count}`);
+			// 	var doNo = $('#srEntry').val();
+			// 	const matrialGroup = $('#MatrialGroup').val();
 
 				
-				// console.log(optSelect);
+			// 	// console.log(optSelect);
 				
-				getTable.row.add({
-					"0":`<input type="checkbox" class="check_delete" id="chk_${count}" value="${count}">`,
-					"1":count,
-					"2":`<select class="form-control form-control-select2 dt_${count} testSelect" data-live-search="true" id="selectDetailMatrial" data-count="${count}">
-									<option value="">Select Item</option>
-									${showMatrialDetailData(matrialGroup, doNo, elementSelect)}
-								</select>`,
-					"3":"",
-					"4":"",
-					"5":"",
-					"6":`<input type="text" class="form-control" id="gr_qty_${count}" value="" style="width:100%">`,
-					"7":"",
-					"8":""
-					}).draw();
-					count++;
+			// 	getTable.row.add({
+			// 		"0":`<input type="checkbox" class="check_delete" id="chk_${count}" value="${count}">`,
+			// 		"1":count,
+			// 		"2":`<select class="form-control form-control-select2 dt_${count} testSelect" data-live-search="true" id="selectDetailMatrial" data-count="${count}">
+			// 						<option value="">Select Item</option>
+			// 						${showMatrialDetailData(matrialGroup, doNo, elementSelect)}
+			// 					</select>`,
+			// 		"3":"",
+			// 		"4":"",
+			// 		"5":"",
+			// 		"6":`<input type="text" class="form-control" id="gr_qty_${count}" value="" style="width:100%">`,
+			// 		"7":"",
+			// 		"8":""
+			// 		}).draw();
+			// 		count++;
 
-				tbody = $("#tblWhole tbody");
-				tbody.on('change','.testSelect', function(){
-					tr = $(this).closest('tr');
-					no = tr[0].rowIndex;
-					id = $('.dt_'+no).val();
-					setValueTable(doNo,id,no);
-				});
-			}
+			// 	tbody = $("#tblWhole tbody");
+			// 	tbody.on('change','.testSelect', function(){
+			// 		tr = $(this).closest('tr');
+			// 		no = tr[0].rowIndex;
+			// 		id = $('.dt_'+no).val();
+			// 		setValueTable(doNo,id,no);
+			// 	});
+			// }
 			
 			function getDataHeader(srNumber){
 				
@@ -304,50 +304,79 @@
 
 			function showMatrialDetailData(cboMatrialGroup='',do_no='', selectTable){
 				
-				const select = selectTable ? selectTable : $('#matrialGroupDetail');
+				const select = cboMatrialGroup;// ? selectTable : $('#matrialGroupDetail');
 
-				// var countCombo = $('#matrialGroupDetail option').length;
-				// // console.log($('#matrialGroupDetail > option').remove());
-				// if(countCombo > 0){
-				// 	$('#matrialGroupDetail > option').remove();
-				// }
+				var obj = $('#tblWhole tbody tr').length;
 
-				// select.html('<option value="">Select Item</option>');
+				if(obj>0){
+					const tables = $('#tblWhole').DataTable();
 
+					tables.destroy();
+					$("#tblWhole > tbody > tr").remove();
+				}
 
-				$.post("<?php echo site_url('transaksi1/Transferoutinteroutlet/getDetailsTransferOut');?>",{ cboMatrialGroup: cboMatrialGroup,doNo: do_no},(data)=>{
-					obj = JSON.parse(data);
-					
-					for(let key in obj){
-						if(obj.hasOwnProperty(key)){
-							$("<option />",{value:obj[key].MATNR, text:obj[key].MATNR +' - '+ obj[key].MAKTX}).appendTo(select);
-						}
-					}
-				})		
+				dataTable = $('#tblWhole').DataTable({
+                    "ordering":false,  "paging": true, "searching":true,
+                    "ajax": {
+                        "url":"<?php echo site_url('transaksi1/Transferoutinteroutlet/getDetailsTransferOut');?>",
+                        "type":"POST",
+                        "data":{cboMatrialGroup: select, doNo:do_no}
+                    },
+                    "columns": [
+						{data:"NO","className":"dt-center" ,render:function(data, type, row, meta){
+							rr = `<input type="checkbox" class="check_delete" id="chk_${data}" value="${data}">`;
+							return rr;
+						}},
+						{data:"NO"},
+						{data:"MATNR"},
+						{data:"MAKTX"},
+						{data:"inWhsQty","className":"dt-center whsQty" ,render:function(data, type, row, meta){
+							rr = `<td>${data}</td>`;
+							return rr;
+						}},
+						{data:"LFIMG"},
+						{data:"GRQUANTITY","className":"dt-center",render:function(data, type, row, meta){
+							// console.log(row);
+							rr=  `<input type="text" class="form-control qty" id="gr_qty_${row['NO']}" value="">`;
+							return rr;
+						}},
+						{data:"UOM_REG"},
+						{data:"UOM"}
+                    ]
+                });		
 			}
 
-			function setValueTable(doNo='',id,no){
-				doNo = doNo ? doNo : $('#srEntry').val();
-				// console.log(doNo);
-				table = document.getElementById("tblWhole").rows[no].cells;
-				$.post(
-					"<?php echo site_url('transaksi1/Transferoutinteroutlet/getdataDetailMaterialSelect')?>",{ MATNR:id, do_no:doNo },(res)=>{
-						matSelect = JSON.parse(res);
-						// console.log(matSelect);
-						for(let key in matSelect){
-							if(obj.hasOwnProperty(key)){
-								table[3].innerHTML = matSelect[key].MAKTX;
-								table[4].innerHTML = matSelect[key].In_Whs_Qty;
-								table[5].innerHTML = matSelect[key].LFIMG;
-								table[7].innerHTML = matSelect[key].VRKME
-								table[8].innerHTML = matSelect[key].VRKME
-							}
-						}
-					}
-				)
-			}
+			// function setValueTable(doNo='',id,no){
+			// 	doNo = doNo ? doNo : $('#srEntry').val();
+			// 	// console.log(doNo);
+			// 	table = document.getElementById("tblWhole").rows[no].cells;
+			// 	$.post(
+			// 		"<!?php echo site_url('transaksi1/Transferoutinteroutlet/getdataDetailMaterialSelect')?>",{ MATNR:id, do_no:doNo },(res)=>{
+			// 			matSelect = JSON.parse(res);
+			// 			// console.log(matSelect);
+			// 			for(let key in matSelect){
+			// 				if(obj.hasOwnProperty(key)){
+			// 					table[3].innerHTML = matSelect[key].MAKTX;
+			// 					table[4].innerHTML = matSelect[key].In_Whs_Qty;
+			// 					table[5].innerHTML = matSelect[key].LFIMG;
+			// 					table[7].innerHTML = matSelect[key].VRKME
+			// 					table[8].innerHTML = matSelect[key].VRKME
+			// 				}
+			// 			}
+			// 		}
+			// 	)
+			// }
 
 			function addDatadb(id_approve=''){
+				if($('.qty').val() ==''){
+					alert('Quatity harus di isi');
+					return false;
+				}
+
+				if($('.qty').val() > $('.whsQty').val()){
+					alert('Quatity Tidak boleh lebih besar dari Quantity Gudang');
+					return false;
+				}
 				const requestRespon= document.getElementById('srEntry').value;
 				const matrialGroup= document.getElementById('MatrialGroup').value;
 				const status= document.getElementById('status').value;
@@ -365,7 +394,7 @@
 				tbodyTable.find('tr').each(function(i, el){
 						let td = $(this).find('td');
 						// console.log(td.eq(2).find('select').val());	
-						matrialNo.push(td.eq(2).find('select').val()); 
+						matrialNo.push(td.eq(2).text()); 
 						matrialDesc.push(td.eq(3).text());
 						whsQty.push(td.eq(4).text());
 						outStdQty.push(td.eq(5).text());
