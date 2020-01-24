@@ -54,14 +54,14 @@
                                             <div class="form-group row">
 												<label class="col-lg-3 col-form-label">Outlet From</label>
 												<div class="col-lg-9">
-													<input type="text" class="form-control"value="WMSISNST - Senopati" readOnly>
+													<input type="text" class="form-control"value="<?= $plant_name?>" readOnly>
 												</div>
                                             </div>
                                             
                                             <div class="form-group row">
 												<label class="col-lg-3 col-form-label">Storage Location</label>
 												<div class="col-lg-9">
-													<input type="text" class="form-control" value="WMSISNST - Senopati" readOnly>
+													<input type="text" class="form-control" value="<?= $storage_location_name?>" readOnly>
 												</div>
                                             </div>
                                             
@@ -92,39 +92,6 @@
 													<input type="text" class="form-control" value="<?= $stdstock_header['item_group_code']?>" id="materialGroup" readOnly>
 												</div>
 											</div>
-
-                                            <!-- <div class="form-group row">
-												<label class="col-lg-3 col-form-label">Request To Outlet</label>
-												<div class="col-lg-9">
-													<select class="form-control form-control-select2" data-live-search="true">
-														<option value="">Select Item</option>
-														<option value="1">Pilih 1</option>
-														<option value="2">Pilih 2</option>
-													</select>
-												</div>
-                                            </div> -->
-                                            
-                                            <!-- <div class="form-group row">
-												<label class="col-lg-3 col-form-label">Request Reason</label>
-												<div class="col-lg-9">
-													<select class="form-control form-control-select2" data-live-search="true">
-														<option value="">Select Item</option>
-														<option value="1">Pilih 1</option>
-														<option value="2">Pilih 2</option>
-													</select>
-												</div>
-                                            </div> -->
-                                            
-                                            <!-- <div class="form-group row">
-												<label class="col-lg-3 col-form-label">Material Group</label>
-												<div class="col-lg-9">
-													<select class="form-control form-control-select2" data-live-search="true">
-														<option value="">Select Item</option>
-														<option value="1">Pilih 1</option>
-														<option value="2">Pilih 2</option>
-													</select>
-												</div>
-											</div> -->
 
                                             <div class="form-group row">
                                                 <label class="col-lg-3 col-form-label">Delivery Date</label>

@@ -55,21 +55,21 @@
                                             <div class="form-group row">
 												<label class="col-lg-3 col-form-label">Outlet From</label>
 												<div class="col-lg-9">
-													<input type="text" class="form-control" placeholder="WMSISNST - Senopati" readOnly>
+													<input type="text" class="form-control" value="<?= $plant ?>" readOnly>
 												</div>
                                             </div>
                                             
                                             <div class="form-group row">
 												<label class="col-lg-3 col-form-label">Storage Location</label>
 												<div class="col-lg-9">
-													<input type="text" class="form-control" placeholder="WMSISNST - MSI Senopati" readOnly>
+													<input type="text" class="form-control" value="<?= $storage_location ?>" readOnly>
 												</div>
                                             </div>
                                             
                                             <div class="form-group row">
 												<label class="col-lg-3 col-form-label">Status</label>
 												<div class="col-lg-9">
-													<input type="text" class="form-control" placeholder="Not Approved" readOnly>
+													<input type="text" class="form-control" value="Not Approved" readOnly>
 												</div>
 											</div>
 
@@ -184,7 +184,7 @@
 															</select>
 														</td>
 														<td width="40%"></td>
-														<td><input type="text" class="form-control" name="qty[]" id="qty" style="width:100%"></td>
+														<td><input type="text" class="form-control  qty" name="qty[]" id="qty" style="width:100%"></td>
 														<td></td>
 														<td></td>
 														<td></td>
@@ -277,7 +277,7 @@
 								${showMatrialDetailData(requestReason, matrialGroup, requestToOutlet, elementSelect)}
 							</select>`,
 				"3":"",
-				"4":`<input type="text" class="form-control" id="gr_qty_${count}" value="" style="width:100%">`,
+				"4":`<input type="text" class="form-control qty" id="gr_qty_${count}" value="" style="width:100%">`,
 				"5":"",
 				"6":"",
 				"7":"",
@@ -339,6 +339,10 @@
 		}
 
 		function addDatadb(id_approve=''){
+			if($('.qty').val() ==''){
+					alert('Quatity harus di isi');
+					return false;
+				}
 			const requestRespon= document.getElementById('rr').value;
 			const matrialGroup= document.getElementById('materialGroup').value;
 			const requestToOutlet= document.getElementById('rto').value;
@@ -352,7 +356,6 @@
 			let uom =[];
 			tbodyTable.find('tr').each(function(i, el){
 					let td = $(this).find('td');
-					// console.log(td.eq(2).find('select').val());	
 					matrialNo.push(td.eq(2).find('select').val()); 
 					matrialDesc.push(td.eq(3).text());
 					qty.push(td.eq(4).find('input').val());
@@ -360,7 +363,6 @@
 				})
 
 
-			// console.log(requestRespon,'-',matrialGroup,'-',requestToOutlet,'-',delivDate,'-',createDate, matrialNo.join('/'), matrialDesc.join('^'), qty.join('%'), uom.join('*'));
 			$.post("<?php echo site_url('transaksi2/sr/addData')?>", {
 				reqRes: requestRespon, matGrp: matrialGroup, reqToOutlet: requestToOutlet, appr: approve, dateDeliv: delivDate, dateCreate: createDate, detMatrialNo: matrialNo, detMatrialDesc: matrialDesc, detQty: qty, detUom: uom,
 			}, function(res){location.reload(true);;});
