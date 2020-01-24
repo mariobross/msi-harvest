@@ -188,7 +188,8 @@
 						{"data":"in_whs_qty", "className":"dt-center whsQty"},
 						{"data":"outstanding_qty", "className":"dt-center"},
 						{"data":"gr_quantity", "className":"dt-center",render:function(data, type, row, meta){
-							rr=  `<input type="text" class="form-control qty" id="gr_qty_${row['no']}" value="${data}">`;
+							rr=  `<input type="text" class="form-control qty" id="gr_qty_${row['no']}" value="${data}" 
+								${row['status']==1 ?'':'readonly'}>`;
 							return rr;
 						}},
 						{"data":"uom"},
