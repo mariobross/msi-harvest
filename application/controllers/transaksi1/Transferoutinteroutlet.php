@@ -344,6 +344,7 @@ class Transferoutinteroutlet extends CI_Controller
 				$nestedData['gr_quantity'] = $value['gr_quantity'];
                 $nestedData['uom'] = $value['uom'];
                 $nestedData['uom_req'] = $value['uom_req'];
+                $nestedData['status'] = $stts;
                 $dt[] = $nestedData;
                 $i++;
             }
