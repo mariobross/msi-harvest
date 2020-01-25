@@ -53,14 +53,17 @@
 											<div class="form-group row">
 												<label class="col-lg-3 col-form-label">Outlet From</label>
 												<div class="col-lg-9">
-													<input type="text" class="form-control" readonly="" value="<?=$gistonew_out_header['plant']?>" name="outlet" id="outlet">
+													<input type="hidden" class="form-control" readonly="" value="<?=$gistonew_out_header['plant']?>" name="outlet" id="outlet">
+													<input type="text" class="form-control" readonly="" value="<?=$gistonew_out_header['plant_str']?>" >
 												</div>
 											</div>
 											
 											<div class="form-group row">
 												<label class="col-lg-3 col-form-label">Storage Transit Location</label>
 												<div class="col-lg-9">
-													<input type="text" class="form-control" readonly="" value="<?=$gistonew_out_header['storage_location']?>" name="storageLocation" id="storageLocation">
+													<input type="hidden" class="form-control" readonly="" value="<?=$gistonew_out_header['storage_location']?>" name="storageLocation" id="storageLocation">
+													<input type="text" class="form-control" readonly="" value="<?=$gistonew_out_header['storage_location_str']?>" >
+													
 												</div>
 											</div>
 											
@@ -351,8 +354,13 @@
 				let qty =[];
 				let uom =[];
 				let uom_reg = [];
+				let validasi = true;
 				tbodyTable.find('tr').each(function(i,el){
 					let td = $(this).find('td');
+					if(parseInt(td.eq(6).find('input').val(),10) > parseInt(td.eq(4).text(),10)){
+							validasi = false;
+					}
+
 					matrial_no.push(td.eq(2).text().trim());
 					matrialDesc.push(td.eq(3).text());
 					out_qty.push(td.eq(5).text());
@@ -360,6 +368,11 @@
 					uom.push(td.eq(7).text());
 					uom_reg.push(td.eq(8).text());
 				})
+
+				if(!validasi){
+					alert('Quatity Tidak boleh lebih besar dari Quantity Gudang');
+					return false;
+				}
 				
 				$.post("<?php echo site_url('transaksi1/Transferoutinteroutlet/addDataUpdate')?>", {
 					idGistonew_out_header: id_gistonew_out_header, poNo: srEntry, aapr:approve, detMatrialNo: matrial_no, detMatrialDesc: matrialDesc, detOutQty:out_qty, detQty: qty, detUom: uom, detUomReg:uom_reg

@@ -3,13 +3,13 @@
 class Transferout_model extends CI_Model {
 
     function t_gistonew_out_headers($fromDate='', $toDate='', $status=''){
-      // $kd_plant = $this->session->userdata['ADMIN']['plant'];
+      $kd_plant = $this->session->userdata['ADMIN']['plant'];
 
         $this->db->select('t_gistonew_out_header.*,(select OUTLET_NAME1 from m_outlet where OUTLET = t_gistonew_out_header.to_plant) as OUTLET_NAME1,
         (select admin_realname from d_admin where admin_id = t_gistonew_out_header.id_user_input) as user_input
         , (select admin_realname from d_admin where admin_id = t_gistonew_out_header.id_user_approved) as user_approved ');
         $this->db->from('t_gistonew_out_header');
-        $this->db->where('t_gistonew_out_header.plant','WMSIMBST');
+        $this->db->where('t_gistonew_out_header.plant',$kd_plant);
         if((!empty($fromDate)) || (!empty($toDate))){
             if( (!empty($fromDate)) || (!empty($toDate)) ) {
             $this->db->where("posting_date BETWEEN '$fromDate' AND '$toDate'");
@@ -34,8 +34,7 @@ class Transferout_model extends CI_Model {
 
     public function sap_do_select_all($kd_plant="",$do_no="",$do_item=""){
         $SAP_MSI = $this->load->database('SAP_MSI', TRUE);
-        // $kd_plant = $this->session->userdata['ADMIN']['plant'];
-        $kd_plant = 'WMSIMBST';
+        $kd_plant = $this->session->userdata['ADMIN']['plant'];
         
         $SAP_MSI->select('t0.DocEntry As VBELN, t0.DocDate as DELIVDATE, t0.ToWhsCode as RECEIVING_PLANT, t1.LineNum as PONSR, t4.ItmsGrpCod as DISPO, t1.ItemCode as MATNR, t2.ItemName as MAKTX, t1.Quantity as LFIMG, t1.unitMsr as VRKME,   t1.LineNum as item, t0.ToWhsCode as Plant,t0.Filler ,(SELECT WhsName FROM OWHS WHERE U_TransFor=ToWhsCode) as ABC');
         $SAP_MSI->from('ODRF t0');
@@ -183,15 +182,14 @@ class Transferout_model extends CI_Model {
     }
 
     function getDataMaterialGroupSelect($po_no, $itemSelect){
-      $plant = 'WMSIMBST';
-      // $kd_plant = $this->session->userdata['ADMIN']['plant'];
+      $kd_plant = $this->session->userdata['ADMIN']['plant'];
       $SAP_MSI = $this->load->database('SAP_MSI', TRUE);
 
       $dataHeader = $this->sap_do_select_all('',$po_no, $itemSelect);
       for($i = 1; $i <= count($dataHeader); $i++){
         $SAP_MSI->select('OnHand'); 
         $SAP_MSI->from('OITW');
-        $SAP_MSI->where('WhsCode', $plant);
+        $SAP_MSI->where('WhsCode', $kd_plant);
         $SAP_MSI->where('ItemCode', $dataHeader[$i]['MATNR']);
 
         $query = $SAP_MSI->get();
@@ -292,9 +290,9 @@ class Transferout_model extends CI_Model {
   }
   
     function sap_item_groups_select_all() {
-      // $kd_plant = $this->session->userdata['ADMIN']['plant'];
+      $kd_plant = $this->session->userdata['ADMIN']['plant'];
       $this->db->from('m_item_group');
-          $this->db->where('kdplant', 'WMSIMBST');
+          $this->db->where('kdplant', $kd_plant);
 
       $query = $this->db->get();
       if(($query)&&($query->num_rows() > 0)) {
@@ -336,13 +334,13 @@ class Transferout_model extends CI_Model {
     }
     
     function gistonew_out_header_select($id_gistonew_out_header){
-      // $kd_plant = $this->session->userdata['ADMIN']['plant'];
+      $kd_plant = $this->session->userdata['ADMIN']['plant'];
       
-        $this->db->select('t_gistonew_out_header.*,(select OUTLET_NAME1 from m_outlet where OUTLET = t_gistonew_out_header.to_plant) as STOR_LOC_NAME');
+        $this->db->select('t_gistonew_out_header.*,(select OUTLET_NAME1 from m_outlet where OUTLET = t_gistonew_out_header.plant) as PLANTS_NAME,(select STOR_LOC_NAME from m_outlet where OUTLET = t_gistonew_out_header.storage_location) as STORAGE_LOCATION_NAME,(select OUTLET_NAME1 from m_outlet where OUTLET = t_gistonew_out_header.to_plant) as STOR_LOC_NAME');
         $this->db->from('t_gistonew_out_header');
         // $this->db->join('m_outlet', 'm_outlet.OUTLET = t_gistonew_out_header.to_plant');
         $this->db->where('id_gistonew_out_header', $id_gistonew_out_header);
-        $this->db->where('t_gistonew_out_header.plant','WMSIMBST');
+        $this->db->where('t_gistonew_out_header.plant',$kd_plant);
         
         $query = $this->db->get();
     
@@ -439,10 +437,10 @@ class Transferout_model extends CI_Model {
   }
 
   function posting_date_select_max() {
-    // $kd_plant = $this->session->userdata['ADMIN']['plant'];
+    $kd_plant = $this->session->userdata['ADMIN']['plant'];
     $this->db->select_max('posting_date');
     $this->db->from('t_posinc_header');
-    $this->db->where('plant', 'WMSIMBST');
+    $this->db->where('plant', $kd_plant);
     $this->db->where('status', 2);
   //		$this->db->where('waste_no is not null AND waste_no <> "" ');
 
