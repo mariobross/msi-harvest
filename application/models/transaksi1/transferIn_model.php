@@ -3,7 +3,7 @@
 class TransferIn_model extends CI_Model {
 
     function t_grsto_headers($fromDate='', $toDate='', $status=''){
-      $kd_plant = 'WMSISNST';
+      $kd_plant = $this->session->userdata['ADMIN']['plant'];
 
         $this->db->select('t_grsto_header.*, (SELECT OUTLET_NAME1 FROM m_outlet WHERE OUTLET = t_grsto_header.delivery_plant) AS OUTLET_NAME1, (SELECT admin_realname FROM d_admin WHERE admin_id = t_grsto_header.id_user_input) AS user_input, (SELECT admin_realname FROM d_admin WHERE admin_id = t_grsto_header.id_user_approved) AS user_approved');
         $this->db->from('t_grsto_header');
@@ -33,11 +33,11 @@ class TransferIn_model extends CI_Model {
 
     public function sap_do_select_all($kd_plant="",$do_no="",$do_item=""){
         $SAP_MSI = $this->load->database('SAP_MSI', TRUE);
-        $kd_plant = 'WMSISNST';
+        $kd_plant = $this->session->userdata['ADMIN']['plant'];
 
         $SAP_MSI->select('U_TransFor'); 
         $SAP_MSI->from('OWHS');
-        $SAP_MSI->where('WhsCode', 'WMSISNST');
+        $SAP_MSI->where('WhsCode', $kd_plant);
         $CON1 = $SAP_MSI->get();
         $CON1Result = $CON1->result_array();
         $plant = $CON1Result[0]["U_TransFor"];
@@ -256,14 +256,14 @@ class TransferIn_model extends CI_Model {
     }
 
     function getDataMaterialGroupSelect($po_no, $itemSelect){
-      $plant = 'WMSISTRM';
+      $kd_plant = $this->session->userdata['ADMIN']['plant'];
       $SAP_MSI = $this->load->database('SAP_MSI', TRUE);
 
       $dataHeader = $this->sap_do_select_all('',$po_no, $itemSelect);
       for($i = 1; $i <= count($dataHeader); $i++){
         $SAP_MSI->select('OnHand'); 
         $SAP_MSI->from('OITW');
-        $SAP_MSI->where('WhsCode', 'WMSISNST');
+        $SAP_MSI->where('WhsCode', $kd_plant);
         $SAP_MSI->where('ItemCode', $dataHeader[$i]['MATNR']);
 
         $query = $SAP_MSI->get();
@@ -330,9 +330,9 @@ class TransferIn_model extends CI_Model {
   }
   
     function sap_item_groups_select_all() {
-      // $kd_plant = $this->session->userdata['ADMIN']['plant'];
+      $kd_plant = $this->session->userdata['ADMIN']['plant'];
       $this->db->from('m_item_group');
-          $this->db->where('kdplant', 'WMSISNST');
+          $this->db->where('kdplant', $kd_plant);
 
       $query = $this->db->get();
       if(($query)&&($query->num_rows() > 0)) {
@@ -378,7 +378,6 @@ class TransferIn_model extends CI_Model {
         $this->db->from('t_grsto_header');
         // $this->db->join('m_outlet', 'm_outlet.OUTLET = t_grsto_header.to_plant');
         $this->db->where('id_grsto_header', $id_grsto_header);
-        // $this->db->where('t_grsto_header.plant','WMSISNST');
         
         $query = $this->db->get();
     
@@ -476,10 +475,10 @@ class TransferIn_model extends CI_Model {
   }
 
   function posting_date_select_max() {
-    // $id_outlet = $this->session->userdata['ADMIN']['plant'];
+    $kd_plant = $this->session->userdata['ADMIN']['plant'];
     $this->db->select_max('posting_date');
     $this->db->from('t_posinc_header');
-    $this->db->where('plant', 'WMSISNST');
+    $this->db->where('plant', $kd_plant);
     $this->db->where('status', 2);
   //		$this->db->where('waste_no is not null AND waste_no <> "" ');
 
