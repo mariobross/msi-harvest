@@ -72,14 +72,14 @@
 											<div class="form-group row">
 												<label class="col-lg-3 col-form-label">Outlet</label>
 												<div class="col-lg-9">
-													<input type="text" class="form-control" readonly="" value="WMSISNST - MSI Senopati" name="outlet" id="outlet">
+													<input type="text" class="form-control" readonly="" value="<?= $plant ?>" name="outlet" id="outlet">
 												</div>
 											</div>
 											
 											<div class="form-group row">
-												<label class="col-lg-3 col-form-label">Storage Transit Location</label>
+												<label class="col-lg-3 col-form-label">Storage Location</label>
 												<div class="col-lg-9">
-													<input type="text" class="form-control" readonly="" value="" name="storageLocation" id="storageLocation">
+													<input type="text" class="form-control" readonly="" value="<?= $storage_location ?>"name="storageLocation" id="storageLocation">
 												</div>
 											</div>
 
@@ -348,9 +348,14 @@
 				let outStdQty = [];
 				let qty =[];
 				let uom =[];
+				let validasi = true;
 				tbodyTable.find('tr').each(function(i, el){
 						let td = $(this).find('td');
-						// console.log(td.eq(1).text());	
+						// console.log(td.eq(1).text());
+						if(parseInt(td.eq(5).find('input').val(),10) > parseInt(td.eq(4).text(),10)){
+							validasi = false;
+						}
+						
 						matrialNo.push(td.eq(1).text()); 
 						matrialDesc.push(td.eq(2).text());
 						srQty.push(parseInt(td.eq(3).text()));
@@ -359,7 +364,10 @@
 						uom.push(td.eq(6).text());
 					})
 
-					console.log(matrialNo);
+				if(!validasi){
+					alert('Quatity Tidak boleh lebih besar dari Quantity Gudang');
+					return false;
+				}
 
 				$.post("<?php echo site_url('transaksi1/transferininteroutlet/addData')?>", {
 					reqRes: requestRespon, toNumb: tranferOutNumb, storageLoc: storageLocation, plant:outlet, matGrp: matrialGroup, stts: status, Rto:rto, delivDate:DelivDate, pstDate: postingDate, detMatrialNo: matrialNo, appr: approve, detMatrialDesc: matrialDesc, detsrQty: srQty, detOutStdQty: outStdQty, detQty: qty, detUom: uom,

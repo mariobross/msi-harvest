@@ -93,7 +93,9 @@ class Transferininteroutlet extends CI_Controller
 			foreach ($data['do_nos'] as $do_no) {
 				$object['do_no'][$do_no['EBELN']] = $do_no['EBELN'].' - '.$do_no['SPLANT_NAME'];
 			}
-		}
+        }
+        $object['plant'] = $this->session->userdata['ADMIN']['plant'].' - '.$this->session->userdata['ADMIN']['plant_name'];
+        $object['storage_location'] = $this->session->userdata['ADMIN']['storage_location'].' - '.$this->session->userdata['ADMIN']['storage_location_name'];
 
         $this->load->view('transaksi1/eksternal/transferininteroutlet/add_new', $object);
 	}
@@ -133,8 +135,8 @@ class Transferininteroutlet extends CI_Controller
                 $nestedData['NO'] = $i;
                 $nestedData['MATNR'] = $value['MATNR'];
                 $nestedData['MAKTX'] = $value['MAKTX'];
-                $nestedData['SRQUANTITY'] = $srQty[0]["requirement_qty"] ? $srQty[0]["requirement_qty"] : 0 ;
-                $nestedData['TFQUANTITY'] = $value["TFQUANTITY"];
+                $nestedData['SRQUANTITY'] = $srQty[0]["requirement_qty"] != '.000000' ? $srQty[0]["requirement_qty"] : 0 ;
+                $nestedData['TFQUANTITY'] = $value["TFQUANTITY"] != '.000000' ? $value["TFQUANTITY"] : 0;
                 $nestedData['GRQUANTITY'] = '';
                 $nestedData['UOM'] = $value['BSTME'];
                 $dt[] = $nestedData;
@@ -367,8 +369,8 @@ class Transferininteroutlet extends CI_Controller
                 $nestedData['no'] = $i;
                 $nestedData['material_no'] = $value['material_no'];
 				$nestedData['material_desc'] = $value['material_desc'];
-				$nestedData['in_whs_qty'] = $value['sr_qty'];
-				$nestedData['outstanding_qty'] = $value['outstanding_qty'];
+				$nestedData['in_whs_qty'] = $value['sr_qty']!= '.000000' ? $value['sr_qty'] : 0;
+				$nestedData['outstanding_qty'] = $value['outstanding_qty']!= '.000000' ? $value["outstanding_qty"] : 0;
 				$nestedData['gr_quantity'] = $value['gr_quantity'];
                 $nestedData['uom'] = $value['uom'];
                 $nestedData['status'] = $stts;
