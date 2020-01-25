@@ -90,7 +90,12 @@ class Transferoutinteroutlet extends CI_Controller
 			foreach ($data['do_nos'] as $do_no) {
 				$object['do_no'][$do_no['VBELN']] = $do_no['VBELN'].' - '.$do_no['ABC'];
 			}
-		}
+        }
+        
+
+        $object['plant'] = $this->session->userdata['ADMIN']['plant'].' - '.$this->session->userdata['ADMIN']['plant_name'];
+        $object['storage_location'] = $this->session->userdata['ADMIN']['storage_location'].' - '.$this->session->userdata['ADMIN']['storage_location_name'];
+    
 
         $this->load->view('transaksi1/eksternal/transferoutinteroutlet/add_new', $object);
 	}
@@ -131,7 +136,7 @@ class Transferoutinteroutlet extends CI_Controller
                 $nestedData['NO'] = $i;
                 $nestedData['MATNR'] = $value['MATNR'];
                 $nestedData['MAKTX'] = $value['MAKTX'];
-                $nestedData['inWhsQty'] = $inWhsQty[1]["In_Whs_Qty"] ? $inWhsQty[1]["In_Whs_Qty"] : 0 ;
+                $nestedData['inWhsQty'] = $inWhsQty[1]["In_Whs_Qty"]!='.000000' ? $inWhsQty[1]["In_Whs_Qty"] : 0 ;
                 $nestedData['LFIMG'] = $value["LFIMG"];
                 $nestedData['GRQUANTITY'] = '';
                 $nestedData['UOM_REG'] = $value['VRKME'];
@@ -181,18 +186,37 @@ class Transferoutinteroutlet extends CI_Controller
     }
 
 	public function addData(){
+        $plant = $this->session->userdata['ADMIN']['plant'];
+        $storage_location = $this->session->userdata['ADMIN']['storage_location'];
+        $plant_name = $this->session->userdata['ADMIN']['plant_name'];
+        $storage_location_name = $this->session->userdata['ADMIN']['storage_location_name'];
+        $admin_id = $this->session->userdata['ADMIN']['admin_id'];
+
+        if($this->input->post("Rto")!= ''){
+            $strPlant = explode("-",$this->input->post("Rto"));
+            $receiving_plant = trim($strPlant[0]);
+            $receiving_plant_name = trim($strPlant[1]);
+        }else{
+            $receiving_plant = '';
+            $receiving_plant_name = '';
+        }
+
 		$gistonew_out_header['po_no'] = $this->input->post('reqRes');
 		$gistonew_out_header['posting_date'] = $this->l_general->str_to_date($this->input->post('pstDate'));
         $gistonew_out_header['item_group_code'] = $this->input->post('matGrp');
         $gistonew_out_header['status'] = $this->input->post('stss');
-		$gistonew_out_header['receiving_plant'] = $this->input->post('Rto');
-        $gistonew_out_header['plant'] = 'WMSIMBST';
-        $gistonew_out_header['storage_location'] = 'WMSIMBST';
+        $gistonew_out_header['receiving_plant'] = $receiving_plant;
+        $gistonew_out_header['receiving_plant_name'] = $receiving_plant_name;
+        $gistonew_out_header['plant'] = $plant;
+        $gistonew_out_header['plant_name'] = $plant_name;
+        $gistonew_out_header['storage_location'] = $storage_location;
+        // $gistonew_out_header['storage_location_name'] = $storage_location_name;
         $gistonew_out_header['id_gistonew_out_plant'] = $this->tout_model->id_stdstock_plant_new_select($gistonew_out_header['plant'],$gistonew_out_header['posting_date']);
         $gistonew_out_header['status'] = $this->input->post('appr')? $this->input->post('appr') : '1';
 
-        $gistonew_out_header['id_user_input'] = '2392';
-        $gistonew_out_header['to_plant'] = $this->input->post('Rto');
+        $gistonew_out_header['id_user_input'] = $admin_id;
+        $gistonew_out_header['id_user_approved'] = $this->input->post('appr')? $admin_id : '0';
+        $gistonew_out_header['to_plant'] = $receiving_plant;
 
         $gistonew_out_details['material_no'] = $this->input->post('detMatrialNo');
         $count = count($gistonew_out_details['material_no']);
@@ -258,13 +282,15 @@ class Transferoutinteroutlet extends CI_Controller
             $object['gistonew_out_header']['status_string'] = 'Cancel';
 		}
 		
-		$object['gistonew_out_header']['plant'] = $object['data']['plant'];
+        $object['gistonew_out_header']['plant'] = $object['data']['plant'];
+        $object['gistonew_out_header']['plant_str'] = $object['data']['plant'].' - '.$object['data']['PLANTS_NAME'];
 		$object['gistonew_out_header']['po_no'] = $object['data']['po_no'];
 		$object['gistonew_out_header']['transfer_slip_number'] = $object['data']['gistonew_out_no'];
-		$object['gistonew_out_header']['storage_location'] = $object['data']['storage_location'];
+        $object['gistonew_out_header']['storage_location'] = $object['data']['storage_location'];
+        $object['gistonew_out_header']['storage_location_str'] = $object['data']['storage_location'].' - '.$object['data']['STORAGE_LOCATION_NAME'];
 		$object['gistonew_out_header']['to_plant'] = $object['data']['to_plant'].' - '.$object['data']['STOR_LOC_NAME'];
         $object['gistonew_out_header']['posting_date'] = $object['data']['posting_date'];
-        $object['gistonew_out_header']['item_group_code'] = $object['data']['item_group_code'];
+        $object['gistonew_out_header']['item_group_code'] = $object['data']['item_group_code'] ? $object['data']['item_group_code'] : 'all';
         $object['gistonew_out_header']['status'] = $object['data']['status'];
 
         $this->load->view('transaksi1/eksternal/transferoutinteroutlet/edit_view', $object);
@@ -339,7 +365,7 @@ class Transferoutinteroutlet extends CI_Controller
                 $nestedData['no'] = $i;
                 $nestedData['material_no'] = $value['material_no'];
 				$nestedData['material_desc'] = $value['material_desc'];
-				$nestedData['in_whs_qty'] = $inwhs[0]['OnHand'];
+				$nestedData['in_whs_qty'] = $inwhs[0]['OnHand']!='.000000' ? $inwhs[0]['OnHand'] : 0;
 				$nestedData['outstanding_qty'] = $value['outstanding_qty'];
 				$nestedData['gr_quantity'] = $value['gr_quantity'];
                 $nestedData['uom'] = $value['uom'];

@@ -34,11 +34,11 @@
 										<fieldset>
 											<legend class="font-weight-semibold"><i class="icon-reading mr-2"></i>Transfer Out Inter Outlet</legend>
 
-											<div class="form-group row">
+											<!-- <div class="form-group row">
 												<label class="col-lg-3 col-form-label"><b>Data SAP per Tanggal/Jam</b></label>
 												<div class="col-lg-9"><b>Data tidak ditemukan.</b>
 												</div>
-											</div>
+											</div> -->
 											
 											<div class="form-group row">
 												<label class="col-lg-3 col-form-label">Store Room Request (SR) Number</label>
@@ -72,14 +72,14 @@
 											<div class="form-group row">
 												<label class="col-lg-3 col-form-label">Outlet</label>
 												<div class="col-lg-9">
-													<input type="text" class="form-control" readonly="" value="WMSIMBST - Mangga Beasar" name="outlet" id="outlet">
+													<input type="text" class="form-control" readonly="" value="<?= $plant ?>" name="outlet" id="outlet">
 												</div>
 											</div>
 											
 											<div class="form-group row">
-												<label class="col-lg-3 col-form-label">Storage Transit Location</label>
+												<label class="col-lg-3 col-form-label">Storage Location</label>
 												<div class="col-lg-9">
-													<input type="text" class="form-control" readonly="" value="WMSIMBST - MSI Mangga Beasar" name="storageLocation" id="storageLocation">
+													<input type="text" class="form-control" readonly="" value="<?= $storage_location ?>" name="storageLocation" id="storageLocation">
 												</div>
 											</div>
 
@@ -278,7 +278,7 @@
 					let date = day+'-'+bln+'-'+year;
 					
 					$("#delivDate").val(date);
-					$("#rto").val(value.data.RECEIVING_PLANT);
+					$("#rto").val(value.data.RECEIVING_PLANT+' - '+value.data.ABC);
 
 					var objCombo = $('#MatrialGroup option').length;
 					if(objCombo > 0){
@@ -330,20 +330,20 @@
 						{data:"NO"},
 						{data:"MATNR"},
 						{data:"MAKTX"},
-						{data:"inWhsQty","className":"dt-center whsQty" ,render:function(data, type, row, meta){
+						{data:"inWhsQty","className":"dt-center " ,render:function(data, type, row, meta){
 							rr = `<td>${data}</td>`;
 							return rr;
 						}},
 						{data:"LFIMG"},
 						{data:"GRQUANTITY","className":"dt-center",render:function(data, type, row, meta){
-							// console.log(row);
+							
 							rr=  `<input type="text" class="form-control qty" id="gr_qty_${row['NO']}" value="">`;
 							return rr;
 						}},
 						{data:"UOM_REG"},
 						{data:"UOM"}
                     ]
-                });		
+				});	
 			}
 
 			// function setValueTable(doNo='',id,no){
@@ -370,13 +370,10 @@
 			function addDatadb(id_approve=''){
 				if($('.qty').val() ==''){
 					alert('Quatity harus di isi');
+					
 					return false;
 				}
-
-				if($('.qty').val() > $('.whsQty').val()){
-					alert('Quatity Tidak boleh lebih besar dari Quantity Gudang');
-					return false;
-				}
+				
 				const requestRespon= document.getElementById('srEntry').value;
 				const matrialGroup= document.getElementById('MatrialGroup').value;
 				const status= document.getElementById('status').value;
@@ -391,9 +388,15 @@
 				let qty =[];
 				let uomReg = [];
 				let uom =[];
+				let validasi = true;
 				tbodyTable.find('tr').each(function(i, el){
 						let td = $(this).find('td');
-						// console.log(td.eq(2).find('select').val());	
+
+						if(parseInt(td.eq(6).find('input').val(),10) > parseInt(td.eq(4).text(),10)){
+							validasi = false;
+						}
+
+						// console.log(td.eq(6).find('input').val());	
 						matrialNo.push(td.eq(2).text()); 
 						matrialDesc.push(td.eq(3).text());
 						whsQty.push(td.eq(4).text());
@@ -401,7 +404,13 @@
 						qty.push(td.eq(6).find('input').val());
 						uomReg.push(td.eq(7).text());
 						uom.push(td.eq(8).text());
+						
 					})
+
+					if(!validasi){
+						alert('Quatity Tidak boleh lebih besar dari Quantity Gudang');
+						return false;
+					}
 
 				$.post("<?php echo site_url('transaksi1/Transferoutinteroutlet/addData')?>", {
 					reqRes: requestRespon, matGrp: matrialGroup, stts: status, Rto:rto, pstDate: postingDate, detMatrialNo: matrialNo, appr: approve, detMatrialDesc: matrialDesc, detWhsQty: whsQty, detOutStdQty: outStdQty, detQty: qty, detUomReg: uomReg, detUom: uom,
