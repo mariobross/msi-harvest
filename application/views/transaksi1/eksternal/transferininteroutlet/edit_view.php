@@ -65,7 +65,7 @@
 											</div>
 											
 											<div class="form-group row">
-												<label class="col-lg-3 col-form-label">Storage Transit Location</label>
+												<label class="col-lg-3 col-form-label">Storage Location</label>
 												<div class="col-lg-9">
 													<input type="text" class="form-control" readonly="" value="<?=$grsto_header['storage_location']?>" name="storageLocation" id="storageLocation">
 												</div>
@@ -219,7 +219,7 @@
 						{"data":"outstanding_qty", "className":"dt-center"},
 						{"data":"gr_quantity", "className":"dt-center",render:function(data, type, row, meta){
 							// console.log(row);
-							rr=  (row["status"] == 2) ? data :`<input type="text" class="form-control" id="gr_qty_${data}" value="${data}">`;
+							rr=  `<input type="text" class="form-control gr_qty" id="gr_qty_${data}" value="${data}" ${row['status']==1 ?'':'readonly'}>`;
 							return rr;
 						}},
 						{"data":"uom"}
@@ -357,6 +357,10 @@
 			}
 
 			function addDatadb(id_approve=''){
+				if($('.gr_qty').val() ==''){
+					alert('Gr Quatity harus di isi');
+					return false;
+				}
 				const id_grsto_header = $('#id_grsto_header').val();
 				const srEntry = $('#srEntry').val();
 				const approve = id_approve;
@@ -370,8 +374,12 @@
 				let tfQty =[];
 				let grQty =[];
 				let uom =[];
+				let validasi = true;
 				tbodyTable.find('tr').each(function(i,el){
 					let td = $(this).find('td');
+					if(parseInt(td.eq(6).find('input').val(),10) > parseInt(td.eq(5).text(),10)){
+							validasi = false;
+					}
 					matrial_no.push(td.eq(2).text().trim());
 					matrialDesc.push(td.eq(3).text());
 					srQty.push(td.eq(4).text());
@@ -379,6 +387,10 @@
 					grQty.push(td.eq(6).find('input').val());
 					uom.push(td.eq(7).text());
 				})
+				if(!validasi){
+					alert('Quatity Tidak boleh lebih besar dari Quantity Gudang');
+					return false;
+				}
 				
 				$.post("<?php echo site_url('transaksi1/transferininteroutlet/addDataUpdate')?>", {
 					idgrsto_header: id_grsto_header, poNo: srEntry, appr:approve, pstDate: postingDate, detMatrialNo: matrial_no, detMatrialDesc: matrialDesc, detSrQty:srQty, detTftQty:tfQty, detGrQty: grQty, detUom: uom
