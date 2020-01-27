@@ -156,7 +156,7 @@
 													<th style="width:10%">Quantity</th>
 													<th>UOM</th>
                                                     <th>On Hand</th>
-                                                    <th>Min Stock</th>
+                                                    <!-- <th>Min Stock</th> -->
 													<th>Outstanding Total</th>
 												</tr>
 											</thead>
@@ -202,7 +202,7 @@
 					{"data":"uom", "className":"dt-center"},
 					{"data":"OnHand", "className":"dt-center"},
 					
-					{"data":"MinStock", "className":"dt-center"},
+					// {"data":"MinStock", "className":"dt-center"},
 					{"data":"OpenQty", "className":"dt-center"}
 				],
 				drawCallback: function() {
@@ -276,7 +276,7 @@
 				"requirement_qty": "",
 				"uom":"",
 				"OnHand":"",
-				"MinStock":"",
+				// "MinStock":"",
 				"OpenQty":""
 				}).draw();
 				count++;

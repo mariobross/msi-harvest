@@ -116,7 +116,7 @@
                                             <div class="form-group row">
                                                 <label class="col-lg-3 col-form-label">Delivery Date</label>
                                                 <div class="col-lg-9 input-group date">
-                                                    <input type="text" class="form-control" id="deliveDate">
+                                                    <input type="text" class="form-control" id="deliveDate" readonly="">
                                                     <div class="input-group-prepend">
                                                         <span class="input-group-text" id="basic-addon1">
                                                             <i class="icon-calendar"></i>
@@ -127,7 +127,7 @@
                                             <div class="form-group row">
                                                 <label class="col-lg-3 col-form-label">Created Date</label>
                                                 <div class="col-lg-9 input-group date">
-                                                    <input type="text" class="form-control" id="createdDate">
+                                                    <input type="text" class="form-control" id="createdDate" readonly="">
                                                     <div class="input-group-prepend">
                                                         <span class="input-group-text" id="basic-addon1">
                                                             <i class="icon-calendar"></i>
@@ -170,7 +170,7 @@
 														<th>Quantity</th>
 														<th>UOM</th>
 														<th>On Hand</th>
-														<th>Min Stock</th>
+														<!-- <th>Min Stock</th> -->
 														<th>Outstanding Total</th>
 													</tr>
 												</thead>
@@ -187,7 +187,7 @@
 														<td><input type="text" class="form-control  qty" name="qty[]" id="qty" style="width:100%"></td>
 														<td></td>
 														<td></td>
-														<td></td>
+														<!-- <td></td> -->
 														<td></td>
 													</tr>
 												</tbody>
@@ -252,10 +252,10 @@
 				autoclose: true
 			};
 			$('#createdDate').datepicker(optSimple);
-			$('#createdDate').datepicker( 'setDate', today );
+			$('#createdDate').datepicker();
 
 			$('#deliveDate').datepicker(optSimple);
-			$('#deliveDate').datepicker( 'setDate', today );
+			$('#deliveDate').datepicker();
 		});
 
 		function onAddrow(){
@@ -280,8 +280,7 @@
 				"4":`<input type="text" class="form-control qty" id="gr_qty_${count}" value="" style="width:100%">`,
 				"5":"",
 				"6":"",
-				"7":"",
-				"8":""
+				"7":""
 				}).draw();
 				count++;
 
