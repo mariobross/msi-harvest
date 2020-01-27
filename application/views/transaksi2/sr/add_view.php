@@ -184,7 +184,7 @@
 															</select>
 														</td>
 														<td width="40%"></td>
-														<td><input type="text" class="form-control  qty" name="qty[]" id="qty" style="width:100%"></td>
+														<td><input type="text" class="form-control  qty" name="qty[]" id="qty" style="width:100%" autocomplete="off"></td>
 														<td></td>
 														<td></td>
 														<!-- <td></td> -->
@@ -277,7 +277,7 @@
 								${showMatrialDetailData(requestReason, matrialGroup, requestToOutlet, elementSelect)}
 							</select>`,
 				"3":"",
-				"4":`<input type="text" class="form-control qty" id="gr_qty_${count}" value="" style="width:100%">`,
+				"4":`<input type="text" class="form-control qty" id="gr_qty_${count}" value="" style="width:100%" autocomplete="off">`,
 				"5":"",
 				"6":"",
 				"7":""
