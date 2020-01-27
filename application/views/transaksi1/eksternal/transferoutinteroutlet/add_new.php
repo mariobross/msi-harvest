@@ -392,7 +392,7 @@
 				tbodyTable.find('tr').each(function(i, el){
 						let td = $(this).find('td');
 
-						if(parseInt(td.eq(6).find('input').val(),10) > parseInt(td.eq(4).text(),10)){
+						if(parseInt(td.eq(6).find('input').val(),10) > parseInt(td.eq(5).text(),10)){
 							validasi = false;
 						}
 
@@ -408,7 +408,7 @@
 					})
 
 					if(!validasi){
-						alert('Quatity Tidak boleh lebih besar dari Quantity Gudang');
+						alert('Quatity Tidak boleh lebih besar dari Outstanding Quantity');
 						return false;
 					}
 
