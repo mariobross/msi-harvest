@@ -40,7 +40,6 @@ class Plant extends CI_Controller {
 
 		$Msg = array();
 		$admin = array();
-		
 
 		$admin['plant'] = $this->input->post('outlet');
 		$admin['plant_type_id'] = $this->m_general->sap_get_plant_type_id($this->input->post('outlet'));
@@ -74,8 +73,6 @@ class Plant extends CI_Controller {
 				'message' => "Gagal ganti plant .. "
 			);
 		}
-
-		
 
 		echo json_encode($Msg);
 	}
