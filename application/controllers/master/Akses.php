@@ -6,65 +6,150 @@ class Akses extends CI_Controller
         parent::__construct();
         $this->load->library('form_validation');
         //load model
-        // $this->load->model('akses_model');
+        if(!$this->auth->is_logged_in()) {
+			redirect(base_url());
+        }
+        if(!$this->auth->is_have_perm('masterdata_perm'))
+            show_404();
+
+        $this->load->model('master/permission_model', 'm_perm');
     }
 
-    public function index()
-    {
-        $this->load->view('master/hak_akses/list_view');
+    public function index(){
+
+        $perm_codes = array (
+            'perm_group_browse_name_all',
+            'perm_group_browse_detail_all',
+        );
+        
+        $object['perm_codes']['own'] = array (
+			'perm_group_view_name_own',
+		);
+
+		$object['perm_codes']['view'] = array (
+			'perm_group_view_detail_own',
+			'perm_group_view_name_all',
+			'perm_group_view_detail_all',
+		);
+
+		$object['perm_codes']['edit'] = array (
+			'perm_group_edit_name_all',
+			'perm_group_edit_detail_all',
+		);
+
+		$object['perm_codes']['delete'] = array (
+			'perm_group_delete_all',
+		);
+
+		$object['perm_codes']['add'] = array (
+			'perm_group_add_all',
+		);
+
+		$object['perm_codes2'] = $this->auth->perm_code_merge($object['perm_codes']);
+		// end of content permissions
+
+		$object['data']['perm_groups'] = $this->m_perm->perm_groups_select_all();
+        $object['perms'] = $this->m_perm->perms_select_all();
+
+        $this->load->view('master/hak_akses/list_view', $object);
     }
 
     public function add(){
-        $this->load->view('master/hak_akses/add_form');
-    }
-	
-	public function edit(){
-        $this->load->view('master/hak_akses/edit');
-    }
-	
-	public function check(){
-        $this->load->view('master/hak_akses/check');
-    }
-	
-	public function showAllData(){
-       $dt= array(
-           array(
-            "no" => "1",
-			"grup_hak_akses"=> "Not Approved",
-            "admin_terkait" => "false",
-           ),
-		   array(
-            "no" => "2",
-			"grup_hak_akses"=> "Super Admin",
-            "admin_terkait" => "true",
-           ),
-		   array(
-            "no" => "3",
-			"grup_hak_akses"=> "Area Manager",
-            "admin_terkait" => "false",
-           ),
-		   array(
-            "no" => "4",
-			"grup_hak_akses"=> "Outlet - Manager",
-            "admin_terkait" => "false",
-           ),
-		   array(
-            "no" => "4",
-			"grup_hak_akses"=> "HQ - Manager",
-            "admin_terkait" => "true",
-           ),
-		   array(
-            "no" => "5",
-			"grup_hak_akses"=> "Store",
-            "admin_terkait" => "false",
-           )
-        ); 
-
-        $data = [
-            "data"=> $dt
-        ];
         
-        echo json_encode($data);
+        $object = array();
+
+        $object['perms'] = $this->m_perm->perms_select_all();
+
+        $this->load->view('master/hak_akses/add_form', $object);
+    }
+    
+    public function save(){
+        //$this->form_validation->set_rules('group_name', $this->lang->line('perm_group_name'), 'trim|required');
+       
+        $group = $_POST;
+        $group['group_perms']=null;
+        if( $group['group_name'] !== "" && count($group['perm']) > 0){
+            $group['group_perms'] = '';
+            
+            foreach($group['perm'] as $perm) {
+                if(!empty($perm))
+                    $group['group_perms'] .= $perm;
+            }
+
+            unset($group['perm']);
+
+            $group['group_order'] = $this->m_perm->perm_group_order_max_select() + 1;
+
+            if($this->m_perm->perm_group_add($group)) {
+    
+                $this->session->set_flashdata('success', "Berhasil nembahkan grup hak akses");	
+            } else {
+                $this->session->set_flashdata('failed', "Gagal menambahkan grup hak akses");
+            }
+
+        }
+
+        redirect('master/akses');
+        
+        
+    }
+    
+	public function edit($ID=NULL){
+        $object = array();
+        $data = $this->m_perm->perm_group_select($ID);
+        $object['data'] = $data;
+        $object['page_title'] = $this->lang->line('perm_group_perm_edit');
+        $object['perms'] = $this->m_perm->perms_select_all();
+        
+        $this->load->view('master/hak_akses/edit_form', $object);
+    }
+
+    public function update(){
+        $group = $_POST;
+        $group['group_perms']=null;
+        
+        if( $group['group_name'] !== "" && count($group['perm']) > 0){
+            
+            $group['group_perms'] = '';
+            
+            foreach($group['perm'] as $perm) {
+                if(!empty($perm))
+                    $group['group_perms'] .= $perm;
+            }
+
+            unset($group['perm']);
+
+            if($this->m_perm->perm_group_update($group)) {
+    
+                $this->session->set_flashdata('success', "Berhasil mengubah grup hak akses");	
+            } else {
+                $this->session->set_flashdata('failed', "Gagal mengubah grup hak akses");
+            }
+        }
+
+        redirect('master/akses');
+    }
+
+    public function delete($group_id){
+
+        $group_id = (int) $group_id;
+
+		// start of check page permission
+		$perm_codes = array (
+			'perm_group_delete_all',
+		);
+
+		if(!$this->auth->is_have_perm($perm_codes))
+            redirect(base_url());
+
+        if($this->m_perm->perm_group_delete($group_id)){
+            $this->session->set_flashdata('success', "Data grup hak akses berhasil di hapus");	
+        } else {
+            $this->session->set_flashdata('failed', "Data grup hak akses gagal di hapus");
+        }
+
+        redirect('master/akses');
+            
     }
 }
 ?>
