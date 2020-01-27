@@ -69,7 +69,7 @@ class Sr extends CI_Controller{
             $nestedData['admin_realname'] = $val['user_input'];
             $nestedData['admin_realname(1)'] = $val['user_approved'] ? $val['user_approved'] : '-';
             $nestedData['lastmodified'] = date("d-m-Y",strtotime($val['lastmodified']));
-            $nestedData['back'] = $val['back'] =='1'?'Not Integrated':'Integrated';
+            $nestedData['back'] = $val['back'] =='1'?'Integrated':'Not Integrated';
             $nestedData['stts'] = $val['status'];
             $data[] = $nestedData;
 
@@ -89,6 +89,9 @@ class Sr extends CI_Controller{
     $object['request_reasons'] = ['Order', 'Order Tambahan', 'Special Order', 'Big Order'];
     $object['plants'] = $this->sr_model->showOutlet();
     $object['matrialGroup'] = $this->sr_model->showMatrialGroup();
+    $object['plant'] = $this->session->userdata['ADMIN']['plant'].' - '.$this->session->userdata['ADMIN']['plant_name'];
+    $object['storage_location'] = $this->session->userdata['ADMIN']['storage_location'].' - '.$this->session->userdata['ADMIN']['storage_location_name'];
+    
     $this->load->view('transaksi2/sr/add_view', $object);
     }
 
@@ -112,18 +115,26 @@ class Sr extends CI_Controller{
     }
 
     public function addData(){
+        $plant = $this->session->userdata['ADMIN']['plant'];
+        $storage_location = $this->session->userdata['ADMIN']['storage_location'];
+        $plant_name = $this->session->userdata['ADMIN']['plant_name'];
+        $storage_location_name = $this->session->userdata['ADMIN']['storage_location_name'];
+        $admin_id = $this->session->userdata['ADMIN']['admin_id'];
+
         $stdstock_header['delivery_date'] = $this->l_general->str_to_date($this->input->post('dateDeliv'));
         $stdstock_header['request_reason'] = $this->input->post('reqRes');
         $stdstock_header['item_group_code'] = $this->input->post('matGrp');
         $stdstock_header['to_plant'] = $this->input->post('reqToOutlet');
         $stdstock_header['created_date'] = $this->l_general->str_to_date($this->input->post('dateCreate'));
-        $stdstock_header['plant'] = 'WMSISNST';
-        $stdstock_header['storage_location'] = 'WMSISNST';
+        $stdstock_header['plant'] = $plant;
+        $stdstock_header['plant_name'] = $plant_name;
+        $stdstock_header['storage_location_name'] = $storage_location_name ;
+        $stdstock_header['storage_location'] = $storage_location ;
         $stdstock_header['id_stdstock_plant'] = $this->sr_model->id_stdstock_plant_new_select($stdstock_header['plant'],$stdstock_header['created_date']);
         $stdstock_header['status'] = $this->input->post('appr')? $this->input->post('appr') : '1';
-        $stdstock_header['id_user_input'] = '2392';
+        $stdstock_header['id_user_input'] = $admin_id;
         $stdstock_header['pr_no'] = '';
-        $stdstock_header['id_user_approved'] = $this->input->post('appr')? '2392' : 0;
+        $stdstock_header['id_user_approved'] = $this->input->post('appr')? $admin_id : 0;
 
         $stdstock_details['material_no'] = $this->input->post('detMatrialNo');
         $count = count($stdstock_details['material_no']);
@@ -153,6 +164,8 @@ class Sr extends CI_Controller{
 
     public function edit(){
         $id_stdstock_header = $this->uri->segment(4);
+        $object['plant_name'] = $this->session->userdata['ADMIN']['plant'].' - '.$this->session->userdata['ADMIN']['plant_name'];
+        $object['storage_location_name'] = $this->session->userdata['ADMIN']['storage_location'].' - '.$this->session->userdata['ADMIN']['storage_location_name'];
         $object['data'] = $this->sr_model->stdstock_header_select($id_stdstock_header);
 
         $object['stdstock_header']['id_stdstock_header'] = $id_stdstock_header;
@@ -198,6 +211,7 @@ class Sr extends CI_Controller{
                 $nestedData['OnHand'] = $value['OnHand'];
                 $nestedData['MinStock'] = $value['MinStock'];
                 $nestedData['OpenQty'] = $value['OpenQty']; 
+                $nestedData['status'] = $stts; 
                 $dt[] = $nestedData;
                 $i++;
             }
@@ -228,11 +242,13 @@ class Sr extends CI_Controller{
     }
 
     public function addDataUpdate(){
+        $admin_id = $this->session->userdata['ADMIN']['admin_id'];
+
         $stdstock_header['id_stdstock_header'] = $this->input->post('idStdStock_header');
         $stdstock_header['delivery_date'] = $this->l_general->str_to_date($this->input->post('dateDeliv'));
         $stdstock_header['created_date'] = $this->l_general->str_to_date($this->input->post('dateCreate'));
         $stdstock_header['status'] = $this->input->post('appr')? $this->input->post('appr') : '1';
-        $stdstock_header['id_user_approved'] = $this->input->post('appr')? '2392' : 0;
+        $stdstock_header['id_user_approved'] = $this->input->post('appr')? $admin_id : 0;
         
         $stdstock_details['material_no'] = $this->input->post('detMatrialNo');
         $count = count($stdstock_details['material_no']);

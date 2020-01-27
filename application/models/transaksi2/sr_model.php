@@ -28,12 +28,12 @@ class Sr_model extends CI_Model {
     }
 
     function stdstock_headers($fromDate='', $toDate='', $status='',$rto=''){
+        $plant = $this->session->userdata['ADMIN']['plant'];
+
         $this->db->select('* ,(select OUTLET_NAME1 from m_outlet where OUTLET = t_stdstock_header.to_plant) as OUTLET_NAME1,(select admin_realname from d_admin where admin_id = t_stdstock_header.id_user_input) as user_input, (select admin_realname from d_admin where admin_id = t_stdstock_header.id_user_approved) as user_approved');
         $this->db->from('t_stdstock_header');
-        // $this->db->join('m_outlet', 'm_outlet.OUTLET = t_stdstock_header.to_plant');
-        // $this->db->join('d_admin','t_stdstock_header.id_user_input = d_admin.admin_id','left');
-        // $this->db->join('d_admin c','t_stdstock_header.id_user_approved = c.admin_id','left');
-        $this->db->where('t_stdstock_header.plant','WMSISNST');
+        
+        $this->db->where('t_stdstock_header.plant', $plant);
         if((!empty($fromDate)) || (!empty($toDate))){
             if( (!empty($fromDate)) || (!empty($toDate)) ) {
             $this->db->where("delivery_date BETWEEN '$fromDate' AND '$toDate'");
@@ -50,29 +50,32 @@ class Sr_model extends CI_Model {
             $this->db->where('to_plant', $rto);
         }
 
-        $this->db->order_by('created_date', 'desc');
+        $this->db->order_by('id_stdstock_header', 'desc');
 
         $query = $this->db->get();
-        // echo $this->db->last_query();
-        // die();
+
         $ret = $query->result_array();
         return $ret;
     }
 
     function getDataMaterialGroup($item_group_code ='all'){
+        $kd_plant = $this->session->userdata['ADMIN']['plant'];
+        $trans_type = 'stdstock';
         $this->db->distinct();
         $this->db->select('m_item.MATNR,m_item.MAKTX,m_item.DISPO,m_item.UNIT,space(0) as DSNAM');
         $this->db->select('(REPLACE(m_item.MATNR,REPEAT("0",(12)),SPACE(0))) AS MATNR1');
         $this->db->from('m_item');
         $this->db->join('m_map_item_trans','m_map_item_trans.MATNR = m_item.MATNR','inner');
         $this->db->join('m_item_group','m_item_group.DISPO = m_item.DISPO','inner');
-        $this->db->where('transtype', 'stdstock');
-        $this->db->where('m_item_group.kdplant','WMSISNST');
+        $this->db->where('transtype', $trans_type);
+        $this->db->where('m_item_group.kdplant', $kd_plant);
         
-        // $this->db->limit(10000);
+        $this->db->limit(500);
         if($item_group_code !='all'){
             $this->db->where('m_item_group.DSNAM', $item_group_code);
         }
+
+        $this->db->order_by('MATNR', 'desc');
 
         $query = $this->db->get();
         // echo $this->db->last_query();
@@ -84,6 +87,7 @@ class Sr_model extends CI_Model {
     }
 
     function getDataMaterialGroupSelect($itemSelect){
+        $kd_plant = $this->session->userdata['ADMIN']['plant'];
         if(($itemSelect != '') || ($itemSelect != null)){
             $this->db->select('m_item.MATNR,m_item.MAKTX,m_item.DISPO,m_item.UNIT,space(0) as DSNAM');
             $this->db->select('(REPLACE(m_item.MATNR,REPEAT("0",(12)),SPACE(0))) AS MATNR1');
@@ -91,7 +95,7 @@ class Sr_model extends CI_Model {
             $this->db->join('m_map_item_trans','m_map_item_trans.MATNR = m_item.MATNR','inner');
             $this->db->join('m_item_group','m_item_group.DISPO = m_item.DISPO','inner');
             $this->db->where('transtype', 'stdstock');
-            $this->db->where('m_item_group.kdplant','WMSISNST');
+            $this->db->where('m_item_group.kdplant',$kd_plant);
             $this->db->where('m_item.MATNR',$itemSelect);
 
             // $this->db->limit(10000);
@@ -144,10 +148,11 @@ class Sr_model extends CI_Model {
     }
     
     function stdstock_header_select($id_stdstock_header){
+        $kd_plant = $this->session->userdata['ADMIN']['plant'];
         $this->db->from('t_stdstock_header');
         $this->db->join('m_outlet', 'm_outlet.OUTLET = t_stdstock_header.to_plant');
         $this->db->where('id_stdstock_header', $id_stdstock_header);
-        $this->db->where('t_stdstock_header.plant','WMSISNST');
+        $this->db->where('t_stdstock_header.plant',$kd_plant);
         
         $query = $this->db->get();
     

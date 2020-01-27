@@ -3,9 +3,11 @@
 class TransferIn_model extends CI_Model {
 
     function t_grsto_headers($fromDate='', $toDate='', $status=''){
+      $kd_plant = $this->session->userdata['ADMIN']['plant'];
+
         $this->db->select('t_grsto_header.*, (SELECT OUTLET_NAME1 FROM m_outlet WHERE OUTLET = t_grsto_header.delivery_plant) AS OUTLET_NAME1, (SELECT admin_realname FROM d_admin WHERE admin_id = t_grsto_header.id_user_input) AS user_input, (SELECT admin_realname FROM d_admin WHERE admin_id = t_grsto_header.id_user_approved) AS user_approved');
         $this->db->from('t_grsto_header');
-        $this->db->where('t_grsto_header.plant','WMSIASST');
+        $this->db->where('t_grsto_header.plant', $kd_plant);
 
         if((!empty($fromDate)) || (!empty($toDate))){
             if( (!empty($fromDate)) || (!empty($toDate)) ) {
@@ -31,21 +33,22 @@ class TransferIn_model extends CI_Model {
 
     public function sap_do_select_all($kd_plant="",$do_no="",$do_item=""){
         $SAP_MSI = $this->load->database('SAP_MSI', TRUE);
+        $kd_plant = $this->session->userdata['ADMIN']['plant'];
 
         $SAP_MSI->select('U_TransFor'); 
         $SAP_MSI->from('OWHS');
-        $SAP_MSI->where('WhsCode', 'WMSISNST');
+        $SAP_MSI->where('WhsCode', $kd_plant);
         $CON1 = $SAP_MSI->get();
         $CON1Result = $CON1->result_array();
         $plant = $CON1Result[0]["U_TransFor"];
         
         $this->db->query('SET @num=0');
-		    $this->db->select('po_no EBELN, gistonew_out_no  MBLNR, plant SUPPL_PLANT, STOR_LOC_NAME SPLANT_NAME, posting_date DELIV_DATE, DISPO, id_gistonew_out_h_detail EBELP, MATNR, MAKTX, (gr_quantity-receipt) BSTMG, uom BSTME,(@num := @num + 1) as NUMBER, gr_quantity as TFQUANTITY');
+		    $this->db->select('po_no EBELN, gistonew_out_no  MBLNR, plant SUPPL_PLANT, STOR_LOC_NAME SPLANT_NAME, posting_date DELIV_DATE, DISPO, id_gistonew_out_h_detail EBELP, MATNR, MAKTX, (gr_quantity-receipt) BSTMG, uom BSTME,(@num := @num + 1) as NUMBER, gr_quantity as TFQUANTITY, receiving_plant');
   	    $this->db->from('t_gistonew_out_header');
 		    $this->db->join('t_gistonew_out_detail','t_gistonew_out_detail.id_gistonew_out_header = t_gistonew_out_header.id_gistonew_out_header','inner');
 		    $this->db->join('m_item','m_item.MATNR = t_gistonew_out_detail.material_no','inner');
 		    $this->db->join('m_outlet','m_outlet.outlet = t_gistonew_out_header.plant','inner');
-		    $this->db->where('receiving_plant',$plant);
+		    $this->db->where('receiving_plant',$kd_plant);
   	    $this->db->where('status',2);
      	  $this->db->where('po_no != ""');
 		    $this->db->where('gistonew_out_no != ""');
@@ -104,12 +107,14 @@ class TransferIn_model extends CI_Model {
         }
     }
 
-    function getQtySR($pr_no,$material_no){
-      $doitems = $this->sap_do_select_all("",$pr_no);
+    function getQtySR($pr_no,$material_no,$plant){
+      // $doitems = $this->sap_do_select_all("",$pr_no);
       $this->db->select('id_stdstock_header'); 
       $this->db->from('t_stdstock_header');
       $this->db->where('pr_no', $pr_no);
-
+      $this->db->where('plant', $plant);
+      // echo $this->db->last_query();
+      // die();
       $query = $this->db->get();
       $con = $query->result_array();
       $id_stdstock_header = $con[0]["id_stdstock_header"];
@@ -251,14 +256,14 @@ class TransferIn_model extends CI_Model {
     }
 
     function getDataMaterialGroupSelect($po_no, $itemSelect){
-      $plant = 'WMSISTRM';
+      $kd_plant = $this->session->userdata['ADMIN']['plant'];
       $SAP_MSI = $this->load->database('SAP_MSI', TRUE);
 
       $dataHeader = $this->sap_do_select_all('',$po_no, $itemSelect);
       for($i = 1; $i <= count($dataHeader); $i++){
         $SAP_MSI->select('OnHand'); 
         $SAP_MSI->from('OITW');
-        $SAP_MSI->where('WhsCode', 'WMSISNST');
+        $SAP_MSI->where('WhsCode', $kd_plant);
         $SAP_MSI->where('ItemCode', $dataHeader[$i]['MATNR']);
 
         $query = $SAP_MSI->get();
@@ -325,9 +330,9 @@ class TransferIn_model extends CI_Model {
   }
   
     function sap_item_groups_select_all() {
-      // $kd_plant = $this->session->userdata['ADMIN']['plant'];
+      $kd_plant = $this->session->userdata['ADMIN']['plant'];
       $this->db->from('m_item_group');
-          $this->db->where('kdplant', 'WMSISNST');
+          $this->db->where('kdplant', $kd_plant);
 
       $query = $this->db->get();
       if(($query)&&($query->num_rows() > 0)) {
@@ -373,7 +378,6 @@ class TransferIn_model extends CI_Model {
         $this->db->from('t_grsto_header');
         // $this->db->join('m_outlet', 'm_outlet.OUTLET = t_grsto_header.to_plant');
         $this->db->where('id_grsto_header', $id_grsto_header);
-        // $this->db->where('t_grsto_header.plant','WMSISNST');
         
         $query = $this->db->get();
     
@@ -471,10 +475,10 @@ class TransferIn_model extends CI_Model {
   }
 
   function posting_date_select_max() {
-    // $id_outlet = $this->session->userdata['ADMIN']['plant'];
+    $kd_plant = $this->session->userdata['ADMIN']['plant'];
     $this->db->select_max('posting_date');
     $this->db->from('t_posinc_header');
-    $this->db->where('plant', 'WMSISNST');
+    $this->db->where('plant', $kd_plant);
     $this->db->where('status', 2);
   //		$this->db->where('waste_no is not null AND waste_no <> "" ');
 

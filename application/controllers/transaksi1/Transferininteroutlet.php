@@ -70,7 +70,7 @@ class Transferininteroutlet extends CI_Controller
             $nestedData['created_by'] = $val['user_input'];
             $nestedData['approved_by'] = $val['user_approved'];
             $nestedData['last_modified'] = date("d-m-Y",strtotime($val['lastmodified']));
-            $nestedData['back'] = $val['back'] =='1'?'Not Integrated':'Integrated';;
+            $nestedData['back'] = $val['back'] =='1'?'Integrated':'Not Integrated';;
             $data[] = $nestedData;
 
         }
@@ -86,13 +86,16 @@ class Transferininteroutlet extends CI_Controller
 	public function add()
     {
         $data['do_nos'] = $this->tIn_model->sap_do_select_all();
-       
+
+       $object['po_no']['-'] = '';
 		if($data['do_nos'] !== FALSE) {
 			$object['do_no'][0] = '';
 			foreach ($data['do_nos'] as $do_no) {
 				$object['do_no'][$do_no['EBELN']] = $do_no['EBELN'].' - '.$do_no['SPLANT_NAME'];
 			}
-		}
+        }
+        $object['plant'] = $this->session->userdata['ADMIN']['plant'].' - '.$this->session->userdata['ADMIN']['plant_name'];
+        $object['storage_location'] = $this->session->userdata['ADMIN']['storage_location'].' - '.$this->session->userdata['ADMIN']['storage_location_name'];
 
         $this->load->view('transaksi1/eksternal/transferininteroutlet/add_new', $object);
 	}
@@ -127,14 +130,13 @@ class Transferininteroutlet extends CI_Controller
             $dt = array();
             $i = 1;
             foreach($grsto_details as $key=>$value){
-                $srQty = $this->tIn_model->getQtySR($value['EBELN'],$value['MATNR']);
-                // print_r($srQty[0]["requirement_qty"]);
+                $srQty = $this->tIn_model->getQtySR($value['EBELN'],$value['MATNR'],$value['receiving_plant']);
                 $nestedData=array();
                 $nestedData['NO'] = $i;
                 $nestedData['MATNR'] = $value['MATNR'];
                 $nestedData['MAKTX'] = $value['MAKTX'];
-                $nestedData['SRQUANTITY'] = $srQty[0]["requirement_qty"] ? $srQty[0]["requirement_qty"] : 0 ;
-                $nestedData['TFQUANTITY'] = $value["TFQUANTITY"];
+                $nestedData['SRQUANTITY'] = $srQty[0]["requirement_qty"] != '.000000' ? $srQty[0]["requirement_qty"] : 0 ;
+                $nestedData['TFQUANTITY'] = $value["TFQUANTITY"] != '.000000' ? $value["TFQUANTITY"] : 0;
                 $nestedData['GRQUANTITY'] = '';
                 $nestedData['UOM'] = $value['BSTME'];
                 $dt[] = $nestedData;
@@ -230,7 +232,7 @@ class Transferininteroutlet extends CI_Controller
 
                 $grsto_detail['id_grsto_header'] = $id_grsto_header;
                 $grsto_detail['id_grsto_h_detail'] = $i+1;
-                $grsto_detail['item'] = $i+1;
+                $grsto_detail['item'] = $i;
                 $grsto_detail['material_no'] = $this->input->post('detMatrialNo')[$i];
                 $grsto_detail['material_desc'] = $this->input->post('detMatrialDesc')[$i];
                 $grsto_detail['sr_qty'] = $this->input->post('detsrQty')[$i];
@@ -296,7 +298,8 @@ class Transferininteroutlet extends CI_Controller
     
     public function addDataUpdate(){
         $grsto_header['id_grsto_header'] = $this->input->post('idgrsto_header');
-        $grsto_header['status'] = $this->input->post('aapr') ? $this->input->post('aapr') : '1';
+        $grsto_header['po_no'] = $this->input->post('poNo');
+        $grsto_header['status'] = $this->input->post('appr') ? $this->input->post('appr') : '1';
         $grsto_header['posting_date'] = $this->l_general->str_to_date($this->input->post('pstDate'));
 
         $approve = $this->input->post('appr');
@@ -304,38 +307,46 @@ class Transferininteroutlet extends CI_Controller
         $grsto_details['material_no'] = $this->input->post('detMatrialNo');
        
         $count = count($grsto_details['material_no']);
+ 
+        $update_not_detail=false;
         if($this->tIn_model->grsto_header_update($grsto_header)){
             $update_detail_success = false;
             if($this->tIn_model->grsto_details_delete($grsto_header['id_grsto_header'])){
-                for($i =0; $i < $count; $i++){
-                    $grsto_details['id_grsto_header'] = $grsto_header['id_grsto_header'];
-                    $grsto_details['id_grsto_h_detail'] = $i+1;
-                    $grsto_details['material_no'] = $this->input->post('detMatrialNo')[$i];
-                    $grsto_details['material_desc'] = $this->input->post('detMatrialDesc')[$i];
-                    $grsto_details['sr_qty'] = $this->input->post('detSrQty')[$i];
-                    $grsto_details['outstanding_qty'] = $this->input->post('detTftQty')[$i];
-                    $grsto_details['gr_quantity'] = $this->input->post('detGrQty')[$i];
-                    $grsto_details['uom'] = $this->input->post('detUom')[$i];
-                    $grsto_detail['ok'] = 1;
-                    $grsto_detail['ok_cancel'] = 0;
+                if($count > 1){
+                    for($i =0; $i < $count; $i++){
+                        $grsto_details['id_grsto_header'] = $grsto_header['id_grsto_header'];
+                        $grsto_details['id_grsto_h_detail'] = $i+1;
+                        $grsto_details['item'] = $i;
+                        $grsto_details['material_no'] = $this->input->post('detMatrialNo')[$i];
+                        $grsto_details['material_desc'] = $this->input->post('detMatrialDesc')[$i];
+                        $grsto_details['sr_qty'] = $this->input->post('detSrQty')[$i];
+                        $grsto_details['outstanding_qty'] = $this->input->post('detTftQty')[$i];
+                        $grsto_details['gr_quantity'] = $this->input->post('detGrQty')[$i];
+                        $grsto_details['uom'] = $this->input->post('detUom')[$i];
+                        $grsto_details['ok'] = 1;
+                        $grsto_details['ok_cancel'] = 0;
+                        $grsto_details['var'] = ((int)$this->input->post('detTftQty')[$i] - (int)$this->input->post('detGrQty')[$i]);
 
-                    if($approve == 2){
-                        $cekQty = $this->tIn_model->cekQty($grsto_header['po_no'],$grsto_detail['material_no']);
-                        $gistonew_out_header['po_no'] = $grsto_header['po_no'];
-                        $gistonew_out_header['material_no'] = $grsto_detail['material_no'];
-                        $gistonew_out_header['receipt'] = $cekQty[0]['receipt'] + $grsto_detail['gr_quantity'];
-                        $gistonew_out_header['var'] = $grsto_detail['var'];
-                        $this->tIn_model->update_grstonew_out_detail($gistonew_out_header);
-                        
+
+                        if($approve == 2){
+                            $cekQty = $this->tIn_model->cekQty($grsto_header['po_no'],$grsto_details['material_no']);
+                            $gistonew_out_header['po_no'] = $grsto_header['po_no'];
+                            $gistonew_out_header['material_no'] = $grsto_details['material_no'];
+                            $gistonew_out_header['receipt'] = $cekQty[0]['receipt'] + $grsto_details['gr_quantity'];
+                            $gistonew_out_header['var'] = $grsto_details['var'];
+                            $this->tIn_model->update_grstonew_out_detail($gistonew_out_header);
+                            
+                        }
+
+                        if($this->tIn_model->grsto_detail_insert($grsto_details))
+                        $update_detail_success = TRUE;
                     }
-
-                    if($this->tIn_model->grsto_detail_insert($grsto_details))
-                    $update_detail_success = TRUE;
                 }
+                $update_not_detail=TRUE;
             }
         }
 
-        if($update_detail_success){
+        if($update_detail_success || $update_not_detail){
             return $this->session->set_flashdata('success', "Transfer Out Inter Outlet Berhasil di Update");
         }else{
             return $this->session->set_flashdata('failed', "Transfer Out Inter Outlet Gagal di Update");
@@ -358,8 +369,8 @@ class Transferininteroutlet extends CI_Controller
                 $nestedData['no'] = $i;
                 $nestedData['material_no'] = $value['material_no'];
 				$nestedData['material_desc'] = $value['material_desc'];
-				$nestedData['in_whs_qty'] = $value['sr_qty'];
-				$nestedData['outstanding_qty'] = $value['outstanding_qty'];
+				$nestedData['in_whs_qty'] = $value['sr_qty']!= '.000000' ? $value['sr_qty'] : 0;
+				$nestedData['outstanding_qty'] = $value['outstanding_qty']!= '.000000' ? $value["outstanding_qty"] : 0;
 				$nestedData['gr_quantity'] = $value['gr_quantity'];
                 $nestedData['uom'] = $value['uom'];
                 $nestedData['status'] = $stts;

@@ -68,7 +68,7 @@ class Transferoutinteroutlet extends CI_Controller
             $nestedData['created_by'] = $val['user_input'];
             $nestedData['approved_by'] = $val['user_approved'];
             $nestedData['last_modified'] = date("d-m-Y",strtotime($val['lastmodified']));
-            $nestedData['back'] = $val['back'] =='1'?'Not Integrated':'Integrated';;
+            $nestedData['back'] = $val['back'] =='1'?'Integrated':'Not Integrated';;
             $data[] = $nestedData;
 
         }
@@ -83,13 +83,19 @@ class Transferoutinteroutlet extends CI_Controller
 	
 	public function add()
     {
-		$data['do_nos'] = $this->tout_model->sap_do_select_all();
+        $data['do_nos'] = $this->tout_model->sap_do_select_all();
+        $object['po_no']['-'] = '';
 		if($data['do_nos'] !== FALSE) {
 			$object['do_no'][0] = '';
 			foreach ($data['do_nos'] as $do_no) {
 				$object['do_no'][$do_no['VBELN']] = $do_no['VBELN'].' - '.$do_no['ABC'];
 			}
-		}
+        }
+        
+
+        $object['plant'] = $this->session->userdata['ADMIN']['plant'].' - '.$this->session->userdata['ADMIN']['plant_name'];
+        $object['storage_location'] = $this->session->userdata['ADMIN']['storage_location'].' - '.$this->session->userdata['ADMIN']['storage_location_name'];
+    
 
         $this->load->view('transaksi1/eksternal/transferoutinteroutlet/add_new', $object);
 	}
@@ -120,7 +126,48 @@ class Transferoutinteroutlet extends CI_Controller
 				
 			} else {
 				$gistonew_out_details= $this->tout_model->sap_gistonew_out_details_select_by_do_and_item_group($do_no, $item_group_code);
-			}
+            }
+
+            $dt = array();
+            $i=1;
+            foreach($gistonew_out_details as $key=>$value){
+                $inWhsQty = $this->tout_model->getDataMaterialGroupSelect($value['VBELN'],$value['MATNR']);
+                $nestedData=array();
+                $nestedData['NO'] = $i;
+                $nestedData['MATNR'] = $value['MATNR'];
+                $nestedData['MAKTX'] = $value['MAKTX'];
+                $nestedData['inWhsQty'] = $inWhsQty[1]["In_Whs_Qty"]!='.000000' ? $inWhsQty[1]["In_Whs_Qty"] : 0 ;
+                $nestedData['LFIMG'] = $value["LFIMG"];
+                $nestedData['GRQUANTITY'] = '';
+                $nestedData['UOM_REG'] = $value['VRKME'];
+                $nestedData['UOM'] = $value['VRKME'];
+                $dt[] = $nestedData;
+                $i++;
+            }
+            
+            // print_r($gistonew_out_details);
+            // die();
+            $json_data = array(
+                "data" => $dt
+            );
+            echo json_encode($json_data) ;
+			
+			// echo json_encode($gistonew_out_details);
+		}
+    }
+    
+    public function getDetailsTransferOutEdit(){
+        $item_group_code = $this->input->post('cboMatrialGroup');
+        
+		$do_no = $this->input->post('doNo');
+
+		if ((!empty($item_group_code)) || (trim($item_group_code)!="")) {
+			if($item_group_code == 'all') {
+				$gistonew_out_details = $this->tout_model->sap_gistonew_out_details_select_by_do_no($do_no);
+				
+			} else {
+				$gistonew_out_details= $this->tout_model->sap_gistonew_out_details_select_by_do_and_item_group($do_no, $item_group_code);
+            }
 			
 			echo json_encode($gistonew_out_details);
 		}
@@ -139,23 +186,44 @@ class Transferoutinteroutlet extends CI_Controller
     }
 
 	public function addData(){
+        $plant = $this->session->userdata['ADMIN']['plant'];
+        $storage_location = $this->session->userdata['ADMIN']['storage_location'];
+        $plant_name = $this->session->userdata['ADMIN']['plant_name'];
+        $storage_location_name = $this->session->userdata['ADMIN']['storage_location_name'];
+        $admin_id = $this->session->userdata['ADMIN']['admin_id'];
+
+        if($this->input->post("Rto")!= ''){
+            $strPlant = explode("-",$this->input->post("Rto"));
+            $receiving_plant = trim($strPlant[0]);
+            $receiving_plant_name = trim($strPlant[1]);
+        }else{
+            $receiving_plant = '';
+            $receiving_plant_name = '';
+        }
+
 		$gistonew_out_header['po_no'] = $this->input->post('reqRes');
 		$gistonew_out_header['posting_date'] = $this->l_general->str_to_date($this->input->post('pstDate'));
         $gistonew_out_header['item_group_code'] = $this->input->post('matGrp');
         $gistonew_out_header['status'] = $this->input->post('stss');
-		$gistonew_out_header['receiving_plant'] = $this->input->post('Rto');
-        $gistonew_out_header['plant'] = 'WMSIMBST';
-        $gistonew_out_header['storage_location'] = 'WMSIMBST';
+        $gistonew_out_header['receiving_plant'] = $receiving_plant;
+        $gistonew_out_header['receiving_plant_name'] = $receiving_plant_name;
+        $gistonew_out_header['plant'] = $plant;
+        $gistonew_out_header['plant_name'] = $plant_name;
+        $gistonew_out_header['storage_location'] = $storage_location;
+        // $gistonew_out_header['storage_location_name'] = $storage_location_name;
         $gistonew_out_header['id_gistonew_out_plant'] = $this->tout_model->id_stdstock_plant_new_select($gistonew_out_header['plant'],$gistonew_out_header['posting_date']);
         $gistonew_out_header['status'] = $this->input->post('appr')? $this->input->post('appr') : '1';
 
-        $gistonew_out_header['id_user_input'] = '2392';
-        $gistonew_out_header['to_plant'] = $this->input->post('Rto');
+        $gistonew_out_header['id_user_input'] = $admin_id;
+        $gistonew_out_header['id_user_approved'] = $this->input->post('appr')? $admin_id : '0';
+        $gistonew_out_header['to_plant'] = $receiving_plant;
 
         $gistonew_out_details['material_no'] = $this->input->post('detMatrialNo');
         $count = count($gistonew_out_details['material_no']);
 
-        // print_r($count);
+        $base = $gistonew_out_header['po_no'];
+
+        
         if($id_gistonew_out_header= $this->tout_model->gistonew_out_header_insert($gistonew_out_header)){
             $input_detail_success = false;
             for($i =0; $i < $count; $i++){
@@ -166,10 +234,29 @@ class Transferoutinteroutlet extends CI_Controller
                 $gistonew_out_detail['outstanding_qty'] = $this->input->post('detOutStdQty')[$i];
                 $gistonew_out_detail['gr_quantity'] = $this->input->post('detQty')[$i];
 				$gistonew_out_detail['uom'] = $this->input->post('detUom')[$i];
-				$gistonew_out_detail['uom_req'] = $this->input->post('detUomReg')[$i];
+                $gistonew_out_detail['uom_req'] = $this->input->post('detUomReg')[$i];
+                $gistonew_out_detail['posnr'] = $i;
+
+                $line = $gistonew_out_detail['posnr'];
+
+                $rem = $this->tout_model->U_grqty_web($base,$line);
+                $gr_qty1=$rem['U_grqty_web'];
+                $gr_qty = $gr_qty1 + $gistonew_out_detail['gr_quantity'];
+
+                $LFIMG = $this->tout_model->sap_do_select_all('',$gistonew_out_header['po_no'],$gistonew_out_detail['material_no']);
+                $outstanding = $LFIMG[1]['LFIMG'];
 
                 if($this->tout_model->gistonew_out_detail_insert($gistonew_out_detail))
                 $input_detail_success = TRUE;
+
+                if( $input_detail_success = TRUE){
+                    if($this->input->post('appr') == 2){
+                        if ($outstanding = 0){
+                            $this->tout_model->updateOWTQ($base);
+                        }
+                        $this->tout_model->updateWTQ1($gr_qty, $base, $line);
+                    }
+                }
             }
         }
 
@@ -195,13 +282,15 @@ class Transferoutinteroutlet extends CI_Controller
             $object['gistonew_out_header']['status_string'] = 'Cancel';
 		}
 		
-		$object['gistonew_out_header']['plant'] = $object['data']['plant'];
+        $object['gistonew_out_header']['plant'] = $object['data']['plant'];
+        $object['gistonew_out_header']['plant_str'] = $object['data']['plant'].' - '.$object['data']['PLANTS_NAME'];
 		$object['gistonew_out_header']['po_no'] = $object['data']['po_no'];
 		$object['gistonew_out_header']['transfer_slip_number'] = $object['data']['gistonew_out_no'];
-		$object['gistonew_out_header']['storage_location'] = $object['data']['storage_location'];
+        $object['gistonew_out_header']['storage_location'] = $object['data']['storage_location'];
+        $object['gistonew_out_header']['storage_location_str'] = $object['data']['storage_location'].' - '.$object['data']['STORAGE_LOCATION_NAME'];
 		$object['gistonew_out_header']['to_plant'] = $object['data']['to_plant'].' - '.$object['data']['STOR_LOC_NAME'];
         $object['gistonew_out_header']['posting_date'] = $object['data']['posting_date'];
-        $object['gistonew_out_header']['item_group_code'] = $object['data']['item_group_code'];
+        $object['gistonew_out_header']['item_group_code'] = $object['data']['item_group_code'] ? $object['data']['item_group_code'] : 'all';
         $object['gistonew_out_header']['status'] = $object['data']['status'];
 
         $this->load->view('transaksi1/eksternal/transferoutinteroutlet/edit_view', $object);
@@ -210,9 +299,11 @@ class Transferoutinteroutlet extends CI_Controller
     public function addDataUpdate(){
         $gistonew_out_header['id_gistonew_out_header'] = $this->input->post('idGistonew_out_header');
         $gistonew_out_header['status'] = $this->input->post('aapr') ? $this->input->post('aapr') : '1';
-        
+        $gistonew_out_header['po_no'] = $this->input->post('poNo');
+
         $gistonew_out_details['material_no'] = $this->input->post('detMatrialNo');
-       
+        
+        $base = $gistonew_out_header['po_no'];
         $count = count($gistonew_out_details['material_no']);
         if($this->tout_model->gistonew_out_header_update($gistonew_out_header)){
             $update_detail_success = false;
@@ -226,6 +317,23 @@ class Transferoutinteroutlet extends CI_Controller
                     $gistonew_out_details['gr_quantity'] = $this->input->post('detQty')[$i];
                     $gistonew_out_details['uom'] = $this->input->post('detUom')[$i];
                     $gistonew_out_details['uom_req'] = $this->input->post('detUomReg')[$i];
+                    $gistonew_out_detail['posnr'] = $i;
+
+                    $line = $gistonew_out_detail['posnr'];
+                    $rem = $this->tout_model->U_grqty_web($base,$line);
+                    $gr_qty1=$rem['U_grqty_web'];
+                    $gr_qty = $gr_qty1 + $gistonew_out_detail['gr_quantity'];
+    
+                    $LFIMG = $this->tout_model->sap_do_select_all('',$gistonew_out_header['po_no'],$gistonew_out_detail['material_no']);
+                    $outstanding = $LFIMG[1]['LFIMG'];
+
+                    if($this->input->post('appr')){
+                        if ($outstanding = 0){
+                            $this->tout_model->updateOWTQ($base);
+                        }
+                        $this->tout_model->updateWTQ1($gr_qty, $base, $line);
+                    }
+                   
 
                     if($this->tout_model->gistonew_out_detail_insert($gistonew_out_details))
                     $update_detail_success = TRUE;
@@ -248,6 +356,7 @@ class Transferoutinteroutlet extends CI_Controller
         $i = 1;
         if($rs){
             foreach($rs as $key=>$value){
+                // $kd_plant = $this->session->userdata['ADMIN']['plant'];
                 $inwhs = $this->tout_model->in_whs_qty('WMSIMBST',$value['material_no']);
                 // print_r($inwhs);
                 // // die();
@@ -256,11 +365,12 @@ class Transferoutinteroutlet extends CI_Controller
                 $nestedData['no'] = $i;
                 $nestedData['material_no'] = $value['material_no'];
 				$nestedData['material_desc'] = $value['material_desc'];
-				$nestedData['in_whs_qty'] = $inwhs[0]['OnHand'];
+				$nestedData['in_whs_qty'] = $inwhs[0]['OnHand']!='.000000' ? $inwhs[0]['OnHand'] : 0;
 				$nestedData['outstanding_qty'] = $value['outstanding_qty'];
 				$nestedData['gr_quantity'] = $value['gr_quantity'];
                 $nestedData['uom'] = $value['uom'];
                 $nestedData['uom_req'] = $value['uom_req'];
+                $nestedData['status'] = $stts;
                 $dt[] = $nestedData;
                 $i++;
             }
