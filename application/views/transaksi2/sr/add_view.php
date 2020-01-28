@@ -169,9 +169,9 @@
 														<th>Material Desc</th>
 														<th>Quantity</th>
 														<th>UOM</th>
-														<th>On Hand</th>
+														<!-- <th>On Hand</th> -->
 														<!-- <th>Min Stock</th> -->
-														<th>Outstanding Total</th>
+														<!-- <th>Outstanding Total</th> -->
 													</tr>
 												</thead>
 												<tbody>
@@ -186,9 +186,9 @@
 														<td width="40%"></td>
 														<td><input type="text" class="form-control  qty" name="qty[]" id="qty" style="width:100%" autocomplete="off"></td>
 														<td></td>
-														<td></td>
 														<!-- <td></td> -->
-														<td></td>
+														<!-- <td></td> -->
+														<!-- <td></td> -->
 													</tr>
 												</tbody>
 											</table>
@@ -279,8 +279,9 @@
 				"3":"",
 				"4":`<input type="text" class="form-control qty" id="gr_qty_${count}" value="" style="width:100%" autocomplete="off">`,
 				"5":"",
-				"6":"",
-				"7":""
+				// "6":"",
+				// "7":"",
+				// "8":""
 				}).draw();
 				count++;
 

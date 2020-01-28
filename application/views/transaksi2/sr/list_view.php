@@ -154,10 +154,16 @@
                                 type: "post",
                                 data:{deleteArr: deleteidArr},
                                 success:function(res) {
-                                    // dataTable.ajax.reload();
-                                    location.reload(true);
-                                    getTable.row($(this).closest("tr")).remove().draw();
+                                    cek = JSON.parse(res);
+                                    if(!cek.data){
+                                        alert(cek.message);
+                                    }else{
+                                        location.reload(true);
+                                        getTable.row($(this).closest("tr")).remove().draw();
+                                    }
+                                    
                                 }
+                                
                             });
                         }
                     }
@@ -252,6 +258,7 @@
                     },
                     "columns": [
                         {"data":"id_stdstock_header", "className":"dt-center", render:function(data, type, row, meta){
+                            // console.log(row['dataInTo'])
                             rr=`<input type="checkbox" class="check_delete" id="chk_${data}" value="${data}" onclick="checkcheckbox();">`;
                             return rr;
                         }},

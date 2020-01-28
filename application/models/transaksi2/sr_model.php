@@ -194,6 +194,34 @@ class Sr_model extends CI_Model {
     }
 
     function stdstock_header_delete($id_stdstock_header){
+        $this->db->select('pr_no');
+        $this->db->from('t_stdstock_header');
+        $this->db->where('id_stdstock_header', $id_stdstock_header);
+        $query = $this->db->get();
+        $dataArr = $query->result_array();
+        if($dataArr[0]['pr_no'] != ''){
+            if($this->cekNoSRinTO($dataArr[0]['pr_no'])){
+                return FALSE;
+            }else{
+                if($this->stdstock_details_delete($id_stdstock_header)){
+                    $this->db->where('id_stdstock_header', $id_stdstock_header);
+                    if($this->db->delete('t_stdstock_header'))
+                        return TRUE;
+                    else
+                        return FALSE;
+                }
+
+            }
+        }else{
+            if($this->stdstock_details_delete($id_stdstock_header)){
+                $this->db->where('id_stdstock_header', $id_stdstock_header);
+                if($this->db->delete('t_stdstock_header'))
+                    return TRUE;
+                else
+                    return FALSE;
+            }
+        }
+
         if($this->stdstock_details_delete($id_stdstock_header)){
             $this->db->where('id_stdstock_header', $id_stdstock_header);
             if($this->db->delete('t_stdstock_header'))
@@ -232,5 +260,17 @@ class Sr_model extends CI_Model {
         $query = $this->db->get();
 
         return $query->result_array();
+    }
+
+    function cekNoSRinTO($srNo){
+        $this->db->from('t_gistonew_out_header');
+        $this->db->where('po_no',$srNo);
+        $this->db->where('status','2');
+        $query = $this->db->get();
+        if(($query)&&($query->num_rows() > 0))
+                return TRUE;
+            else
+                return FALSE;
+        // return $query->result_array();
     }
 }
