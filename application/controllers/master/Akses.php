@@ -5,6 +5,7 @@ class Akses extends CI_Controller
     public function __construct(){
         parent::__construct();
         $this->load->library('form_validation');
+        $this->load->library('auth');
         //load model
         if(!$this->auth->is_logged_in()) {
 			redirect(base_url());

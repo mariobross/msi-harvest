@@ -92,7 +92,7 @@ class Manajemen_model extends CI_Model{
         }
 
         $this->db->insert($this->_table, $this);
-        print_r($post) ;
+        // print_r($post) ;
     }
 
     function update(){

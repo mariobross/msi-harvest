@@ -61,23 +61,19 @@ class Sr_model extends CI_Model {
     function getDataMaterialGroup($item_group_code ='all'){
         $kd_plant = $this->session->userdata['ADMIN']['plant'];
         $trans_type = 'stdstock';
-        $this->db->distinct();
-        $this->db->select('m_item.MATNR,m_item.MAKTX,m_item.DISPO,m_item.UNIT,space(0) as DSNAM');
-        $this->db->select('(REPLACE(m_item.MATNR,REPEAT("0",(12)),SPACE(0))) AS MATNR1');
-        $this->db->from('m_item');
-        $this->db->join('m_map_item_trans','m_map_item_trans.MATNR = m_item.MATNR','inner');
-        $this->db->join('m_item_group','m_item_group.DISPO = m_item.DISPO','inner');
-        $this->db->where('transtype', $trans_type);
-        $this->db->where('m_item_group.kdplant', $kd_plant);
+        $SAP_MSI = $this->load->database('SAP_MSI', TRUE);
+        $SAP_MSI->select('t0.ItemCode as MATNR,t0.ItemName as MAKTX,t0.ItmsGrpCod as DISPO,t0.BuyUnitMsr as UNIT,t1.ItmsGrpNam as DSNAM');
+        $SAP_MSI->from('OITM  t0');
+        $SAP_MSI->join('oitb t1','t1.ItmsGrpCod = t0.ItmsGrpCod','inner');
         
         $this->db->limit(500);
         if($item_group_code !='all'){
-            $this->db->where('m_item_group.DSNAM', $item_group_code);
+            $SAP_MSI->where('t1.ItmsGrpNam', $item_group_code);
         }
 
-        $this->db->order_by('MATNR', 'desc');
+        $SAP_MSI->order_by('t0.ItemCode', 'desc');
 
-        $query = $this->db->get();
+        $query = $SAP_MSI->get();
         // echo $this->db->last_query();
         
         if(($query)&&($query->num_rows()>0))

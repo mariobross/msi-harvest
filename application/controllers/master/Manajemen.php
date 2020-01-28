@@ -4,10 +4,9 @@ class Manajemen extends CI_Controller
 {
     public function __construct(){
         parent::__construct();
-        $this->config->set_item('language', 'english');
+        // $this->config->set_item('language', 'english');
         $this->load->library('form_validation');
         $this->load->model('master/manajemen_model', 'manajemen_model');
-        
         //$this->lang->load('form_validation', $this->session->userdata('lang_name'));
         //$this->lang->load('g_form_validation', $this->session->userdata('lang_name'));
         
@@ -50,7 +49,7 @@ class Manajemen extends CI_Controller
         $manajemen = $this->manajemen_model;
         
         $validation = $this->form_validation;
-        
+
         $validation->set_rules('admin_username', 'Username', 'trim|required');
         $validation->set_rules('admin_realname', 'Nama Lengkap', 'trim|required');
         $validation->set_rules('admin_email', 'Admin Email', 'trim|valid_email|required');
