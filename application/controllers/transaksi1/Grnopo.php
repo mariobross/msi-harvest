@@ -98,13 +98,14 @@ class Grnopo extends CI_Controller{
     public function add()
     {
         # code...
-        $object['plant'] = 'WMSIRHBD'; 
-        $object['plant_name'] = 'Rmh Hamper Dago';
-        $object['storage_location'] = 'WMSIRHBD'; 
-        $object['storage_location_name'] = 'Rmh Hamper Dago';
-        $object['cost_center'] = 'MSI0132'; 
-        $object['cost_center_name'] = 'MSI OPERASIONAL';
+        $object['plant'] = $this->session->userdata['ADMIN']['plant']; 
+        $object['plant_name'] = $this->session->userdata['ADMIN']['plant_name'];
+        $object['storage_location'] = $this->session->userdata['ADMIN']['storage_location']; 
+        $object['storage_location_name'] = $this->session->userdata['ADMIN']['storage_location_name'];
+        $object['cost_center'] = $this->session->userdata['ADMIN']['cost_center']; 
+        $object['cost_center_name'] = $this->session->userdata['ADMIN']['cost_center_name'];
         $object['matrialGroup'] = $this->gnon_model->showMatrialGroup();
+
         $this->load->view('transaksi1/eksternal/grnopo/add_view', $object);
     }
 

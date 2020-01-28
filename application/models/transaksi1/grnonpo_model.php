@@ -3,7 +3,7 @@
 class Grnonpo_model extends CI_Model {
 
     public function getDataGrNonPo_Header($fromDate='', $toDate='', $status=''){
-        $kd_plant = 'WMSIRHBD';
+        $kd_plant = $this->session->userdata['ADMIN']['plant'];
         $this->db->from('t_grnonpo_header');
         $this->db->where('plant',$kd_plant);
 
@@ -55,7 +55,7 @@ class Grnonpo_model extends CI_Model {
     }
 
     function sap_item_groups_select_all_grnonpo() {
-        $kd_plant = 'WMSIRHBD';
+        $kd_plant = $this->session->userdata['ADMIN']['plant'];
         $trans_type = 'grnonpo';
         $this->db->select('m_item.*,DSNAM');
         $this->db->select('(REPLACE(m_item.MATNR,REPEAT("0",(12)),SPACE(0))) AS MATNR1');
@@ -76,8 +76,7 @@ class Grnonpo_model extends CI_Model {
     }
     
     function sap_items_select_by_item_group($item_group, $trans_type) {
-        // $kd_plant = $this->session->userdata['ADMIN']['plant'];
-        $kd_plant = 'WMSIRHBD';
+        $kd_plant = $this->session->userdata['ADMIN']['plant'];
 		$this->db->select('MAKTX,m_item.MATNR,MEINS,UNIT');
      	$this->db->select('(REPLACE(m_item.MATNR,REPEAT("0",(12)),SPACE(0))) AS MATNR1, SPACE(1) AS DistNumber');
 		$this->db->from('m_item');
@@ -98,7 +97,7 @@ class Grnonpo_model extends CI_Model {
     
     function getDataMaterialGroupSelect($itemSelect){
         $trans_type = 'stdstock';
-        $kd_plant = 'WMSIRHBD';
+        $kd_plant = $this->session->userdata['ADMIN']['plant'];
         if(($itemSelect != '') || ($itemSelect != null)){
             $this->db->select('m_item.MATNR,m_item.MAKTX,m_item.DISPO,m_item.UNIT,space(0) as DSNAM');
             $this->db->select('(REPLACE(m_item.MATNR,REPEAT("0",(12)),SPACE(0))) AS MATNR1');
@@ -183,7 +182,7 @@ class Grnonpo_model extends CI_Model {
     }
 
     public function sap_do_select_all($kd_plant="",$do_no="",$do_item=""){
-        $kd_plant = 'WMSIRHBD';
+        $kd_plant = $this->session->userdata['ADMIN']['plant'];
         $SAP_MSI = $this->load->database('SAP_MSI', TRUE);
 
         $SAP_MSI->select('U_TransFor');
@@ -328,8 +327,7 @@ class Grnonpo_model extends CI_Model {
 	}
   
     function sap_item_groups_select_all() {
-        // $kd_plant = $this->session->userdata['ADMIN']['plant'];
-        $kd_plant = 'WMSIRHBD';
+        $kd_plant = $this->session->userdata['ADMIN']['plant'];
         $this->db->from('m_item_group');
         $this->db->where('kdplant', $kd_plant);
 
@@ -360,7 +358,7 @@ class Grnonpo_model extends CI_Model {
     }
 
     function getDataMaterialGroup($item_group_code ='all'){
-        $kd_plant = 'WMSIRHBD';
+        $kd_plant = $this->session->userdata['ADMIN']['plant'];
         $trans_type = 'grnonpo';
         $this->db->distinct();
         $this->db->select('m_item.MATNR,m_item.MAKTX,m_item.DISPO,m_item.UNIT,m_item_group.DSNAM');

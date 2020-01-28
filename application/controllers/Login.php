@@ -58,6 +58,7 @@ class Login extends CI_Controller {
 							$userdata['logged_in'] = TRUE;
 							$userdata['password'] = $password; 
 							$userdata['startup'] = 1; 
+							$userdata['lang_name'] = 'indonesian';
 
 							$this->session->set_userdata($userdata);
 							
@@ -131,6 +132,7 @@ class Login extends CI_Controller {
 							$userdata['logged_in'] = TRUE;
 							$userdata['password'] = $password; 
 							$userdata['startup'] = 1;
+							$userdata['lang_name'] = 'indonesian';
 							$this->session->set_userdata($userdata);
 						
 						}

@@ -55,7 +55,7 @@
                                         <td>
                                             <?php if( ($perm_group['group_id'] == 1) || ($perm_group['group_id'] == 2) ) : echo ''; else : ?>
                                                 <a href="#header[<?=$i;?>]" onclick="toggle_visibility('detail[<?=$i;?>]');">
-                                                    <img src="<?=base_url();?>files/assets/images/arrow_down.png" title="<?=$this->lang->line('show_detail');?>" alt="<?=$this->lang->line('show_detail');?>" width="15" />
+                                                <i class='icon-arrow-down5'></i>
                                                 </a>
                                                 <?php endif; ?> 
                                                 <?=$perm_group['group_name'];?>
@@ -67,9 +67,8 @@
                                                 
                                                 ?>
                                                 <a href="#header[<?=$i;?>]" onclick="toggle_visibility('admins[<?=$i;?>]');">
-
-							                        <img src="<?=base_url();?>files/assets/images/arrow_down.png" title="<?=$this->lang->line('show_detail');?>" alt="<?=$this->lang->line('show_detail');?>" width="15" />
-
+                                                    <!-- <img src="<?=base_url();?>files/assets/images/arrow_down.png" title="<?=$this->lang->line('show_detail');?>" alt="<?=$this->lang->line('show_detail');?>" width="15" /> -->
+                                                    <i class='icon-arrow-down5' title='<?=$this->lang->line('show_detail');?>'></i>
                                                 </a>
 
                                                 <span id="admins[<?=$i;?>]" style="display:none">
@@ -104,7 +103,9 @@
                                                     
                                                     ?>
                                                     <a href="<?php echo base_url(); ?>master/akses/edit/<?php echo $perm_group['group_id']; ?>">
-                                                        <img src="<?=base_url();?>files/assets/images/view.png" title="<?=$this->lang->line('view');?>" height="20" width="20" />
+
+                                                        <i class='icon-file-plus2' title='<?=$this->lang->line('view');?>'></i>
+                                                        
                                                     </a>
                                                     <?php
                                                 }
@@ -114,7 +115,9 @@
                                             ?>
 
                                                     <a href="#header[<?=($i-1);?>]" onClick='confirm_perm_group_delete("<?=site_url('master/akses/delete/'.$perm_group['group_id']);?>", "<?=$perm_group['group_name'];?>")'>
-                                                        <img src="<?=base_url();?>files/assets/images/delete.png" title="<?=$this->lang->line('delete');?>" height="20" width="20" />
+                                                        <!-- <img src="<?=base_url();?>files/assets/images/delete.png" title="<?=$this->lang->line('delete');?>" height="20" width="20" /> -->
+
+                                                        <i class='icon-cross2' title='<?=$this->lang->line('view');?>'></i>
                                                     </a>
                                                 
                                                 <?php	
