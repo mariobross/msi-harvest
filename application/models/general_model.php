@@ -89,19 +89,16 @@ class General_Model extends CI_Model{
 			  $this->db->where('a.COMP_CODE = b.id_jenisoutlet');
 			}
 			$query = $this->db->get();
+			$plant_result=array();
 
 			if(($query)&&($query->num_rows() > 0)) {
 				$plants = $query->result_array();
-				$plant_result = $plants;
+				return $plants[0];
 			 } else {
-				$plant_result = FALSE;
+				return FALSE;
 			 }
 
-			if (count($plant_result) > 0) {
-				return $plant_result[0];
-			} else {
-				return FALSE;
-			}
+			
 		} else return FALSE;
     }
 	

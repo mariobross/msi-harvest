@@ -64,9 +64,10 @@ class Sr_model extends CI_Model {
         $SAP_MSI = $this->load->database('SAP_MSI', TRUE);
         $SAP_MSI->select('t0.ItemCode as MATNR,t0.ItemName as MAKTX,t0.ItmsGrpCod as DISPO,t0.BuyUnitMsr as UNIT,t1.ItmsGrpNam as DSNAM');
         $SAP_MSI->from('OITM  t0');
+        $SAP_MSI->where('validFor', 'Y');
+        $SAP_MSI->where('InvntItem', 'Y');
         $SAP_MSI->join('oitb t1','t1.ItmsGrpCod = t0.ItmsGrpCod','inner');
-        
-        $this->db->limit(500);
+
         if($item_group_code !='all'){
             $SAP_MSI->where('t1.ItmsGrpNam', $item_group_code);
         }
@@ -74,7 +75,8 @@ class Sr_model extends CI_Model {
         $SAP_MSI->order_by('t0.ItemCode', 'desc');
 
         $query = $SAP_MSI->get();
-        // echo $this->db->last_query();
+        // echo $SAP_MSI->last_query();
+        // die();
         
         if(($query)&&($query->num_rows()>0))
             return $query->result_array();
@@ -84,18 +86,18 @@ class Sr_model extends CI_Model {
 
     function getDataMaterialGroupSelect($itemSelect){
         $kd_plant = $this->session->userdata['ADMIN']['plant'];
+        $SAP_MSI = $this->load->database('SAP_MSI', TRUE);
         if(($itemSelect != '') || ($itemSelect != null)){
-            $this->db->select('m_item.MATNR,m_item.MAKTX,m_item.DISPO,m_item.UNIT,space(0) as DSNAM');
-            $this->db->select('(REPLACE(m_item.MATNR,REPEAT("0",(12)),SPACE(0))) AS MATNR1');
-            $this->db->from('m_item');
-            $this->db->join('m_map_item_trans','m_map_item_trans.MATNR = m_item.MATNR','inner');
-            $this->db->join('m_item_group','m_item_group.DISPO = m_item.DISPO','inner');
-            $this->db->where('transtype', 'stdstock');
-            $this->db->where('m_item_group.kdplant',$kd_plant);
-            $this->db->where('m_item.MATNR',$itemSelect);
+            
+            $SAP_MSI->select('t0.ItemCode as MATNR,t0.ItemName as MAKTX,t0.ItmsGrpCod as DISPO,t0.BuyUnitMsr as UNIT,t1.ItmsGrpNam as DSNAM');
+            $SAP_MSI->from('OITM  t0');
+            $SAP_MSI->where('validFor', 'Y');
+            $SAP_MSI->where('InvntItem', 'Y'); 
+            $SAP_MSI->where('ItemCode', $itemSelect);
+            $SAP_MSI->join('oitb t1','t1.ItmsGrpCod = t0.ItmsGrpCod','inner');
 
             // $this->db->limit(10000);
-            $query = $this->db->get();
+            $query = $SAP_MSI->get();
             return $query->result_array();
         }else{
             return false;

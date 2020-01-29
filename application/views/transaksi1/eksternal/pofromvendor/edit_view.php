@@ -92,21 +92,21 @@
 											<div class="form-group row">
 												<label class="col-lg-3 col-form-label">Outlet</label>
 												<div class="col-lg-9">
-													<input type="text" class="form-control" readonly="" value="WMSICKST - Tajur" id="grpo_no" nama="grpo_no">
+													<input type="text" class="form-control" readonly="" value="<?= $plant ?>" id="grpo_no" nama="grpo_no">
 												</div>
 											</div>
 											
 											<div class="form-group row">
 												<label class="col-lg-3 col-form-label">Storage Location</label>
 												<div class="col-lg-9">
-													<input type="text" class="form-control" placeholder="Outlet" readonly="" value="WMSICKST - MSI Tajur">
+													<input type="text" class="form-control" readonly="" value="<?= $storage_location ?>">
 												</div>
 											</div>
 											
 											<div class="form-group row">
 												<label class="col-lg-3 col-form-label">Status</label>
 												<div class="col-lg-9">
-													<input type="text" class="form-control" placeholder="Outlet" readonly="" value="<?= $grpo_header['status_string']?>">
+													<input type="text" class="form-control" readonly="" value="<?= $grpo_header['status_string']?>">
 												</div>
 											</div>
 											

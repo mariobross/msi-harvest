@@ -319,7 +319,23 @@
 			$("#form2").css('display', '');
 		}
 
+		// function getAddMaterial(count){
+		// 	let dataMaterialLocal = JSON.parse(localStorage.getItem('tmpDataMaterial'));
+		// 	const select = $('#selectDetailMatrial');
+		// 	// let getTable = $("#tblWhole").DataTable();
+		// 	// let count = getTable.rows().count() + 1;
+		// 	// let select = $('.dt_'+count);
+		// 	console.log(select);
+		// 	dataMaterialLocal.forEach((val)=>{
+		// 		// console.log(val.MATNR);
+		// 		// $("<option />", {value:val.MATNR, text:val.MAKTX +' - '+ val.MATNR+' - '+val.UNIT	}).appendTo(select);
+		// 		select.append(`<option>test</option>`);
+		// 	})
+
+		// }
+
 		function showMatrialDetailData(requestReason='', matrialGroup='', requestToOutlet='', select){
+			console.log(select);
 			$.ajax({
 				url: "<?php echo site_url('transaksi2/sr/getdataDetailMaterial');?>",
 				type: "POST",
@@ -330,8 +346,9 @@
 				},
 				success:function(res) {
 					optData = JSON.parse(res);
-					optData.forEach((val)=>{
-						// console.log(val.MATNR);
+					localStorage.setItem('tmpDataMaterial', JSON.stringify(optData));
+					
+					optData.forEach((val)=>{						
 						$("<option />", {value:val.MATNR, text:val.MAKTX +' - '+ val.MATNR+' - '+val.UNIT	}).appendTo(select);
 					})
 				}
