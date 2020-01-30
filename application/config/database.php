@@ -78,7 +78,7 @@ $db['default'] = array(
 	'hostname' => 'localhost',
 	'username' => 'root',
 	'password' => '',
-	'database' => 'test_msi_20191223',
+	'database' => 'msi_add_on_20190924',
 	'dbdriver' => 'mysqli',
 	'dbprefix' => '',
 	'pconnect' => FALSE,
@@ -96,10 +96,10 @@ $db['default'] = array(
 );
 
 $db['SAP_MSI'] = array(
-	'hostname' => '192.168.0.23',
-	'username' => 'YBCDeveloper',
-	'password' => 'ybc@123',
-	'database' => 'Staging_MSI_20191024',
+	'hostname' => 'DESKTOP-IF704SH',
+	'username' => 'sa',
+	'password' => '1234',
+	'database' => 'Staging_MSI',
 	'dbdriver' => 'sqlsrv',
 	'dbprefix' => '',
 	'pconnect' => FALSE,
