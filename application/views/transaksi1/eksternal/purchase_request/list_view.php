@@ -10,52 +10,62 @@
 			<div class="content-wrapper">
                 <!-- <?php  $this->load->view("_template/breadcrumb.php")?> -->
 				<div class="content">
+                    <?php if ($this->session->flashdata('success')): ?>
+						<div class="alert alert-success" role="alert">
+							<?php echo $this->session->flashdata('success'); ?>
+						</div>
+					<?php endif; ?>
+					<?php if ($this->session->flashdata('failed')): ?>
+						<div class="alert alert-danger" role="alert">
+							<?php echo $this->session->flashdata('failed'); ?>
+						</div>
+					<?php endif; ?>
                     <div class="card">
                         <div class="card-header">
                             <legend class="font-weight-semibold"><i class="icon-search4 mr-2"></i>Search of Purchase Request (PR)</legend>  
                         </div>
                         <div class="card-body">
                         <form action="#" method="POST">
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <div class="form-group row">
-                                        <label class="col-lg-3 col-form-label">Dari Tanggal</label>
-                                        <div class="col-lg-3 input-group date">
-                                            <input type="text" class="form-control" id="fromDate">
-                                            <div class="input-group-prepend">
-                                                <span class="input-group-text" id="basic-addon1">
-                                                    <i class="icon-calendar"></i>
-                                                </span>
-                                            </div>
-                                        </div>
-                                        <label class="col-lg-2 col-form-label">Sampai Tanggal</label>
-                                        <div class="col-lg-4 input-group date">
-                                            <input type="text" class="form-control" id="toDate">
-                                            <div class="input-group-prepend">
-                                                <span class="input-group-text" id="basic-addon1">
-                                                    <i class="icon-calendar"></i>
-                                                </span>
-                                            </div>
-                                        </div>
-                                    </div>
+                        <div class="row">
+									<div class="col-md-12">
+										<div class="form-group row">
+											<label class="col-lg-3 col-form-label">Dari Tanggal</label>
+											<div class="col-lg-3 input-group date">
+												<input type="text" class="form-control" id="fromDate" autocomplete="off">
+												<div class="input-group-prepend">
+													<span class="input-group-text" id="basic-addon1">
+														<i class="icon-calendar"></i>
+													</span>
+												</div>
+											</div>
+											<label class="col-lg-2 col-form-label">Sampai Tanggal</label>
+											<div class="col-lg-4 input-group date">
+												<input type="text" class="form-control" id="toDate" autocomplete="off">
+												<div class="input-group-prepend">
+													<span class="input-group-text" id="basic-addon1">
+														<i class="icon-calendar"></i>
+													</span>
+												</div>
+											</div>
+										</div>
 
 
-                                    <div class="form-group row">
-                                        <label class="col-lg-3 col-form-label">Status</label>
-                                        <div class="col-lg-9">
-                                            <select class="form-control form-control-select2" data-live-search="true">
-                                                <option value="">none selected</option>
-                                                <option value="approved">Approved</option>
-                                                <option value="notapproved">Not Approved</option>
-                                            </select>
-                                        </div>
-                                    </div>
+										<div class="form-group row">
+											<label class="col-lg-3 col-form-label">Status</label>
+											<div class="col-lg-9">
+												<select class="form-control form-control-select2" data-live-search="true" id="status" name="status" >
+													<option value="">--- All ---</option>
+													<option value="2">Approved</option>
+													<option value="1">Not Approved</option>
+												</select>
+											</div>
+										</div>
 
-                                    <div class="text-right">
-                                        <button type="submit" class="btn btn-primary">Search<i class="icon-search4  ml-2"></i></button>
-                                    </div>
-                                </div>
-                            </div>
+										<div class="text-right">
+											<button type="button" class="btn btn-primary" onclick="onSearch()">Search<i class="icon-search4  ml-2"></i></button>
+										</div>
+									</div>
+								</div>
                         </form>
                         </div>                        
                     </div> 
@@ -105,42 +115,7 @@
                 $('#fromDate').datepicker();
                 $('#toDate').datepicker();
 
-                dataTable = $('#tableWhole').DataTable({
-                    "ordering":false,  "paging": true, "searching":true,
-                    "ajax": {
-                        "url":"<?php echo site_url('transaksi1/purchase_request/showAllData');?>",
-                        "type":"POST"
-                    },
-                    "columns": [
-                        {"data":"no", "className":"dt-center", render:function(data, type, row, meta){
-                            rr=`<input type="checkbox" class="check_delete" id="chk_${data}" value="${data}" onclick="checkcheckbox();">`;
-                            return rr;
-                        }},
-                        {"data":"action", "className":"dt-center", render:function(data, type, row, meta){
-                            rr = `<div style="width:100px">
-                                        <a href='<?php echo site_url('transaksi1/purchase_request/edit')?>' ><i class='icon-file-plus2' title="Edit"></i></a>&nbsp;
-                                        <a href='#' ><i class='icon-printer' title="Print"></i></a>&nbsp;
-                                        <a onClick="deleteConfirm('<?php echo site_url('transaksi1/purchase_request/delete')?>')" href="#!"><i class='icon-cross2' title="Delete"></i></a>
-                                    </div>`;
-                                        return rr;
-                        }},
-                        {"data":"id"},
-                        {"data":"item_no"},
-                        {"data":"item_description"},
-                        {"data":"posting_date"},
-                        {"data":"status"},
-                        {"data":"created_by"},
-                        {"data":"approved_by"},
-                        {"data":"last_modified"},
-                        {"data":"receipt_number"},
-                        {"data":"issue_number", "className":"dt-center", render:function(data, type, row, meta){
-                            rr = `<a href='#' ><i class='icon-printer' title="Print"></i></a>`;
-                            return rr;
-                        }},
-                        {"data":"issue_number"},
-                        {"data":"log"}
-                    ]
-                });
+                showListData();
 
                 // untuk check all
                 $("#checkall").click(function(){
@@ -201,7 +176,82 @@
 	                $('#deleteModal').modal();
                 }
 
+                printPdf = (data)=>{
+                    uri = "<?php echo site_url('transaksi1/purchase_request/printpdf/')?>"+data
+                    window.open(uri);
+
+                }
+
+                printPdfPO = (data)=>{
+                    uri = "<?php echo site_url('transaksi1/purchase_request/printpdfPO/')?>"+data
+                    window.open(uri);
+
+                }
+
             });
+
+            function onSearch(){
+                const fromDate = $('#fromDate').val();
+                const toDate = $('#toDate').val();
+                const status = $('#status').val();
+
+                showListData();
+            }
+
+            function showListData(){
+                const obj = $('#tableWhole tbody tr').length;
+
+                if(obj > 0){
+                    const dataTable = $('#tableWhole').DataTable();
+                    dataTable.destroy();
+                    $('#tableWhole > tbody > tr').remove();
+                    
+                }
+
+                const fromDate = $('#fromDate').val();
+                const toDate = $('#toDate').val();
+                const status = $('#status').val();
+
+                dataTable = $('#tableWhole').DataTable({
+                    "ordering":false,  "paging": true, "searching":true,
+                    "ajax": {
+                        "url":"<?php echo site_url('transaksi1/purchase_request/showAllData');?>",
+                        "type":"POST",
+                        "data":{fDate: fromDate, tDate: toDate, stts: status}
+                    },
+                    "columns": [
+                        {"data":"id_pr_header", "className":"dt-center", render:function(data, type, row, meta){
+                            rr=`<input type="checkbox" class="check_delete" id="chk_${data}" value="${data}" onclick="checkcheckbox();">`;
+                            return rr;
+                        }},
+                        {"data":"id_pr_header", "className":"dt-center", render:function(data, type, row, meta){
+                            rr = `<div style="width:100px">
+										<a href='<?php echo site_url('transaksi1/purchase_request/excel/')?>${data}' ><i class='icon-file-excel' title="Excel"></i></a>&nbsp;
+										<a onClick="printPdf(${data})" href="#" ><i class='icon-printer' title="Print"></i></a>&nbsp;
+                                        <a href='<?php echo site_url('transaksi1/purchase_request/edit/')?>${data}' ><i class='icon-file-plus2' title="Edit"></i></a>&nbsp;
+                                    </div>`;
+                                        return rr;
+                        }},
+                        {"data":"id_pr_header"},
+                        {"data":"pr_no", "className":"dt-center"},
+                        {"data":"created_date"},
+                        {"data":"delivery_date"},
+                        {"data":"request_reason"},
+                        {"data":"status"},
+                        {"data":"created_by"},
+                        {"data":"approved_by"},
+                        {"data":"last_modified"},
+                        {"data":"id_pr_header", "className":"dt-center", render:function(data, type, row, meta){
+                            rr = `<div style="width:100px">
+									<a onClick="printPdfPO(${data})" href="#" ><i class='icon-printer' title="Print PO"></i></a>
+                                </div>`;
+                            return rr;
+                        }},
+                        {"data":"po"},
+                        {"data":"back"}
+                    ]
+                });
+            }
         
         </script>
 	</body>
