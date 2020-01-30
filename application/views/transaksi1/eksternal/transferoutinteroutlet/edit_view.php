@@ -336,11 +336,6 @@
 					return false;
 				}
 
-				if($('.qty').val() > $('.whsQty').val()){
-					alert('Quatity Tidak boleh lebih besar dari Quantity Gudang');
-					return false;
-				}
-
 				const id_gistonew_out_header = $('#id_gistonew_out_header').val();
 				const srEntry = $('#srEntry').val();
 				const approve = id_approve;
@@ -357,7 +352,10 @@
 				let validasi = true;
 				tbodyTable.find('tr').each(function(i,el){
 					let td = $(this).find('td');
-					if(parseInt(td.eq(6).find('input').val(),10) > parseInt(td.eq(4).text(),10)){
+					console.log(parseInt(td.eq(5).text(),10));
+					console.log(parseInt(td.eq(6).find('input').val(),10));
+					console.log('test');
+					if(parseInt(td.eq(6).find('input').val(),10) > parseInt(td.eq(5).text(),10)){
 							validasi = false;
 					}
 
@@ -370,7 +368,7 @@
 				})
 
 				if(!validasi){
-					alert('Quatity Tidak boleh lebih besar dari Quantity Gudang');
+					alert('Quatity Tidak boleh lebih besar dari Outstanding Quantity');
 					return false;
 				}
 				

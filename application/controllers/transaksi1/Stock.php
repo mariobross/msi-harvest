@@ -7,6 +7,10 @@ class Stock extends CI_Controller{
         # code...
         parent::__construct();
 
+        $this->load->library('auth');  
+		if(!$this->auth->is_logged_in()) {
+			redirect(base_url());
+        }
         // load model
         // $this->load->model("");
         $this->load->library('form_validation');

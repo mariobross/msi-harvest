@@ -8,12 +8,12 @@ class Auth {
 	{
 		$this->CI =& get_instance();
 		$this->CI->load->model('master/permission_model', 'm_perm');
-		$this->CI->lang->load('g_perm', $this->CI->session->userdata('lang_name'));
+		//$this->CI->lang->load('g_perm', $this->CI->session->userdata('lang_name'));
 		
 	}
 	
 	function is_logged_in() {
-
+		
 		if ($this->CI->session) {
 
 			if ($this->CI->session->userdata('logged_in')){

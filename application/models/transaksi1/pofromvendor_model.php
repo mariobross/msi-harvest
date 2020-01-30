@@ -3,9 +3,10 @@
 class Pofromvendor_model extends CI_Model {
 
   public function getDataPoVendor_Header($fromDate='', $toDate='', $status=''){
+    $kd_plant = $this->session->userdata['ADMIN']['plant'];
       $this->db->from('t_grpo_header');
       $this->db->join('m_outlet', 'm_outlet.OUTLET = t_grpo_header.plant');
-      $this->db->where('plant','WMSIMBST');
+      $this->db->where('plant', $kd_plant);
       if((!empty($fromDate)) || (!empty($toDate))){
           if( (!empty($fromDate)) || (!empty($toDate)) ) {
           $this->db->where("posting_date BETWEEN '$fromDate' AND '$toDate'");
@@ -30,6 +31,7 @@ class Pofromvendor_model extends CI_Model {
   public function sap_grpo_headers_select_by_kd_vendor($kd_vendor="",$kd_plant="",$po_no="",$po_item="")
   {
     # code...
+    $kd_plant = $this->session->userdata['ADMIN']['plant'];
     $SAP_MSI = $this->load->database('SAP_MSI', TRUE);
     
     $SAP_MSI->select('POR1.DocEntry as EBELN,LineNum as EBELP,OPOR.CardCode as VENDOR, OPOR.CardName as VENDOR_NAME,
@@ -40,20 +42,24 @@ class Pofromvendor_model extends CI_Model {
     $SAP_MSI->join('OPOR','POR1.DocEntry = OPOR.DocEntry');
     $SAP_MSI->join('OITM','POR1.ItemCode = OITM.ItemCode');
     $SAP_MSI->join('NNM1','OPOR.Series = NNM1.Series');
-    $SAP_MSI->where('WhsCode','WMSIMBST');
+    $SAP_MSI->where('WhsCode',$kd_plant);
+    $SAP_MSI->where('OPOR.DocStatus' ,'O');
+    $SAP_MSI->where('POR1.TrgetEntry is NULL', NULL, TRUE);
     // $SAP_MSI->where('BSTMG >',0);
     
     if(!empty($po_no)) {
-        $SAP_MSI->where('EBELN',$po_no);
+        $SAP_MSI->where('POR1.DocEntry',$po_no);
     }
     if(!empty($po_item)) {
-        $SAP_MSI->where('EBELP',$po_item);
+        $SAP_MSI->where('LineNum',$po_item);
     }
     if(empty($po_no)&&empty($po_item)) {
     }
 
+    $SAP_MSI->order_by('DOCNUM', 'desc');
     $query = $SAP_MSI->get();
     // echo $SAP_MSI->last_query();
+    // die();
 
     if(($query)&&($query->num_rows() > 0)) {
         $pos = $query->result_array();
@@ -98,9 +104,9 @@ class Pofromvendor_model extends CI_Model {
   
   function sap_item_groups_select_all() {
   
-    // $kd_plant = $this->session->userdata['ADMIN']['plant'];
+    $kd_plant = $this->session->userdata['ADMIN']['plant'];
     $this->db->from('m_item_group');
-        $this->db->where('kdplant', 'WMSIMBST');
+        $this->db->where('kdplant', $kd_plant);
 
     $query = $this->db->get();
     if(($query)&&($query->num_rows() > 0)) {
@@ -169,10 +175,10 @@ class Pofromvendor_model extends CI_Model {
   }
 
   function posting_date_select_max() {
-    // $id_outlet = $this->session->userdata['ADMIN']['plant'];
+    $kd_plant = $this->session->userdata['ADMIN']['plant'];
     $this->db->select_max('posting_date');
     $this->db->from('t_posinc_header');
-    $this->db->where('plant', 'WMSIMBST');
+    $this->db->where('plant', $kd_plant);
     $this->db->where('status', 2);
   //		$this->db->where('waste_no is not null AND waste_no <> "" ');
 

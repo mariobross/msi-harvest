@@ -6,6 +6,10 @@ class Pofromvendor extends CI_Controller
 
     public function __construct(){
         parent::__construct();
+        $this->load->library('auth');  
+		if(!$this->auth->is_logged_in()) {
+			redirect(base_url());
+        }
         $this->load->helper(array('form', 'url'));
         $this->load->library('form_validation');
         $this->load->library('l_general');
@@ -31,6 +35,9 @@ class Pofromvendor extends CI_Controller
         } 
         // print_r($data['po_nos']);
         // die();
+        $object['plant'] = $this->session->userdata['ADMIN']['plant'].' - '.$this->session->userdata['ADMIN']['plant_name'];
+        $object['storage_location'] = $this->session->userdata['ADMIN']['storage_location'].' - '.$this->session->userdata['ADMIN']['storage_location_name'];
+        
 
         $this->load->view('transaksi1/eksternal/pofromvendor/add_new',$object);
     }
@@ -87,6 +94,8 @@ class Pofromvendor extends CI_Controller
         $object['grpo_header']['grpo_no'] = $object['data']['grpo_no'];
         $object['grpo_header']['posting_date'] = $object['data']['posting_date'];
         $object['grpo_header']['status'] = $object['data']['status'];
+        $object['plant'] = $this->session->userdata['ADMIN']['plant'].' - '.$this->session->userdata['ADMIN']['plant_name'];
+        $object['storage_location'] = $this->session->userdata['ADMIN']['storage_location'].' - '.$this->session->userdata['ADMIN']['storage_location_name'];
         
         // print_r($object['data']);
         $this->load->view('transaksi1/eksternal/pofromvendor/edit_view', $object);
@@ -191,20 +200,26 @@ class Pofromvendor extends CI_Controller
     }
 
     public function addData(){
+        $plant = $this->session->userdata['ADMIN']['plant'];
+        $storage_location = $this->session->userdata['ADMIN']['storage_location'];
+        $plant_name = $this->session->userdata['ADMIN']['plant_name'];
+        $storage_location_name = $this->session->userdata['ADMIN']['storage_location_name'];
+        $admin_id = $this->session->userdata['ADMIN']['admin_id'];
+
         $grpo_header['po_no'] = $this->input->post('poNo');
         $grpo_header['grpo_no'] = '';
         $grpo_header['kd_vendor'] = $this->input->post('kd_vendor');
         $grpo_header['delivery_date'] = $this->l_general->str_to_date_clone($this->input->post('delivery_date'));
         $grpo_header['nm_vendor'] = $this->input->post('nm_vendor');
         $grpo_header['docnum'] = $this->input->post('docnum');
-        $grpo_header['plant'] = 'WMSIMBST';
-        $grpo_header['storage_location'] = 'WMSIMBST';
+        $grpo_header['plant'] = $plant;
+        $grpo_header['storage_location'] = $storage_location;
         $grpo_header['posting_date'] = $this->l_general->str_to_date($this->input->post('posting_date'));
         $grpo_header['id_grpo_plant'] = $this->povendor->id_grpo_plant_new_select($grpo_header['plant'],$grpo_header['posting_date']);
         $grpo_header['status'] = $this->input->post('app') == "2" ? "2" : $this->input->post('status');
-        $grpo_header['id_user_approved'] = $this->input->post('app') ? '2392' : '0';
+        $grpo_header['id_user_approved'] = $this->input->post('app') ? $admin_id : '0';
         $grpo_header['item_group_code'] = $this->input->post('item_group_code');
-        $grpo_header['id_user_input'] = '2392';
+        $grpo_header['id_user_input'] = $admin_id;
 
         $web_trans_id = $this->l_general->_get_web_trans_id($grpo_header['plant'],$grpo_header['posting_date'],$grpo_header['id_grpo_plant'],'01');
 

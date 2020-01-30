@@ -116,7 +116,7 @@
                                             <div class="form-group row">
                                                 <label class="col-lg-3 col-form-label">Delivery Date</label>
                                                 <div class="col-lg-9 input-group date">
-                                                    <input type="text" class="form-control" id="deliveDate">
+                                                    <input type="text" class="form-control" id="deliveDate" readonly="">
                                                     <div class="input-group-prepend">
                                                         <span class="input-group-text" id="basic-addon1">
                                                             <i class="icon-calendar"></i>
@@ -127,7 +127,7 @@
                                             <div class="form-group row">
                                                 <label class="col-lg-3 col-form-label">Created Date</label>
                                                 <div class="col-lg-9 input-group date">
-                                                    <input type="text" class="form-control" id="createdDate">
+                                                    <input type="text" class="form-control" id="createdDate" readonly="">
                                                     <div class="input-group-prepend">
                                                         <span class="input-group-text" id="basic-addon1">
                                                             <i class="icon-calendar"></i>
@@ -169,9 +169,9 @@
 														<th>Material Desc</th>
 														<th>Quantity</th>
 														<th>UOM</th>
-														<th>On Hand</th>
-														<th>Min Stock</th>
-														<th>Outstanding Total</th>
+														<!-- <th>On Hand</th> -->
+														<!-- <th>Min Stock</th> -->
+														<!-- <th>Outstanding Total</th> -->
 													</tr>
 												</thead>
 												<tbody>
@@ -184,11 +184,11 @@
 															</select>
 														</td>
 														<td width="40%"></td>
-														<td><input type="text" class="form-control  qty" name="qty[]" id="qty" style="width:100%"></td>
+														<td><input type="text" class="form-control  qty" name="qty[]" id="qty" style="width:100%" autocomplete="off"></td>
 														<td></td>
-														<td></td>
-														<td></td>
-														<td></td>
+														<!-- <td></td> -->
+														<!-- <td></td> -->
+														<!-- <td></td> -->
 													</tr>
 												</tbody>
 											</table>
@@ -252,10 +252,10 @@
 				autoclose: true
 			};
 			$('#createdDate').datepicker(optSimple);
-			$('#createdDate').datepicker( 'setDate', today );
+			$('#createdDate').datepicker();
 
 			$('#deliveDate').datepicker(optSimple);
-			$('#deliveDate').datepicker( 'setDate', today );
+			$('#deliveDate').datepicker();
 		});
 
 		function onAddrow(){
@@ -277,11 +277,11 @@
 								${showMatrialDetailData(requestReason, matrialGroup, requestToOutlet, elementSelect)}
 							</select>`,
 				"3":"",
-				"4":`<input type="text" class="form-control qty" id="gr_qty_${count}" value="" style="width:100%">`,
+				"4":`<input type="text" class="form-control qty" id="gr_qty_${count}" value="" style="width:100%" autocomplete="off">`,
 				"5":"",
-				"6":"",
-				"7":"",
-				"8":""
+				// "6":"",
+				// "7":"",
+				// "8":""
 				}).draw();
 				count++;
 
@@ -319,7 +319,23 @@
 			$("#form2").css('display', '');
 		}
 
+		// function getAddMaterial(count){
+		// 	let dataMaterialLocal = JSON.parse(localStorage.getItem('tmpDataMaterial'));
+		// 	const select = $('#selectDetailMatrial');
+		// 	// let getTable = $("#tblWhole").DataTable();
+		// 	// let count = getTable.rows().count() + 1;
+		// 	// let select = $('.dt_'+count);
+		// 	console.log(select);
+		// 	dataMaterialLocal.forEach((val)=>{
+		// 		// console.log(val.MATNR);
+		// 		// $("<option />", {value:val.MATNR, text:val.MAKTX +' - '+ val.MATNR+' - '+val.UNIT	}).appendTo(select);
+		// 		select.append(`<option>test</option>`);
+		// 	})
+
+		// }
+
 		function showMatrialDetailData(requestReason='', matrialGroup='', requestToOutlet='', select){
+			console.log(select);
 			$.ajax({
 				url: "<?php echo site_url('transaksi2/sr/getdataDetailMaterial');?>",
 				type: "POST",
@@ -330,8 +346,9 @@
 				},
 				success:function(res) {
 					optData = JSON.parse(res);
-					optData.forEach((val)=>{
-						// console.log(val.MATNR);
+					localStorage.setItem('tmpDataMaterial', JSON.stringify(optData));
+					
+					optData.forEach((val)=>{						
 						$("<option />", {value:val.MATNR, text:val.MAKTX +' - '+ val.MATNR+' - '+val.UNIT	}).appendTo(select);
 					})
 				}

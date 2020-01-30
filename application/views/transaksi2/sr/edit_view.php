@@ -155,9 +155,9 @@
 													<th style="width:35%">Material Desc</th>
 													<th style="width:10%">Quantity</th>
 													<th>UOM</th>
-                                                    <th>On Hand</th>
-                                                    <th>Min Stock</th>
-													<th>Outstanding Total</th>
+                                                    <!-- <th>On Hand</th> -->
+                                                    <!-- <th>Min Stock</th> -->
+													<!-- <th>Outstanding Total</th> -->
 												</tr>
 											</thead>
 										</table>
@@ -200,10 +200,10 @@
 						return rr;
 					}},
 					{"data":"uom", "className":"dt-center"},
-					{"data":"OnHand", "className":"dt-center"},
+					// {"data":"OnHand", "className":"dt-center"},
 					
-					{"data":"MinStock", "className":"dt-center"},
-					{"data":"OpenQty", "className":"dt-center"}
+					// {"data":"MinStock", "className":"dt-center"},
+					// {"data":"OpenQty", "className":"dt-center"}
 				],
 				drawCallback: function() {
 					$('.form-control-select2').select2();
@@ -275,9 +275,9 @@
 				"material_desc":"",
 				"requirement_qty": "",
 				"uom":"",
-				"OnHand":"",
-				"MinStock":"",
-				"OpenQty":""
+				// "OnHand":"",
+				// "MinStock":"",
+				// "OpenQty":""
 				}).draw();
 				count++;
 

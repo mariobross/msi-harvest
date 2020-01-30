@@ -7,6 +7,10 @@ class Sr extends CI_Controller{
         # code...
         parent::__construct();
 
+        $this->load->library('auth');  
+		if(!$this->auth->is_logged_in()) {
+			redirect(base_url());
+        }
         // load model
         $this->load->model("transaksi2/Sr_model","sr_model");
         
@@ -71,6 +75,7 @@ class Sr extends CI_Controller{
             $nestedData['lastmodified'] = date("d-m-Y",strtotime($val['lastmodified']));
             $nestedData['back'] = $val['back'] =='1'?'Integrated':'Not Integrated';
             $nestedData['stts'] = $val['status'];
+            // $nestedData['dataInTo'] = $this->sr_model->cekNoSRinTO($val['pr_no']);
             $data[] = $nestedData;
 
         }
@@ -281,8 +286,21 @@ class Sr extends CI_Controller{
         $id_stdstock_header = $this->input->post('deleteArr');
         $deleteData = false;
         foreach($id_stdstock_header as $id){
-            if($this->sr_model->stdstock_header_delete($id))
-            $deleteData = true;
+            $cek = $this->sr_model->stdstock_header_delete($id);
+            if(!$cek){
+                $json_data = array(
+                    "message"         => 'Dokumen SR sudah ada di Transfer Out',
+                    "data"            => $cek 
+                );
+                echo json_encode($json_data);
+            }else{
+                $deleteData = true;
+                $json_data = array(
+                    "data"            => $cek 
+                );
+                echo json_encode($json_data);
+            }
+            
         }
 
         if($deleteData){

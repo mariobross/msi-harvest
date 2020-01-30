@@ -96,14 +96,14 @@
 											<div class="form-group row">
 												<label class="col-lg-3 col-form-label">Outlet</label>
 												<div class="col-lg-9">
-													<input type="text" class="form-control" placeholder="Outlet" readonly="" value="WMSIMBST - Mangga Besar" name="outlet" id="outlet">
+													<input type="text" class="form-control" placeholder="Outlet" readonly="" value="<?= $plant ?>" name="outlet" id="outlet">
 												</div>
 											</div>
 											
 											<div class="form-group row">
 												<label class="col-lg-3 col-form-label">Storage Location</label>
 												<div class="col-lg-9">
-													<input type="text" class="form-control" placeholder="Outlet" readonly="" value="WMSIMBST - MSI Mangga Besar" name="storageLocation" id="storageLocation">
+													<input type="text" class="form-control" placeholder="Outlet" readonly="" value="<?= $storage_location ?>" name="storageLocation" id="storageLocation">
 												</div>
 											</div>
 											

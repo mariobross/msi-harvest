@@ -32,7 +32,7 @@
                                     <div class="form-group row">
                                         <label class="col-lg-3 col-form-label">Dari Tanggal</label>
                                         <div class="col-lg-3 input-group date">
-                                            <input type="text" class="form-control" id="fromDate">
+                                            <input type="text" class="form-control" id="fromDate" readonly="">
                                             <div class="input-group-prepend">
                                                 <span class="input-group-text" id="basic-addon1">
                                                     <i class="icon-calendar"></i>
@@ -41,7 +41,7 @@
                                         </div>
                                         <label class="col-lg-2 col-form-label">Sampai Tanggal</label>
                                         <div class="col-lg-4 input-group date">
-                                            <input type="text" class="form-control" id="toDate">
+                                            <input type="text" class="form-control" id="toDate" readonly="">
                                             <div class="input-group-prepend">
                                                 <span class="input-group-text" id="basic-addon1">
                                                     <i class="icon-calendar"></i>
@@ -154,10 +154,16 @@
                                 type: "post",
                                 data:{deleteArr: deleteidArr},
                                 success:function(res) {
-                                    // dataTable.ajax.reload();
-                                    location.reload(true);
-                                    getTable.row($(this).closest("tr")).remove().draw();
+                                    cek = JSON.parse(res);
+                                    if(!cek.data){
+                                        alert(cek.message);
+                                    }else{
+                                        location.reload(true);
+                                        getTable.row($(this).closest("tr")).remove().draw();
+                                    }
+                                    
                                 }
+                                
                             });
                         }
                     }
@@ -252,6 +258,7 @@
                     },
                     "columns": [
                         {"data":"id_stdstock_header", "className":"dt-center", render:function(data, type, row, meta){
+                            // console.log(row['dataInTo'])
                             rr=`<input type="checkbox" class="check_delete" id="chk_${data}" value="${data}" onclick="checkcheckbox();">`;
                             return rr;
                         }},

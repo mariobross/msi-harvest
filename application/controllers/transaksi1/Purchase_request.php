@@ -6,10 +6,15 @@ class Purchase_request extends CI_Controller{
     {
         # code...
         parent::__construct();
+        $this->load->library('auth');  
+		if(!$this->auth->is_logged_in()) {
+			redirect(base_url());
+        }
+        $this->load->library('form_validation');
+        $this->load->library('l_general');
 
         // load model
-        // $this->load->model("");
-        $this->load->library('form_validation');
+        $this->load->model('transaksi1/purchase_model', 'pr_model');
     }
 
     public function index()
@@ -19,44 +24,71 @@ class Purchase_request extends CI_Controller{
     }
 
     public function showAllData(){
-        $dt= array(
-            array(
-                "no" => "5242",
-                "action" => "5242",
-                "id" => "5242",
-                "item_no" => "810",
-                "item_description"=>"14-10-2019",
-                "posting_date"=> "14-10-2019",
-                "status" => "Store",
-                "created_by"=>"Approved",
-                "approved_by"=> "Admin Outlet BSD (TH)",
-                "last_modified" => "Manager Outlet BSD (TH)",
-                "receipt_number"=>"2019-10-14 13:30:42",
-                "issue_number" => "16624",
-                "log"=> "Integrated"
-            ),
-            array(
-                "no" => "5304",
-                "action" => "5304",
-                "id" => "5304",
-                "item_no" => "1278",
-                "item_description"=>"21-10-2019",
-                "posting_date"=> "21-10-2019",
-                "status" => "Store",
-                "created_by"=>"Approved",
-                "approved_by"=> "Admin Outlet BSD (TH)",
-                "last_modified" => "Manager Outlet BSD (TH)",
-                "receipt_number"=>"2019-10-21 16:45:43",
-                "issue_number" => "",
-                "log"=> "Integrated"
-            )
-         ); 
- 
-         $data = [
-             "data"=> $dt
-         ];
-         
-         echo json_encode($data);
+        $fromDate = $this->input->post('fDate');
+        $toDate = $this->input->post('tDate');
+        $status = $this->input->post('stts');
+
+        $date_from2;
+        $date_to2;
+
+        if($fromDate != '') {
+			$year = substr($fromDate, 6);
+			$month = substr($fromDate, 3,2);
+			$day = substr($fromDate, 0,2);
+			$date_from2 = $year.'-'.$day.'-'.$month.' 00:00:00';
+        }else{
+            $date_from2='';
+        }
+
+        
+        if($toDate != '') {
+			$year = substr($toDate, 6);
+			$month = substr($toDate, 3,2);
+			$day = substr($toDate, 0,2);
+			$date_to2 = $year.'-'.$day.'-'.$month.' 23:59:59';
+        }else{
+            $date_to2='';
+        }
+
+        $rs = $this->pr_model->t_pr_headers($date_from2, $date_to2, $status);
+		$data = array();
+		
+		// print_r($rs[0]);
+		$status_string='';
+
+        foreach($rs as $key=>$val){
+			if($val['status'] =='1'){
+				$status_string= 'Not Apporeed';
+			}else if($val['status'] =='2'){
+				$status_string= 'Apporeed';
+			}else{
+				$status_string= 'Cancel';
+			}
+
+            $nestedData = array();
+            $nestedData['id_pr_header'] = $val['id_pr_header'];
+            $nestedData['pr_no'] = $val['pr_no'];
+            $nestedData['created_date'] = date("d-m-Y",strtotime($val['created_date']));
+            $nestedData['delivery_date'] = date("d-m-Y",strtotime($val['delivery_date']));
+            $nestedData['request_reason'] = $val['request_reason'];
+            $nestedData['status'] = $status_string; 
+            $nestedData['created_by'] = $val['user_input'];
+            $nestedData['approved_by'] = $val['user_approved'];
+            $nestedData['last_modified'] = date("d-m-Y",strtotime($val['lastmodified']));
+            $nestedData['po_print'] = '';
+            $nestedData['po'] = '';
+            $nestedData['back'] = $val['back'] =='1'?'Integrated':'Not Integrated';
+            $nestedData['status_real'] = $val['status'];
+            $data[] = $nestedData;
+
+        }
+
+        $json_data = array(
+            "recordsTotal"    =>  10, 
+            "recordsFiltered" => 12,
+            "data"            => $data 
+        );
+        echo json_encode($json_data);
      }
 
      public function add()
@@ -68,6 +100,73 @@ class Purchase_request extends CI_Controller{
      public function edit(){
         $this->load->view('transaksi1/eksternal/purchase_request/edit_view');
     }
+
+    public function printpdf()
+	{
+		$id_pr_header = $this->uri->segment(4);
+		$data['data'] = $this->pr_model->tampil($id_pr_header);
+
+		// print_r($data);
+		// die();
+		
+		ob_start();
+		$content = $this->load->view('transaksi1/eksternal/purchase_request/printpdf_view',$data);
+		$content = ob_get_clean();		
+		// $this->load->library('html2pdf');
+		require_once(APPPATH.'libraries/html2pdf/html2pdf.class.php');
+		try
+		{
+			$html2pdf = new HTML2PDF('P', 'F4', 'en');
+			$html2pdf->setTestTdInOnePage(false);
+			$html2pdf->pdf->SetDisplayMode('fullpage');
+			$html2pdf->writeHTML($content, isset($_GET['vuehtml']));
+			$html2pdf->Output('print.pdf');
+		}
+		catch(HTML2PDF_exception $e) {
+			echo $e;
+			exit;
+		}
+		
+    }
+    
+    public function printpdfPO()
+	{
+		$id_pr_header = $this->uri->segment(4);
+		$data['data'] = $this->pr_model->tampil($id_pr_header);
+
+		// print_r($data);
+		// die();
+		
+		ob_start();
+		$content = $this->load->view('transaksi1/eksternal/purchase_request/printpdfPO_view',$data);
+		$content = ob_get_clean();		
+		// $this->load->library('html2pdf');
+		require_once(APPPATH.'libraries/html2pdf/html2pdf.class.php');
+		try
+		{
+			$html2pdf = new HTML2PDF('P', 'F4', 'en');
+			$html2pdf->setTestTdInOnePage(false);
+			$html2pdf->pdf->SetDisplayMode('fullpage');
+			$html2pdf->writeHTML($content, isset($_GET['vuehtml']));
+			$html2pdf->Output('print PO.pdf');
+		}
+		catch(HTML2PDF_exception $e) {
+			echo $e;
+			exit;
+		}
+		
+	}
+
+	public function excel()
+	{
+		$id_pr_header = $this->uri->segment(4);
+		$data['data'] = $this->pr_model->tampil($id_pr_header);
+		
+		ob_start();
+	   	$this->load->view('transaksi1/eksternal/purchase_request/printexcel_view',$data);
+		
+		
+	}
  
 }
 ?>
