@@ -57,15 +57,14 @@ class Grnonpo_model extends CI_Model {
     function sap_item_groups_select_all_grnonpo() {
         $kd_plant = $this->session->userdata['ADMIN']['plant'];
         $trans_type = 'grnonpo';
-        $this->db->select('m_item.*,DSNAM');
-        $this->db->select('(REPLACE(m_item.MATNR,REPEAT("0",(12)),SPACE(0))) AS MATNR1');
-        $this->db->from('m_item');
-        $this->db->join('m_map_item_trans','m_map_item_trans.MATNR = m_item.MATNR','inner');
-        $this->db->join('m_item_group','m_item_group.DISPO = m_item.DISPO','inner');
-        $this->db->where('transtype', $trans_type);
-        $this->db->where('m_item_group.kdplant',$kd_plant);
+        $SAP_MSI = $this->load->database('SAP_MSI', TRUE);
+        $SAP_MSI->select('t0.ItemCode as MATNR,t0.ItemName as MAKTX,t0.ItmsGrpCod as DISPO,t0.BuyUnitMsr as UNIT,t1.ItmsGrpNam as DSNAM');
+        $SAP_MSI->from('OITM  t0');
+        $SAP_MSI->where('validFor', 'Y');
+        $SAP_MSI->where('InvntItem', 'Y');
+        $SAP_MSI->join('oitb t1','t1.ItmsGrpCod = t0.ItmsGrpCod','inner');
         
-        $item_groups = $this->db->get();
+        $item_groups = $SAP_MSI->get();
         // echo $this->db->last_query();
         
         if ($item_groups->num_rows() > 0) {
@@ -77,6 +76,7 @@ class Grnonpo_model extends CI_Model {
     
     function sap_items_select_by_item_group($item_group, $trans_type) {
         $kd_plant = $this->session->userdata['ADMIN']['plant'];
+        
 		$this->db->select('MAKTX,m_item.MATNR,MEINS,UNIT');
      	$this->db->select('(REPLACE(m_item.MATNR,REPEAT("0",(12)),SPACE(0))) AS MATNR1, SPACE(1) AS DistNumber');
 		$this->db->from('m_item');

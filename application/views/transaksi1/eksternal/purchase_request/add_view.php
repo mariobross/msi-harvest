@@ -63,7 +63,7 @@
 												</div>
 											</div>
 
-											<!-- <div class="form-group row">
+											<div class="form-group row">
 												<label class="col-lg-3 col-form-label">Request Reason</label>
 												<div class="col-lg-9">
 													<select class="form-control form-control-select2" data-live-search="true">
@@ -72,7 +72,7 @@
 														<option value="2">Pilih 2</option>
 													</select>
 												</div>
-											</div> -->
+											</div>
 
 											<div class="form-group row">
 												<label class="col-lg-3 col-form-label">Material Group</label>
