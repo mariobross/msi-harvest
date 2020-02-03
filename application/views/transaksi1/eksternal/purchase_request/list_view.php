@@ -130,6 +130,7 @@
 
                 $("#deleteRecord").click(function(){
                     let deleteidArr=[];
+                    let getTable = $("#tableWhole").DataTable();
                     $("input:checkbox[class=check_delete]:checked").each(function(){
                         deleteidArr.push($(this).val());
                     })
@@ -140,11 +141,13 @@
                         var confirmDelete = confirm("Do you really want to Delete records?");
                         if(confirmDelete == true){
                             $.ajax({
-                                url:"", //masukan url untuk delete
+                                url:"<?php echo site_url('transaksi1/purchase_request/deleteData');?>", 
                                 type: "post",
                                 data:{deleteArr: deleteidArr},
                                 success:function(res) {
-                                    dataTable.ajax.reload();
+                                    // dataTable.ajax.reload();
+                                    location.reload(true);
+                                    getTable.row($(this).closest("tr")).remove().draw();
                                 }
                             });
                         }
