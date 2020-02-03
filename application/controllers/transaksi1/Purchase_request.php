@@ -89,20 +89,213 @@ class Purchase_request extends CI_Controller{
             "data"            => $data 
         );
         echo json_encode($json_data);
-     }
-
-     public function add()
-     {
-         # code...
-         $this->load->view('transaksi1/eksternal/purchase_request/add_view');
-     }
-
-     public function edit(){
-        $this->load->view('transaksi1/eksternal/purchase_request/edit_view');
     }
 
-    public function printpdf()
-	{
+    public function add(){
+		 # code...
+		$object['request_reason'] = ['Pastry', 'Cake Shop', 'Store', 'Bar'];
+		$object['matrialGroup'] = $this->pr_model->showMatrialGroup();
+		$object['plant'] = $this->session->userdata['ADMIN']['plant'].' - '.$this->session->userdata['ADMIN']['plant_name'];
+    	$object['storage_location'] = $this->session->userdata['ADMIN']['storage_location'].' - '.$this->session->userdata['ADMIN']['storage_location_name'];
+    
+        $this->load->view('transaksi1/eksternal/purchase_request/add_view', $object);
+	}
+	
+	function getdataDetailMaterial(){
+		$item_group_code = $this->input->post('matGroup');
+		
+		if($item_group_code == 'all'){
+			$data = $this->pr_model->sap_item_groups_select_all_grnonpo();
+		}else{
+			$data = $this->pr_model->sap_items_select_by_item_group($item_group, 'pr');
+		}
+        echo json_encode($data);
+
+	}
+	
+	function getdataDetailMaterialSelect(){
+        $itemSelect = $this->input->post('MATNR');
+        
+        $dataMatrialSelect = $this->pr_model->sap_item_groups_select_all_grnonpo($itemSelect);
+
+        echo json_encode($dataMatrialSelect);
+        
+	}
+	
+	public function addData(){
+        $plant = $this->session->userdata['ADMIN']['plant'];
+        $storage_location = $this->session->userdata['ADMIN']['storage_location'];
+        $plant_name = $this->session->userdata['ADMIN']['plant_name'];
+        $storage_location_name = $this->session->userdata['ADMIN']['storage_location_name'];
+        $admin_id = $this->session->userdata['ADMIN']['admin_id'];
+
+        $pr_header['delivery_date'] = $this->l_general->str_to_date($this->input->post('posting_date'));
+        $pr_header['request_reason'] = $this->input->post('reqReason');
+        $pr_header['item_group_code'] = $this->input->post('matGroup');
+        $pr_header['created_date'] = date('Y-m-d');
+        $pr_header['plant'] = $plant;
+        $pr_header['plant_name'] = $plant_name;
+        $pr_header['storage_location_name'] = $storage_location_name ;
+        $pr_header['storage_location'] = $storage_location ;
+        $pr_header['id_pr_plant'] = $this->pr_model->id_pr_plant_new_select($pr_header['plant'],$pr_header['created_date']);
+        $pr_header['status'] = $this->input->post('appr')? $this->input->post('appr') : '1';
+        $pr_header['id_user_input'] = $admin_id;
+        $pr_header['pr_no'] = '';
+        $pr_header['id_user_approved'] = $this->input->post('appr')? $admin_id : 0;
+
+        $pr_details['material_no'] = $this->input->post('detMatrialNo');
+        $count = count($pr_details['material_no']);
+
+        // print_r($count);
+        if($id_pr_header= $this->pr_model->pr_header_insert($pr_header)){
+            $input_detail_success = false;
+            for($i =0; $i < $count; $i++){
+                $pr_detail['id_pr_header'] = $id_pr_header;
+                $pr_detail['id_pr_h_detail'] = $i+1;
+                $pr_detail['material_no'] = $this->input->post('detMatrialNo')[$i];
+                $pr_detail['material_desc'] = $this->input->post('detMatrialDesc')[$i];
+                $pr_detail['requirement_qty'] = $this->input->post('detQty')[$i];
+                $pr_detail['uom'] = $this->input->post('detUom')[$i];
+
+                if($this->pr_model->pr_detail_insert($pr_detail))
+                $input_detail_success = TRUE;
+            }
+        }
+
+        if($input_detail_success){
+            return $this->session->set_flashdata('success', "Purchase Request Telah Terbentuk");
+        }else{
+            return $this->session->set_flashdata('failed', "Purchase Request Gagal Terbentuk");
+        }
+    }
+
+    function edit(){
+		$id_pr_header = $this->uri->segment(4);
+        $object['plant_name'] = $this->session->userdata['ADMIN']['plant'].' - '.$this->session->userdata['ADMIN']['plant_name'];
+		$object['storage_location_name'] = $this->session->userdata['ADMIN']['storage_location'].' - '.$this->session->userdata['ADMIN']['storage_location_name'];
+		$object['data'] = $this->pr_model->prnew_header_select($id_pr_header);
+		$object['pr_header']['id_pr_header'] = $id_pr_header;
+
+        if($object['data']['status'] == '1'){
+            $object['pr_header']['status_string'] = 'Not Approved';                              
+        }else if($object['data']['status'] == '2'){
+            $object['pr_header']['status_string'] = 'Approved';
+        }else{
+            $object['pr_header']['status_string'] = 'Cancel';
+		}
+		
+        $object['pr_header']['delivery_date'] = $object['data']['delivery_date'];
+        $object['pr_header']['pr_no'] = $object['data']['pr_no'];
+        $object['pr_header']['request_reason'] = $object['data']['request_reason'];
+        $object['pr_header']['item_group_code'] = $object['data']['item_group_code'];
+        $object['pr_header']['status'] = $object['data']['status'];
+
+		// print_r($object['data']);
+        
+        $this->load->view('transaksi1/eksternal/purchase_request/edit_view', $object);
+	}
+
+	public function showPurchaseDetail(){
+        $id_pr_header = $this->input->post('id');
+        $stts = $this->input->post('status');
+        $rs = $this->pr_model->pr_details_select($id_pr_header);
+        $dt = array();
+        $i = 1;
+        if($rs){
+            foreach($rs as $key=>$value){
+                $nestedData=array();
+                $nestedData['id_pr_detail'] = $value['id_pr_detail'];
+                $nestedData['no'] = $i;
+                $nestedData['material_no'] = $value['material_no'];
+                $nestedData['material_desc'] = $value['material_desc'];
+                $nestedData['requirement_qty'] = $value['requirement_qty'];
+                $nestedData['uom'] = $value['uom'];
+                $nestedData['price'] = $value['price'];
+                $nestedData['vendor'] = $value['vendor'];
+                $nestedData['onHand'] = $value['OnHand']; 
+                $nestedData['status'] = $stts; 
+                $dt[] = $nestedData;
+                $i++;
+            }
+        }
+
+        $json_data = array(
+                "data" => $dt
+            );
+            echo json_encode($json_data) ;
+	}
+	
+	public function chageDataDB(){
+        $id_pr_header = $this->input->post('idpr_header');
+        $sum = count($this->input->post('idpr_detail'));
+        $succes_update_detail = false;
+        for($i = 0; $i < $sum; $i++){
+            $pr_detail['id_pr_detail'] = $this->input->post('idpr_detail')[$i];
+            $pr_detail['requirement_qty'] = $this->input->post('qty')[$i];
+            if($this->pr_model->changeUpdateToDb($pr_detail))
+            $succes_update_detail = true;
+        }
+
+        if($succes_update_detail){
+            return $this->session->set_flashdata('success', "Purchase Request Berhasil di Update");
+        }else{
+            return $this->session->set_flashdata('failed', "Purchase Request Gagal di Update");
+        } 
+	}
+	
+	public function addDataUpdate(){
+        $admin_id = $this->session->userdata['ADMIN']['admin_id'];
+
+        $pr_header['id_pr_header'] = $this->input->post('idpr_header');
+        $pr_header['delivery_date'] = $this->l_general->str_to_date($this->input->post('deliveDate'));
+        $pr_header['status'] = $this->input->post('appr')? $this->input->post('appr') : '1';
+        $pr_header['id_user_approved'] = $this->input->post('appr')? $admin_id : 0;
+        
+        $pr_details['material_no'] = $this->input->post('detMatrialNo');
+        $count = count($pr_details['material_no']);
+        if($this->pr_model->pr_header_update($pr_header)){
+            $update_detail_success = false;
+            if($this->pr_model->pr_details_delete($pr_header['id_pr_header'])){
+                for($i =0; $i < $count; $i++){
+                    $pr_details['id_pr_header'] = $pr_header['id_pr_header'];
+                    $pr_details['id_pr_h_detail'] = $i+1;
+                    $pr_details['material_no'] = $this->input->post('detMatrialNo')[$i];
+                    $pr_details['material_desc'] = $this->input->post('detMatrialDesc')[$i];
+                    $pr_details['requirement_qty'] = $this->input->post('detQty')[$i];
+					$pr_details['price'] = $this->input->post('detPrice')[$i];
+					$pr_details['vendor'] = $this->input->post('detVendor')[$i];
+					$pr_details['uom'] = $this->input->post('detUom')[$i];
+					$pr_details['OnHand'] = $this->input->post('detOnHand')[$i];
+
+                    if($this->pr_model->pr_detail_insert($pr_details))
+                    $update_detail_success = TRUE;
+                }
+            }
+        }
+
+        if($update_detail_success){
+            return $this->session->set_flashdata('success', "Purchase Request Berhasil di Update");
+        }else{
+            return $this->session->set_flashdata('failed', "Purchase Request Gagal di Update");
+        }
+    }
+	
+	public function deleteData(){
+        $id_pr_header = $this->input->post('deleteArr');
+        $deleteData = false;
+        foreach($id_pr_header as $id){
+            if($this->pr_model->t_prnew_header_delete($id))
+            $deleteData = true;
+        }
+        
+        if($deleteData){
+            return $this->session->set_flashdata('success', "Purchase Request Berhasil dihapus");
+        }else{
+            return $this->session->set_flashdata('failed', "Purchase Request Gagal dihapus");
+        }
+	}
+
+    function printpdf(){
 		$id_pr_header = $this->uri->segment(4);
 		$data['data'] = $this->pr_model->tampil($id_pr_header);
 
@@ -129,8 +322,7 @@ class Purchase_request extends CI_Controller{
 		
     }
     
-    public function printpdfPO()
-	{
+    public function printpdfPO(){
 		$id_pr_header = $this->uri->segment(4);
 		$data['data'] = $this->pr_model->tampil($id_pr_header);
 
@@ -157,8 +349,7 @@ class Purchase_request extends CI_Controller{
 		
 	}
 
-	public function excel()
-	{
+	public function excel(){
 		$id_pr_header = $this->uri->segment(4);
 		$data['data'] = $this->pr_model->tampil($id_pr_header);
 		

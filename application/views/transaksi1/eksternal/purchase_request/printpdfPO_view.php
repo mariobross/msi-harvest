@@ -105,35 +105,39 @@
     $SAP_MSI->join('OPOR C','A.DocEntry=C.DocEntry','inner');
     $SAP_MSI->where('B.DocEntry',$DocEntry);
     $SAP_MSI->group_by("A.ItemCode,A.Dscription,A.unitMsr,A.Price,A.Quantity,A.LineTotal,A.DocEntry,C.DiscSum,C.VatSum,C.DocTotal");
+    $SAP_MSI->order_by("A.ItemCode");
     $query = $SAP_MSI->get();
     // echo $SAP_MSI->last_query();
+    // die();
     $s = $query->result_array();
 
-while($s)
-{	
-    // print_r($temp);
+  
+
+  for($i=0; $i<= count($s)-1; $i++)
+  {	
+ 
 ?>
   <tr>
  
     <td height="15" align="center"><span class="style8"><?php echo $no++; ?></span></td>
-    <td><span class="style8">&nbsp;<?php echo $s['ItemCode']; ?></span></td>
-    <td align="left"><span class="style8">&nbsp;<?php echo $s['Dscription']; ?></span></td>
-    <td align="center"><span class="style8">&nbsp;<?php echo $s['unitMsr']; ?></span></td>
+    <td><span class="style8">&nbsp;<?php echo $s[$i]['ItemCode']; ?></span></td>
+    <td align="left"><span class="style8">&nbsp;<?php echo $s[$i]['Dscription']; ?></span></td>
+    <td align="center"><span class="style8">&nbsp;<?php echo $s[$i]['unitMsr']; ?></span></td>
     <td align="right"><span class="style8">&nbsp;
       <?php 
-	echo "Rp. ".$s['Quantity']; ?>
+	echo "Rp. ".$s[$i]['Quantity']; ?>
     &nbsp;&nbsp;</span></td>
-    <td align="right"><span class="style8"><?php echo $s['Price']; ?></span></td>
+    <td align="right"><span class="style8"><?php echo $s[$i]['Price']; ?></span></td>
     <td align="right"><span class="style8">
       <?php
-	echo $s['LineTotal'];
+	echo $s[$i]['LineTotal'];
 	?>
 &nbsp;    </span></td>
   </tr>
        <?php
-	   $Diskon=$s[0]['DiscSum'];
-	   $Ppn=$s[0]['VatSum'];
-       $Grand=$s[0]['DocTotal'];
+	      $Diskon=$s[$i]['DiscSum'];
+	      $Ppn=$s[$i]['VatSum'];
+        $Grand=$s[$i]['DocTotal'];
        
 }
 
@@ -159,6 +163,7 @@ while($s)
     $SAP_MSI->join('PRQ1 B','A.BaseRef=B.DocEntry','inner');
     $SAP_MSI->where('B.DocEntry',$DocEntry);
     $query = $SAP_MSI->get();
+    
     $po1 = $query->result_array();
 
     $SAP_MSI = $this->load->database('SAP_MSI', TRUE);
@@ -166,6 +171,8 @@ while($s)
     $SAP_MSI->from('POR1');
     $SAP_MSI->where('DocEntry',$po1[0]['DocEntry']);
     $query = $SAP_MSI->get();
+    // echo $SAP_MSI->last_query();
+  
     $po2 = $query->result_array();
 
     echo $po2[0]['total'];
@@ -186,13 +193,12 @@ while($s)
   </tr>
 </table>
 <p>&nbsp;</p>
-<p>&nbsp;</p>
 <table width="799" border="1"   style="border-collapse:collapse;" align="center">
   <tr>
-    <td width="187" align="center" scope="col">Prepared By :</td>
-    <td width="187" align="center" scope="col">Verified by :</td>
-    <td width="196" align="center" scope="col">Approved 1 by :</td>
-    <td width="201" align="center" scope="col">Approved 2 by :</td>
+    <td width="170" align="center" scope="col">Prepared By :</td>
+    <td width="170" align="center" scope="col">Verified by :</td>
+    <td width="170" align="center" scope="col">Approved 1 by :</td>
+    <td width="170" align="center" scope="col">Approved 2 by :</td>
   </tr>
   <tr>
   <?php
@@ -210,24 +216,4 @@ while($s)
     <td align="center" valign="bottom">(Director)</td>
   </tr>
 </table>
-<p>&nbsp;	</p>
-<p>&nbsp;</p>
-<div align="justify"></div>
-<table width="640" align="center">
-  <tr>
-    <td width="10"><span class="style5">1.</span></td>
-    <td width="618"><span class="style3 style5"> FILLOUT IN DUPLICATE RETAIL YELLOW COPY FOR YOURFILE</span></td>
-  </tr>
-  <tr>
-    <td><span class="style5">2.</span></td>
-    <td><span class="style3 style5"> DEPARTEMENT MANAGERS MUST SIGN PRIOR TO ORDERING</span></td>
-  </tr>
-  <tr>
-    <td><span class="style5">3.</span></td>
-    <td><span class="style3 style5"> RECEIVING - RED</span></td>
-  </tr>
-  <tr>
-    <td><span class="style5">4.</span></td>
-    <td><span class="style3 style5"> USER - BLUE</span></td>
-  </tr>
-</table>
+
