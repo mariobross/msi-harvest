@@ -201,6 +201,7 @@
 
 				table = $("#table-manajemen").DataTable({
 					"ordering":false,
+					"paging":false,
 					"ajax": {
 							"url":"<?php echo site_url('transaksi1/transferininteroutlet/showGistonewOutDetail');?>",
 							"data":{ id: id_grsto_header, status: stts },
