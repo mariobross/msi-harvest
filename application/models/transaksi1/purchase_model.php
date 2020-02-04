@@ -226,13 +226,5 @@ class Purchase_model extends CI_Model {
 			return TRUE;
 		else
 			return FALSE;
-  }
-
-  function pr_detail_insert($data) {
-		if($this->db->insert('t_pr_detail', $data))
-			return $this->db->insert_id();
-		else 
-			return FALSE;
-  }
-    
+  }    
 }
