@@ -170,6 +170,7 @@
 
 				table = $("#tblWhole").DataTable({
 					"ordering":false,
+					"paging":false,
 					"ajax": {
 							"url":"<?php echo site_url('transaksi1/returnin/showReturnInDetail');?>",
 							"data":{ id: id_retin_header, status: stts },

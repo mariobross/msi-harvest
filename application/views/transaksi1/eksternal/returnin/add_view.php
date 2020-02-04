@@ -254,7 +254,8 @@
 				console.log('test');
 
 				dataTable = $('#tableManajemen').DataTable({
-                    "ordering":false,  "paging": true, "searching":true,
+                    "ordering":false,  
+					"paging":false,
                     "ajax": {
                         "url":"<?php echo site_url('transaksi1/returnin/getDetailsReturnIn');?>",
                         "type":"POST",

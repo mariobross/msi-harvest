@@ -262,7 +262,7 @@
 
 
 					$('#table-manajemen').DataTable({
-                    "ordering":false,  "paging": true, "searching":true
+                    "ordering":false,  "paging":false
 					});
 
 				})

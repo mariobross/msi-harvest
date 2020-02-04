@@ -161,6 +161,7 @@
 
 			table = $("#tblWhole").DataTable({
 				"ordering":false,
+				"paging":false,
 				"ajax": {
                         "url":"<?php echo site_url('transaksi1/purchase_request/showPurchaseDetail');?>",
 						"data":{ id: id_pr_header, status: stts },

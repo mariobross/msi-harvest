@@ -189,7 +189,7 @@
 				let stts = $('#status').val();
 
                 $('#table-manajemen').DataTable({
-                    "ordering":false,  "paging": true, "searching":true,
+                    "ordering":false, "paging":false
                     "ajax": {
                         "url":"<?php echo site_url('transaksi1/pofromvendor/showDeatailEdit');?>",
 						"data":{ id: id_grpo_header, status: stts },
