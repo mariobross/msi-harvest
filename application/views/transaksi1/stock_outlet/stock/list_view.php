@@ -10,6 +10,16 @@
 			<div class="content-wrapper">
                 <!-- <?php  $this->load->view("_template/breadcrumb.php")?> -->
 				<div class="content">
+                    <?php if ($this->session->flashdata('success')): ?>
+						<div class="alert alert-success" role="alert">
+							<?php echo $this->session->flashdata('success'); ?>
+						</div>
+					<?php endif; ?>
+					<?php if ($this->session->flashdata('failed')): ?>
+						<div class="alert alert-danger" role="alert">
+							<?php echo $this->session->flashdata('failed'); ?>
+						</div>
+					<?php endif; ?>
                     <div class="card">
                         <div class="card-header">
                             <legend class="font-weight-semibold"><i class="icon-search4 mr-2"></i>Search of Stock Opname</legend>  
@@ -21,7 +31,7 @@
                                 <div class="form-group row">
                                         <label class="col-lg-3 col-form-label">Dari Tanggal</label>
                                         <div class="col-lg-3 input-group date">
-                                            <input type="text" class="form-control" id="fromDate">
+                                            <input type="text" class="form-control" id="fromDate" autocomplete="off" readOnly>
                                             <div class="input-group-prepend">
                                                 <span class="input-group-text" id="basic-addon1">
                                                     <i class="icon-calendar"></i>
@@ -30,7 +40,7 @@
                                         </div>
                                         <label class="col-lg-2 col-form-label">Sampai Tanggal</label>
                                         <div class="col-lg-4 input-group date">
-                                            <input type="text" class="form-control" id="toDate">
+                                            <input type="text" class="form-control" id="toDate" autocomplete="off" readOnly>
                                             <div class="input-group-prepend">
                                                 <span class="input-group-text" id="basic-addon1">
                                                     <i class="icon-calendar"></i>
@@ -42,16 +52,16 @@
                                     <div class="form-group row">
                                         <label class="col-lg-3 col-form-label">Status</label>
                                         <div class="col-lg-9">
-                                            <select class="form-control form-control-select2" data-live-search="true">
-                                                <option value="">none selected</option>
-                                                <option value="approved">Approved</option>
-                                                <option value="notapproved">Not Approved</option>
+                                            <select class="form-control form-control-select2" data-live-search="true" id="status" name="status">
+                                                <option value="">--- All ---</option>
+                                                <option value="2">Approved</option>
+                                                <option value="1">Not Approved</option>
                                             </select>
                                         </div>
                                     </div>
 
                                     <div class="text-right">
-                                        <button type="submit" class="btn btn-primary">Search<i class="icon-search4  ml-2"></i></button>
+                                        <button type="button" class="btn btn-primary" onclick="onSearch()">Search<i class="icon-search4  ml-2"></i></button>
                                     </div>
                                 </div>
                             </div>
@@ -63,7 +73,7 @@
                             <legend class="font-weight-semibold"><i class="icon-list mr-2"></i>List Stock Opname</legend>
                             <a href="<?php echo site_url('transaksi1/stock/add') ?>" class="btn btn-primary"> Add New</a>
                             <input type="button" value="Delete" class="btn btn-danger" id="deleteRecord"> 
-                            <input type="button" value="Export To Excel" class="btn btn-success" id="btnExpExcel"> 
+                            <!-- <input type="button" value="Export To Excel" class="btn btn-success" id="btnExpExcel">  -->
                         </div>
                         <div class="card-body">
                             <div class="row">
@@ -98,33 +108,10 @@
         <?php  $this->load->view("_template/js.php")?>
         <script>
             $(document).ready(function(){
-                dataTable = $('#tableWhole').DataTable({
-                    "ordering":false,  "paging": true, "searching":true,
-                    "ajax": {
-                        "url":"<?php echo site_url('transaksi1/stock/showAllData');?>",
-                        "type":"POST"
-                    },
-                    "columns": [
-                        {"data":"no", "className":"dt-center", render:function(data, type, row, meta){
-                            rr=`<input type="checkbox" class="check_delete" id="chk_${data}" value="${data}" onclick="checkcheckbox();">`;
-                            return rr;
-                        }},
-                        {"data":"action", "className":"dt-center", render:function(data, type, row, meta){
-                                rr = `<a href='<?php echo site_url('transaksi1/stock/edit')?>' ><i class='icon-file-plus2' title="Edit"></i></a>&nbsp;
-                                        <a href='#' ><i class='icon-printer' title="Print"></i></a>&nbsp;
-                                        <a onClick="deleteConfirm('<?php echo site_url('transaksi1/stock/delete')?>')" href="#!"><i class='icon-cross2' title="Delete"></i></a>`;
-                                return rr;
-                        }},
-                        {"data":"id"},
-                        {"data":"date"},
-                        {"data":"item_no"},
-                        {"data":"item_description"},
-                        {"data":"createdBy"},
-                        {"data":"approvedBy"},
-                        {"data":"lastModified"},
-                        {"data":"log"}
-                    ]
-                });
+                $('#fromDate').datepicker();
+                $('#toDate').datepicker();
+
+                showListData();
 
                 // untuk check all
                 $("#checkall").click(function(){
@@ -149,11 +136,13 @@
                         var confirmDelete = confirm("Do you really want to Delete records?");
                         if(confirmDelete == true){
                             $.ajax({
-                                url:"", //masukan url untuk delete
+                                url:"<?php echo site_url('transaksi1/stock/deleteData');?>", //masukan url untuk delete
                                 type: "post",
                                 data:{deleteArr: deleteidArr},
                                 success:function(res) {
-                                    dataTable.ajax.reload();
+                                    // dataTable.ajax.reload();
+                                    location.reload(true);
+                                    getTable.row($(this).closest("tr")).remove().draw();
                                 }
                             });
                         }
@@ -185,7 +174,67 @@
 	                $('#deleteModal').modal();
                 }
 
+                printPdf = (data)=>{
+                    uri = "<?php echo site_url('transaksi1/stock/printpdf/')?>"+data
+                    window.open(uri);
+
+                }
+
             });
+
+            function onSearch(){
+                const fromDate = $('#fromDate').val();
+                const toDate = $('#toDate').val();
+                const status = $('#status').val();
+
+                showListData();
+            }
+
+            function showListData(){
+                const obj = $('#tableWhole tbody tr').length;
+
+                if(obj > 0){
+                    const dataTable = $('#tableWhole').DataTable();
+                    dataTable.destroy();
+                    $('#tableWhole > tbody > tr').remove();
+                    
+                }
+
+                const fromDate = $('#fromDate').val();
+                const toDate = $('#toDate').val();
+                const status = $('#status').val();
+
+                dataTable = $('#tableWhole').DataTable({
+                    "ordering":false,  "paging": true, "searching":true,
+                    "ajax": {
+                        "url":"<?php echo site_url('transaksi1/stock/showAllData');?>",
+                        "type":"POST",
+                        "data":{fDate: fromDate, tDate: toDate, stts: status}
+                    },
+                    "columns": [
+                        {"data":"id_opname_header", "className":"dt-center", render:function(data, type, row, meta){
+                            rr=`<input type="checkbox" class="check_delete" id="chk_${data}" value="${data}" onclick="checkcheckbox();">`;
+                            return rr;
+                        }},
+                        {"data":"id_opname_header", "className":"dt-center", render:function(data, type, row, meta){
+                            rr = `<div style="width:100px">
+										
+										<a onClick="printPdf(${data})" href="#" ><i class='icon-printer' title="Print"></i></a>&nbsp;
+                                        <a href='<?php echo site_url('transaksi1/stock/edit/')?>${data}' ><i class='icon-file-plus2' title="Edit"></i></a>&nbsp;
+                                    </div>`;
+                                        return rr;
+                        }},
+                        {"data":"id_opname_header"},
+                        {"data":"opname_no", "className":"dt-center"},
+                        {"data":"created_date"},
+                        {"data":"status"},
+                        {"data":"created_by"},
+                        {"data":"approved_by"},
+                        {"data":"last_modified"},
+                        {"data":"back"}
+                    ]
+                });
+            }
         
         </script>
 	</body>

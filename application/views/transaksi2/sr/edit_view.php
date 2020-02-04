@@ -181,6 +181,7 @@
 
 			table = $("#tblWhole").DataTable({
 				"ordering":false,
+				"paging":false,
 				"ajax": {
                         "url":"<?php echo site_url('transaksi2/sr/showStdstockDetail');?>",
 						"data":{ id: id_stdstock_header, status: stts },

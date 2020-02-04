@@ -193,6 +193,7 @@
             $(document).ready(function(){
 				table = $("#tblWhole").DataTable({
 					"ordering":false,
+					"paging":false,
 					drawCallback: function() {
 						$('.form-control-select2').select2();
 					}

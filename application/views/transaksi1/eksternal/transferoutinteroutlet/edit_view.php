@@ -174,6 +174,7 @@
 
 				table = $("#table-manajemen").DataTable({
 					"ordering":false,
+					"paging":false,
 					"ajax": {
 							"url":"<?php echo site_url('transaksi1/transferoutinteroutlet/showGistonewOutDetail');?>",
 							"data":{ id: id_gistonew_out_header, status: stts },

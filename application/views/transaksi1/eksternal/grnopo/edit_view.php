@@ -183,6 +183,7 @@
 
 				table = $("#tblWhole").DataTable({
 					"ordering":false,
+					"paging":false,
 					"ajax": {
 							"url":"<?php echo site_url('transaksi1/grnopo/showGistonewOutDetail');?>",
 							"data":{ id: id_grnonpo_header, status: stts },
