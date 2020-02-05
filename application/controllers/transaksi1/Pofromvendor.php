@@ -182,7 +182,7 @@ class Pofromvendor extends CI_Controller
             $nestedData['id_user_input'] = $val['id_user_input'];
             $nestedData['id_user_approved'] = $val['id_user_approved'];
             $nestedData['lastmodified'] = date("d-m-Y",strtotime($val['lastmodified']));
-            $nestedData['integrated'] = 'Integrated';
+            $nestedData['integrated'] = $val['back'] == 1 ?'Not Integrated' :'Integrated' ;
             $nestedData['outlet_name'] = $val['OUTLET_NAME1'];
             $data[] = $nestedData;
 
@@ -220,6 +220,7 @@ class Pofromvendor extends CI_Controller
         $grpo_header['id_user_approved'] = $this->input->post('app') ? $admin_id : '0';
         $grpo_header['item_group_code'] = $this->input->post('item_group_code');
         $grpo_header['id_user_input'] = $admin_id;
+        $grpo_header['back'] = '1';
 
         $web_trans_id = $this->l_general->_get_web_trans_id($grpo_header['plant'],$grpo_header['posting_date'],$grpo_header['id_grpo_plant'],'01');
 
@@ -328,8 +329,21 @@ class Pofromvendor extends CI_Controller
         $id_grpo_header = $this->input->post('deleteArr');
         $deleteData = false;
         foreach($id_grpo_header as $id){
-            if($this->povendor->grpo_header_delete($id))
-            $deleteData = true;
+            $cek = $this->povendor->grpo_header_delete($id);
+            if($cek){
+                $deleteData = true;
+                $json_data = array(
+                    "data"            => $cek 
+                );
+                echo json_encode($json_data);
+            }else{
+                $json_data = array(
+                    "message"         => 'Dokumen In PO From Vendor sudah Terintegrasi dan tidak bisa dihapus',
+                    "data"            => $cek 
+                );
+                echo json_encode($json_data); 
+            }
+            
         }
         
         if($deleteData){
