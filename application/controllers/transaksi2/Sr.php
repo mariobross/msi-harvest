@@ -140,6 +140,7 @@ class Sr extends CI_Controller{
         $stdstock_header['id_user_input'] = $admin_id;
         $stdstock_header['pr_no'] = '';
         $stdstock_header['id_user_approved'] = $this->input->post('appr')? $admin_id : 0;
+        $stdstock_header['back'] = '1';
 
         $stdstock_details['material_no'] = $this->input->post('detMatrialNo');
         $count = count($stdstock_details['material_no']);

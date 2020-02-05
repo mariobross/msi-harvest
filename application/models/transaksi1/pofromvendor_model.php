@@ -274,13 +274,19 @@ class Pofromvendor_model extends CI_Model {
   }
 
   function grpo_header_delete($id_grpo_header){
-    if($this->grpo_details_delete($id_grpo_header)){
-      $this->db->where('id_grpo_header', $id_grpo_header);
-      if($this->db->delete('t_grpo_header'))
-          return TRUE;
-      else
-          return FALSE;
-      }
+    $data = $this->grpo_header_select($id_grpo_header);
+    $back = $data['back'];
+    if($back != 0){
+      if($this->grpo_details_delete($id_grpo_header)){
+        $this->db->where('id_grpo_header', $id_grpo_header);
+        if($this->db->delete('t_grpo_header'))
+            return TRUE;
+        else
+            return FALSE;
+        }
+    }else{
+      return FALSE;
+    }  
   }
 
   function grpo_details_delete($id_grpo_header) {

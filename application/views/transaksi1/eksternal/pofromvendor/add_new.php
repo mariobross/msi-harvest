@@ -262,7 +262,7 @@
 
 
 					$('#table-manajemen').DataTable({
-                    "ordering":false,  "paging":false
+                    "ordering":false, "paging":false
 					});
 
 				})
@@ -291,11 +291,27 @@
 
 				let grQty=[];
 				let remark=[];
+				let validasiRemark = true;
+				let validasiQty = true;
 				table.find('tr').each(function(i, el){
 					let td = $(this).find('td');
+					if(td.eq(6).find('input').val() == ''){
+						validasiRemark = false;
+					}
+					if(parseInt(td.eq(4).find('input').val(),10) > parseInt(td.eq(3).text(),10)){
+							validasiQty = false;
+						}
 					grQty.push(td.eq(4).find('input').val());
 					remark.push(td.eq(6).find('input').val());	
 				})
+				if(!validasiRemark){
+					alert('Remark Tidak boleh Kosong, Harap di isi');
+					return false;
+				}
+				if(!validasiQty){
+					alert('Gr Quantity Tidak boleh lebih besar dari Outstanding quantity');
+					return false;
+				}
 
 				$.post("<?php echo site_url('transaksi1/pofromvendor/addData')?>",
 					{

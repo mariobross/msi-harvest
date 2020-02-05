@@ -189,7 +189,7 @@
 				let stts = $('#status').val();
 
                 $('#table-manajemen').DataTable({
-                    "ordering":false, "paging":false
+                    "ordering":false, "paging":false,
                     "ajax": {
                         "url":"<?php echo site_url('transaksi1/pofromvendor/showDeatailEdit');?>",
 						"data":{ id: id_grpo_header, status: stts },
@@ -201,6 +201,7 @@
                         {"data":"material_desc"},
                         {"data":"outstanding_qty", "className":"dt-center"},
                         {"data":"gr_quantity", "className":"dt-center", render:function(data, type, row, meta){
+							
 							rr= row['status'] == 1 ? `<input type="text" class="form-control" id="gr_qty_${data}" value="${data}">`: `${row['gr_quantity']}`;
                             return rr;
 						}},
