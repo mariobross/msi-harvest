@@ -225,7 +225,7 @@
 				orientation: 'bottom right',
 				autoclose: true
 			};
-			$('#postDate').datepicker(optSimple);
+			$('#deliveDate').datepicker(optSimple);
 		});
 
 		function onAddrow(){
