@@ -59,7 +59,7 @@ class Stock_model extends CI_Model {
     $SAP_MSI->select('t0.ItemCode as MATNR,t0.ItemName as MAKTX,t0.ItmsGrpCod as DISPO,t0.BuyUnitMsr as UNIT,t1.ItmsGrpNam as DSNAM');
     $SAP_MSI->from('OITM  t0');
     $SAP_MSI->where('validFor', 'Y');
-    $SAP_MSI->where('t0.PrchseItem ', 'Y');
+    $SAP_MSI->where('t0.InvntItem', 'Y');
     $SAP_MSI->join('oitb t1','t1.ItmsGrpCod = t0.ItmsGrpCod','inner');
 
     if($itemSelect != ''){
@@ -68,6 +68,7 @@ class Stock_model extends CI_Model {
     
     $item_groups = $SAP_MSI->get();
     // echo $this->db->last_query();
+    // die();
     
     if ($item_groups->num_rows() > 0) {
       return $item_groups->result_array();
@@ -83,7 +84,7 @@ class Stock_model extends CI_Model {
     $SAP_MSI->from('OITM  t0');
     $SAP_MSI->join('oitb t1','t1.ItmsGrpCod = t0.ItmsGrpCod','inner');
     $SAP_MSI->where('validFor', 'Y');
-    $SAP_MSI->where('t0.PrchseItem ', 'Y');
+    $SAP_MSI->where('t0.InvntItem', 'Y');
     $SAP_MSI->where('t1.ItmsGrpNam ', $item_group);
     
     $item_groups = $SAP_MSI->get();
@@ -96,7 +97,7 @@ class Stock_model extends CI_Model {
     }
   }
 
-  function id_pr_plant_new_select($id_outlet,$created_date="",$id_pr_header="") {
+  function id_opname_plant_new_select($id_outlet,$created_date="",$id_pr_header="") {
     if (empty($created_date))
        $created_date=$this->posting_date_select_max();
     if (empty($id_outlet))
@@ -143,8 +144,8 @@ class Stock_model extends CI_Model {
     }
   }
 
-  function pr_header_insert($data) {
-		if($this->db->insert('t_prnew_header', $data))
+  function opname_header_insert($data) {
+		if($this->db->insert('t_opname_header', $data))
 			return $this->db->insert_id();
 		else
 			return FALSE;
