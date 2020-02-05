@@ -94,7 +94,58 @@ class Stock extends CI_Controller{
 
     public function add(){
         # code...
-        $this->load->view('transaksi1/stock_outlet/stock/add_view');
+        $object['request_reason'] = ['Pastry', 'Cake Shop', 'Store', 'Bar'];
+		$object['matrialGroup'] = $this->st_model->showMatrialGroup();
+		$object['plant'] = $this->session->userdata['ADMIN']['plant'].' - '.$this->session->userdata['ADMIN']['plant_name'];
+    	$object['storage_location'] = $this->session->userdata['ADMIN']['storage_location'].' - '.$this->session->userdata['ADMIN']['storage_location_name'];
+    
+        $this->load->view('transaksi1/stock_outlet/stock/add_view', $object);
+    }
+
+    public function addData(){
+        $plant = $this->session->userdata['ADMIN']['plant'];
+        $storage_location = $this->session->userdata['ADMIN']['storage_location'];
+        $plant_name = $this->session->userdata['ADMIN']['plant_name'];
+        $storage_location_name = $this->session->userdata['ADMIN']['storage_location_name'];
+        $admin_id = $this->session->userdata['ADMIN']['admin_id'];
+
+        $opname_header['posting_date'] = $this->l_general->str_to_date($this->input->post('postDate'));
+        $opname_header['status'] = $this->input->post('appr')? $this->input->post('appr') : '1';
+        $opname_header['item_group_code'] = $this->input->post('matGroup');
+        $opname_header['created_date'] = date('Y-m-d');
+        $opname_header['plant'] = $plant;
+        $opname_header['plant_name'] = $plant_name;
+        $opname_header['storage_location_name'] = $storage_location_name ;
+        $opname_header['storage_location'] = $storage_location ;
+        $opname_header['id_opname_plant'] = $this->st_model->id_opname_plant_new_select($opname_header['plant'],$opname_header['created_date']);
+        $opname_header['id_user_input'] = $admin_id;
+        $opname_header['opname_no'] = '';
+        $opname_header['id_user_approved'] = $this->input->post('appr')? $admin_id : 0;
+
+        $opname_details['material_no'] = $this->input->post('detMatrialNo');
+        $count = count($opname_details['material_no']);
+
+        // print_r($count);
+        if($id_opname_header= $this->st_model->opname_header_insert($opname_header)){
+            $input_detail_success = false;
+            for($i =0; $i < $count; $i++){
+                $opname_detail['id_opname_header'] = $id_opname_header;
+                $opname_detail['id_opname_h_detail'] = $i+1;
+                $opname_detail['material_no'] = $this->input->post('detMatrialNo')[$i];
+                $opname_detail['material_desc'] = $this->input->post('detMatrialDesc')[$i];
+                $opname_detail['requirement_qty'] = $this->input->post('detQty')[$i];
+                $opname_detail['uom'] = $this->input->post('detUom')[$i];
+
+                if($this->st_model->opname_detail_insert($opname_detail))
+                $input_detail_success = TRUE;
+            }
+        }
+
+        if($input_detail_success){
+            return $this->session->set_flashdata('success', "Purchase Request Telah Terbentuk");
+        }else{
+            return $this->session->set_flashdata('failed', "Purchase Request Gagal Terbentuk");
+        }
     }
 
     public function edit(){
