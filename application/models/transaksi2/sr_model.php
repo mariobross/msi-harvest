@@ -218,6 +218,7 @@ class Sr_model extends CI_Model {
                 else
                     return FALSE;
             }
+            //tambahkan menghapus data di table odrf di SAP oke brooo
         }
 
         if($this->stdstock_details_delete($id_stdstock_header)){

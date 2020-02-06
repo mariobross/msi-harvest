@@ -116,22 +116,33 @@ class TransferIn_model extends CI_Model {
       // echo $this->db->last_query();
       // die();
       $query = $this->db->get();
-      $con = $query->result_array();
-      $id_stdstock_header = $con[0]["id_stdstock_header"];
       
-      $this->db->select('requirement_qty'); 
-      $this->db->from('t_stdstock_detail');
-      $this->db->where('id_stdstock_header', $id_stdstock_header);
-      $this->db->where('material_no',$material_no);
+      $con = $query->result_array();
+      
+      $id_stdstock_header='';
+      if(count($con) != 0){
+        $id_stdstock_header = $con[0]["id_stdstock_header"];
 
-      $queryDetail = $this->db->get();
-      $conDetail = $queryDetail->result_array();
-  
-      if($conDetail){
-        return $conDetail;
-      }else{
-        return false;
+        $this->db->select('requirement_qty'); 
+        $this->db->from('t_stdstock_detail');
+        $this->db->where('material_no',$material_no);
+        if($id_stdstock_header != ''){
+          $this->db->where('id_stdstock_header', $id_stdstock_header);
+        }
+
+        $queryDetail = $this->db->get();
+        // echo $this->db->last_query();
+        // die();
+        $conDetail = $queryDetail->result_array();
+    
+        if($conDetail){
+          return $conDetail;
+        }else{
+          return false;
+        }
       }
+      $conDetail = 0; 
+      return $conDetail;
     }
 
 
@@ -554,13 +565,20 @@ class TransferIn_model extends CI_Model {
 	}
   
   function t_grsto_header_delete($id_grsto_header){
+    $data = $this->grsto_header_select($id_grpo_header);
+    $back = $data['back'];
+    if($back != 0){
       if($this->t_grsto_details_delete($id_grsto_header)){
-          $this->db->where('id_grsto_header', $id_grsto_header);
-          if($this->db->delete('t_grsto_header'))
-              return TRUE;
-          else
-              return FALSE;
+        $this->db->where('id_grsto_header', $id_grsto_header);
+        if($this->db->delete('t_grsto_header'))
+            return TRUE;
+        else
+            return FALSE;
       }
+    }else{
+      return FALSE;
+    }
+      
   }
 
     function t_grsto_details_delete($id_grsto_header) {
