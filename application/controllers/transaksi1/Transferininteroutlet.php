@@ -74,7 +74,7 @@ class Transferininteroutlet extends CI_Controller
             $nestedData['created_by'] = $val['user_input'];
             $nestedData['approved_by'] = $val['user_approved'];
             $nestedData['last_modified'] = date("d-m-Y",strtotime($val['lastmodified']));
-            $nestedData['back'] = $val['back'] =='1'?'Integrated':'Not Integrated';;
+            $nestedData['back'] = $val['back'] =='1'? 'Not Integrated':'Integrated';;
             $data[] = $nestedData;
 
         }
@@ -135,11 +135,20 @@ class Transferininteroutlet extends CI_Controller
             $i = 1;
             foreach($grsto_details as $key=>$value){
                 $srQty = $this->tIn_model->getQtySR($value['EBELN'],$value['MATNR'],$value['receiving_plant']);
+                $srQuantity ='';
+                if($srQty == 0){
+                    $srQuantity = 0;
+                }else{
+                    if( $srQty[0]["requirement_qty"] != '.000000' ){
+                        $srQuantity = $srQty[0]["requirement_qty"];
+                    }
+                    $srQuantity = 0;
+                }
                 $nestedData=array();
                 $nestedData['NO'] = $i;
                 $nestedData['MATNR'] = $value['MATNR'];
                 $nestedData['MAKTX'] = $value['MAKTX'];
-                $nestedData['SRQUANTITY'] = $srQty[0]["requirement_qty"] != '.000000' ? $srQty[0]["requirement_qty"] : 0 ;
+                $nestedData['SRQUANTITY'] = $srQuantity;
                 $nestedData['TFQUANTITY'] = $value["TFQUANTITY"] != '.000000' ? $value["TFQUANTITY"] : 0;
                 $nestedData['GRQUANTITY'] = '';
                 $nestedData['UOM'] = $value['BSTME'];
@@ -219,6 +228,7 @@ class Transferininteroutlet extends CI_Controller
         $grsto_header['status'] = $approve == 2 ? $approve: '1';
         $grsto_header['id_user_input'] = '2392';
         $grsto_header['id_user_approved'] = $approve == 2 ? 2392 : 0;
+        $grsto_header['back'] = '1';
 
         $grsto_details['material_no'] = $this->input->post('detMatrialNo');
         $count = count($grsto_details['material_no']);
@@ -411,8 +421,20 @@ class Transferininteroutlet extends CI_Controller
         $id_grsto_header = $this->input->post('deleteArr');
         $deleteData = false;
         foreach($id_grsto_header as $id){
-            if($this->tIn_model->t_grsto_header_delete($id))
-            $deleteData = true;
+            $cek = $this->tIn_model->t_grsto_header_delete($id);
+            if($cek){
+                $deleteData = true;
+                $json_data = array(
+                    "data"            => $cek 
+                );
+                echo json_encode($json_data);
+            }else{
+                $json_data = array(
+                    "message"         => 'Transfer In Inter Outlet sudah Terintegrasi dan tidak bisa dihapus',
+                    "data"            => $cek 
+                );
+                echo json_encode($json_data); 
+            }
         }
         
         if($deleteData){

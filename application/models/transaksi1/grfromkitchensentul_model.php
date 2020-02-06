@@ -5,7 +5,8 @@ class Grfromkitchensentul_model extends CI_Model {
   function __construct() {
     parent:: __construct();
 
-    $this->msi_sap = $this->load->database('msi_sap', TRUE);
+    // $this->msi_sap = $this->load->database('msi_sap', TRUE);
+    $SAP_MSI = $this->load->database('SAP_MSI', TRUE);
   }
 
   public function getDataPoKitchen_Header($fromDate,$toDate,$status)
@@ -39,7 +40,7 @@ class Grfromkitchensentul_model extends CI_Model {
   function sap_grpodlv_headers_select_slip_number($slipNumberHeader = "", $ItmsGrpNam = ""){
     $response = NULL;
     
-    $this->msi_sap->select("OWTQ.U_DocNum as VBELN, 
+    $SAP_MSI->select("OWTQ.U_DocNum as VBELN, 
                             convert(date, OWTQ.DocDate) as DELIV_DATE, 
                             OWTQ.ToWhsCode, 
                             OITM.ItmsGrpCod as DISPO, 
@@ -55,31 +56,31 @@ class Grfromkitchensentul_model extends CI_Model {
                             WTQ1.unitMsr as UOM, 
                             OWTQ.Filler,
                             OITB.ItmsGrpNam,OITB.ItmsGrpNam");
-    $this->msi_sap->from('OWTQ');
-    $this->msi_sap->join('WTQ1','OWTQ.DocEntry = WTQ1.DocEntry','inner');
-    $this->msi_sap->join('OITM','OITM.ItemCode = WTQ1.ItemCode','inner');
-    $this->msi_sap->join('OWHS','OWTQ.ToWhsCode = OWHS.WhsCode','inner');
-    $this->msi_sap->join('NNM1','OWTQ.Series=NNM1.Series','inner');
-    $this->msi_sap->join('OITB','OITM.ItmsGrpCod = OITB.ItmsGrpCod','inner');
+    $SAP_MSI->from('OWTQ');
+    $SAP_MSI->join('WTQ1','OWTQ.DocEntry = WTQ1.DocEntry','inner');
+    $SAP_MSI->join('OITM','OITM.ItemCode = WTQ1.ItemCode','inner');
+    $SAP_MSI->join('OWHS','OWTQ.ToWhsCode = OWHS.WhsCode','inner');
+    $SAP_MSI->join('NNM1','OWTQ.Series=NNM1.Series','inner');
+    $SAP_MSI->join('OITB','OITM.ItmsGrpCod = OITB.ItmsGrpCod','inner');
 
-    $this->msi_sap->where('OWTQ.ToWhsCode', 'T.DFRHTM');
+    $SAP_MSI->where('OWTQ.ToWhsCode', 'T.DFRHTM');
     
     if(empty($slipNumberHeader) && empty($ItmsGrpNam)) {
-      $this->msi_sap->where('OWTQ.U_DocNum is NOT NULL', NULL, FALSE);
+      $SAP_MSI->where('OWTQ.U_DocNum is NOT NULL', NULL, FALSE);
     } else if(!empty($slipNumberHeader) && empty($ItmsGrpNam)) {
-      $this->msi_sap->where('OWTQ.U_DocNum',(int)$slipNumberHeader);
+      $SAP_MSI->where('OWTQ.U_DocNum',(int)$slipNumberHeader);
     } else if(!empty($slipNumberHeader) && !empty($ItmsGrpNam)){
 
       if($ItmsGrpNam == 'all'){
-        $this->msi_sap->where('OWTQ.U_DocNum', (int)$slipNumberHeader);
+        $SAP_MSI->where('OWTQ.U_DocNum', (int)$slipNumberHeader);
       } else {
-        $this->msi_sap->where('OWTQ.U_DocNum', (int)$slipNumberHeader);
-        $this->msi_sap->where('OITB.ItmsGrpNam', $ItmsGrpNam);
+        $SAP_MSI->where('OWTQ.U_DocNum', (int)$slipNumberHeader);
+        $SAP_MSI->where('OITB.ItmsGrpNam', $ItmsGrpNam);
       }
       
     } else {}
     
-    $query = $this->msi_sap->get();
+    $query = $SAP_MSI->get();
     
     $k=1;
     foreach ($query->result_array() as $row)
@@ -119,11 +120,11 @@ class Grfromkitchensentul_model extends CI_Model {
 
     function getDataQtyU_grqty_web($base, $item){
       
-      $this->msi_sap->from('WTR1');
-      $this->msi_sap->where('DocEntry', $base);
-      $this->msi_sap->where('LineNum', $item);
+      $SAP_MSI->from('WTR1');
+      $SAP_MSI->where('DocEntry', $base);
+      $SAP_MSI->where('LineNum', $item);
 
-      $query = $this->msi_sap->get();
+      $query = $SAP_MSI->get();
 
       if(($query)&&($query->num_rows() > 0))
         return $query->row_array();
@@ -180,9 +181,9 @@ class Grfromkitchensentul_model extends CI_Model {
 
     public function sap_do_select_all($kd_plant="",$do_no="",$do_item="") { 
 
-      // $this->msi_sap->from('WTR1');
+      // $SAP_MSI->from('WTR1');
 
-      $this->msi_sap->select("OWTR.DocEntry VBELN,
+      $SAP_MSI->select("OWTR.DocEntry VBELN,
                               OWTR.DocDate DELIV_DATE,
                               OWTR.ToWhsCode,
                               WTR1.LineNum POSNR, 
@@ -194,19 +195,19 @@ class Grfromkitchensentul_model extends CI_Model {
                               OITM.InvntryUom VRKME, 
                               WTR1.LineNum item, 
                               ToWhsCode PLANT");
-      $this->msi_sap->from('OWTR');
-      $this->msi_sap->join('WTR1','OWTR.DocEntry = WTR1.DocEntry','inner');
-      $this->msi_sap->join('OITM','WTR1.ItemCode = OITM.ItemCode','inner');
-      $this->msi_sap->join('OWHS','OWHS.WhsCode = OWTR.Filler','inner');
-      $this->msi_sap->join('NNM1','OWTR.Series=NNM1.Series','inner');
+      $SAP_MSI->from('OWTR');
+      $SAP_MSI->join('WTR1','OWTR.DocEntry = WTR1.DocEntry','inner');
+      $SAP_MSI->join('OITM','WTR1.ItemCode = OITM.ItemCode','inner');
+      $SAP_MSI->join('OWHS','OWHS.WhsCode = OWTR.Filler','inner');
+      $SAP_MSI->join('NNM1','OWTR.Series=NNM1.Series','inner');
 
-      $this->msi_sap->where('ToWhsCode',$plant);
-      $this->msi_sap->where('(OpenQty-U_grqty_web) >', 0);
-      $this->msi_sap->where('OWTR.CANCELED','N');
-      $this->msi_sap->where('OWTR.U_Reverse','N');
-      $this->msi_sap->where('OWTR.U_Stat',0); //buat ngilangin notifikasi
+      $SAP_MSI->where('ToWhsCode',$plant);
+      $SAP_MSI->where('(OpenQty-U_grqty_web) >', 0);
+      $SAP_MSI->where('OWTR.CANCELED','N');
+      $SAP_MSI->where('OWTR.U_Reverse','N');
+      $SAP_MSI->where('OWTR.U_Stat',0); //buat ngilangin notifikasi
 
-      $query = $this->msi_sap->get();
+      $query = $SAP_MSI->get();
 
       if(($query)&&($query->num_rows() > 0)) {
         
@@ -256,8 +257,8 @@ class Grfromkitchensentul_model extends CI_Model {
     }
     
     function Update_StatOwtr($data, $DOcEntry) {
-      $this->msi_sap->where('DOcEntry', $DOcEntry);
-      if($this->msi_sap->update('OWTR', $data))
+      $SAP_MSI->where('DOcEntry', $DOcEntry);
+      if($SAP_MSI->update('OWTR', $data))
         return TRUE;
       else
         return FALSE;
@@ -265,10 +266,10 @@ class Grfromkitchensentul_model extends CI_Model {
 
     function Update_U_grqty_web_WTR1($data, $DOcEntry, $LineNum) {
       
-      $this->msi_sap->where('DOcEntry', $DOcEntry);
-      $this->msi_sap->where('LineNum', $LineNum);
+      $SAP_MSI->where('DOcEntry', $DOcEntry);
+      $SAP_MSI->where('LineNum', $LineNum);
 
-      if($this->msi_sap->update('WTR1', $data))
+      if($SAP_MSI->update('WTR1', $data))
         return TRUE;
       else
         return FALSE;
@@ -303,7 +304,7 @@ class Grfromkitchensentul_model extends CI_Model {
     {
         $filler=Array('WMSISTBS','WMSISTFG','WMSISTPR','WMSISTQC','WMSISTRM','WMSISTTR','WDFGSYBS','WDFGSYFG','WDFGSYPR','WDFGSYRM','WDFGSYQC','WDFGSTRM');
 																									
-        $this->msi_sap->select("OWTR.DocEntry VBELN, 
+        $SAP_MSI->select("OWTR.DocEntry VBELN, 
                             OWTR.DocDate DELIV_DATE, 
                             OWTR.ToWhsCode, 
                             WTR1.LineNum POSNR, 
@@ -315,16 +316,16 @@ class Grfromkitchensentul_model extends CI_Model {
                             OITM.InvntryUom VRKME, 
                             WTR1.LineNum item, 
                             ToWhsCode PLANT");
-        $this->msi_sap->from('OWTR');
-        $this->msi_sap->join('WTR1','OWTR.DocEntry = WTR1.DocEntry','inner');
-        $this->msi_sap->join('OITM','WTR1.ItemCode = OITM.ItemCode','inner');
-        $this->msi_sap->join('OWHS','OWHS.WhsCode = OWTR.Filler','inner');
-        $this->msi_sap->join('NNM1','OWTR.Series=NNM1.Series','inner');
-        $this->msi_sap->where('OWTR.ToWhsCode', 'WMSITJST');
-        $this->msi_sap->where('OWTR.CANCELED', 'N');
-        $this->msi_sap->where('OWTR.U_Reverse', 'N');
-        $this->msi_sap->where('OWTR.U_Stat', '0');
-        $this->msi_sap->where_in('Filler',$filler);
+        $SAP_MSI->from('OWTR');
+        $SAP_MSI->join('WTR1','OWTR.DocEntry = WTR1.DocEntry','inner');
+        $SAP_MSI->join('OITM','WTR1.ItemCode = OITM.ItemCode','inner');
+        $SAP_MSI->join('OWHS','OWHS.WhsCode = OWTR.Filler','inner');
+        $SAP_MSI->join('NNM1','OWTR.Series=NNM1.Series','inner');
+        $SAP_MSI->where('OWTR.ToWhsCode', 'WMSITJST');
+        $SAP_MSI->where('OWTR.CANCELED', 'N');
+        $SAP_MSI->where('OWTR.U_Reverse', 'N');
+        $SAP_MSI->where('OWTR.U_Stat', '0');
+        $SAP_MSI->where_in('Filler',$filler);
         
         // if(!empty($do_no)) {
         //     $this->db->where('t0.U_DocNum',$do_no);
@@ -335,7 +336,7 @@ class Grfromkitchensentul_model extends CI_Model {
         // if(empty($do_no)&&empty($do_item)) {
         // }
 
-        $query = $this->msi_sap->get();
+        $query = $SAP_MSI->get();
         $ret = $query->result_array();
         return $ret;
 
