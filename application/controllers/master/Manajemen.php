@@ -1,67 +1,80 @@
 <?php 
-defined('BASEPATH') OR exit('No direct script access allowed');
+
 class Manajemen extends CI_Controller
 {
     public function __construct(){
         parent::__construct();
-        
-        //load model
-        $this->load->model('master/manajemen_model');
+        // $this->config->set_item('language', 'english');
         $this->load->library('form_validation');
+        $this->load->model('master/manajemen_model', 'manajemen_model');
+        //$this->lang->load('form_validation', $this->session->userdata('lang_name'));
+        //$this->lang->load('g_form_validation', $this->session->userdata('lang_name'));
+        
     }
 
     public function index()
     {
-        $this->load->view('master/manajemen_pengguna/list_view');
+        $data['admins'] = $this->manajemen_model->getAdmin();
+    
+        $this->load->view('master/manajemen_pengguna/list_view', $data);
     }
 
-    public function showAllData(){
-       $dt= array(
-           array(
-            "no" => "1",
-            "username" => "sx_bogor",
-            "nama_lengkap"=>"Manager Bogor",
-            "grup_hak_akses"=> "Super Admin"
-           ),
-           array(
-            "no" => "2",
-            "username"=> "st_senopati",
-            "nama_lengkap"=>"Admin senopati",
-            "grup_hak_akses"=> "Super Admin"
-           ),
-           array(
-            "no" => "3",
-            "username"=> "sx_cikini",
-            "nama_lengkap"=>"Manager Cikini",
-            "grup_hak_akses"=> "Super Admin"
-           ),
-           array(
-            "no" => "4",
-            "username"=> "st_pi",
-            "nama_lengkap"=>"Admin Pondok Indah",
-            "grup_hak_akses"=> "Super Admin"
-           ),
-           array(
-            "no" => "5",
-            "username"=> "sx_alam",
-            "nama_lengkap"=>"Manager Alam Sutera",
-            "grup_hak_akses"=> "Super Admin"
-           )
-        ); 
+    function add(){
+        $data['outlets'] = $this->manajemen_model->showOutlet();
+        $data['permGroups'] = $this->manajemen_model->perm_group();
+        $this->load->view('master/manajemen_pengguna/add_form', $data);
+    }
 
-        $data = [
-            "data"=> $dt
-        ];
+    public function store()
+    {
+
+        # code...
+        $manajemen = $this->manajemen_model;
+        $validation = $this->form_validation;
+
+        $validation->set_rules($manajemen->rules());        
         
-        echo json_encode($data);
+        if($validation->run() != false){
+            $manajemen->save();
+            $this->session->set_flashdata('success', "User Berhasil Terdaftar");
+        }else{
+            $this->session->set_flashdata('failed', "User Gagal Terdaftar, Silahkan Cek Kembali Inputan Data");
+        }
+        redirect('master/manajemen/add');
     }
 
-    public function add(){
-        $this->load->view('master/manajemen_pengguna/add_form');
+    public function edit($admin_id = null){
+        if(!isset($admin_id)) redirect('master/manajemen');
+
+        $manajemen = $this->manajemen_model;
+        
+        $validation = $this->form_validation;
+
+        $validation->set_rules('admin_username', 'Username', 'trim|required');
+        $validation->set_rules('admin_realname', 'Nama Lengkap', 'trim|required');
+        $validation->set_rules('admin_email', 'Admin Email', 'trim|valid_email|required');
+
+        if($validation->run() != false){
+            $manajemen->update();
+            $this->session->set_flashdata('success', "User Berhasil di Ubah");
+        }
+
+        $data['admin'] = $manajemen->getAdminbyId($admin_id);
+        $data['outlets'] = $this->manajemen_model->showOutlet();
+        $data['permGroups'] = $this->manajemen_model->perm_group();
+        
+        
+        $this->load->view('master/manajemen_pengguna/edit_form', $data);
     }
 
-    public function edit(){
-        $this->load->view('master/manajemen_pengguna/edit_form');
+    public function delete($admin_id = null)
+    {
+        # code...
+        if(!isset($admin_id)) show_404();
+        
+        if($this->manajemen_model->hapus($admin_id)){
+            redirect('master/manajemen');
+        }
     }
 
 }

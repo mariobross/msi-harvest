@@ -41,6 +41,7 @@
                                     </div>
 								</div>	
 								<br>
+<<<<<<< HEAD
 								<div class="row">
 									<div class="col-md-12" style="overflow: auto">
 									<fieldset>
@@ -60,6 +61,32 @@
                             </form>
                         </div>
                     </div>                    
+=======
+								
+                            </form>
+                        </div>
+                    </div>  
+					<div class="card" style="display:none" id="crdTable">
+						<div class="card-body">
+							<div class="row">
+								<div class="col-md-12" style="overflow: auto">
+								<fieldset>
+									<table class="table table-bordered table-striped" id="tblReportOnhand" >
+										<thead>
+											<tr>
+												<th style="text-align: center">No</th>
+												<th style="text-align: center">Code</th>
+												<th style="text-align: center">Description</th>
+												<th style="text-align: center">On Hand</th>
+											</tr>
+										</thead>
+									</table>
+								<fieldset>	
+								</div>
+							</div>
+						</div>
+					</div>                  
+>>>>>>> 5dbf60c318293bf2f66affa57da0a6a4cfa0641a
 				</div>
 				<?php  $this->load->view("_template/footer.php")?>
 			</div>
@@ -70,10 +97,17 @@
 			$('#fromDate').datepicker();
 			$('#toDate').datepicker();
 
+<<<<<<< HEAD
 			const table = document.getElementById("tblReportOnhand");
 			const search = document.getElementById("btnSearch");
 			search.addEventListener('click', function () {
 				table.style.display = "table";
+=======
+			const crdTable = document.getElementById("crdTable");
+			const search = document.getElementById("btnSearch");
+			search.addEventListener('click', function () {
+				crdTable.style.display = "";
+>>>>>>> 5dbf60c318293bf2f66affa57da0a6a4cfa0641a
 			});
 		});
 		</script>

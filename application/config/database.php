@@ -78,7 +78,7 @@ $db['default'] = array(
 	'hostname' => 'localhost',
 	'username' => 'root',
 	'password' => '',
-	'database' => '',
+	'database' => 'test_msi_20191223',
 	'dbdriver' => 'mysqli',
 	'dbprefix' => '',
 	'pconnect' => FALSE,
@@ -93,4 +93,22 @@ $db['default'] = array(
 	'stricton' => FALSE,
 	'failover' => array(),
 	'save_queries' => TRUE
+);
+
+$db['SAP_MSI'] = array(
+	'hostname' => '192.168.0.23',
+	'username' => 'YBCDeveloper',
+	'password' => 'ybc@123',
+	'database' => 'Staging_MSI_20191024',
+	'dbdriver' => 'sqlsrv',
+	'dbprefix' => '',
+	'pconnect' => FALSE,
+	'db_debug' => TRUE,
+	'cache_on' => FALSE,
+	'cachedir' => '',
+	'char_set' => 'utf8',
+	'dbcollat' => 'utf8_general_ci',
+	'swap_pre' => '',
+	'autoinit' => TRUE,
+	'stricton' => FALSE,
 );

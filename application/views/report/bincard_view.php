@@ -73,6 +73,7 @@
                                         </fieldset>
                                     </div>
 								</div>	
+<<<<<<< HEAD
 								<br>
 								<div class="row">
 									<div class="col-md-12" style="overflow: auto">
@@ -103,6 +104,41 @@
                             </form>
                         </div>
                     </div>                    
+=======
+							</form>
+                        </div>
+                    </div>
+					<div class="card" style="display:none" id="crdTable">
+						<div class="card-body" >
+							<div class="row">
+								<div class="col-md-12" style="overflow: auto">
+								<fieldset>
+									<table class="table table-bordered table-striped" id="tblReportBincard" >
+										<thead>
+											<tr>
+												<th rowspan="2">No</th>
+												<th rowspan="2">Code</th>
+												<th rowspan="2">Description</th>
+												<th colspan="3" style="text-align: center">Qty In</th>
+												<th rowspan="2" style="text-align: center">Total In</th>
+												<th colspan="2" style="text-align: center">Qty Out</th>
+												<th rowspan="2" style="text-align: center">Total Out</th>
+											</tr>
+											<tr>
+												<th style="text-align: center">GR From CK</th>
+												<th style="text-align: center">GR From Outlet</th>
+												<th style="text-align: center">GR Return</th>
+												<th style="text-align: center">ISSUE Transfer Outlet</th>
+												<th style="text-align: center">ISSUE Return Out</th>
+											</tr>
+										</thead>
+									</table>
+								<fieldset>	
+								</div>
+							</div>
+						</div>
+					</div>                   
+>>>>>>> 5dbf60c318293bf2f66affa57da0a6a4cfa0641a
 				</div>
 				<?php  $this->load->view("_template/footer.php")?>
 			</div>
@@ -113,10 +149,17 @@
 			$('#fromDate').datepicker();
 			$('#toDate').datepicker();
 
+<<<<<<< HEAD
 			const table = document.getElementById("tblReportBincard");
 			const search = document.getElementById("btnSearch");
 			search.addEventListener('click', function () {
 				table.style.display = "block";
+=======
+			const crdTable = document.getElementById("crdTable");
+			const search = document.getElementById("btnSearch");
+			search.addEventListener('click', function () {
+				crdTable.style.display = "";
+>>>>>>> 5dbf60c318293bf2f66affa57da0a6a4cfa0641a
 			});
 		});
 		</script>
