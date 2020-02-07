@@ -398,9 +398,9 @@ class Transferoutinteroutlet extends CI_Controller
             }
         }
         if($succes_cancel_po_from_vendor){
-            return $this->session->set_flashdata('success', "In PO From Vendor Berhasil di Cancel");
+            return $this->session->set_flashdata('success', "Transfer Out Inter Outlet Berhasil di Cancel");
         }else{
-            return $this->session->set_flashdata('failed', "In PO From Vendor Gagal di Cancel");
+            return $this->session->set_flashdata('failed', "Transfer Out Inter Outlet Gagal di Cancel");
         }  
     }
 	
@@ -408,14 +408,26 @@ class Transferoutinteroutlet extends CI_Controller
         $id_gistonew_out_header = $this->input->post('deleteArr');
         $deleteData = false;
         foreach($id_gistonew_out_header as $id){
-            if($this->tout_model->t_gistonew_out_header_delete($id))
-            $deleteData = true;
+            $cek = $this->tout_model->t_gistonew_out_header_delete($id);
+            if($cek){
+                $deleteData = true;
+                $json_data = array(
+                    "data"            => $cek 
+                );
+                echo json_encode($json_data);
+            }else{
+                $json_data = array(
+                    "message"         => 'Transfer Out Inter Outlet sudah Terintegrasi dan tidak bisa dihapus',
+                    "data"            => $cek 
+                );
+                echo json_encode($json_data); 
+            }
         }
         
         if($deleteData){
-            return $this->session->set_flashdata('success', "SR Berhasil dihapus");
+            return $this->session->set_flashdata('success', "Transfer Out Inter Outlet Berhasil dihapus");
         }else{
-            return $this->session->set_flashdata('failed', "SR Gagal dihapus");
+            return $this->session->set_flashdata('failed', "Transfer Out Inter Outlet Gagal dihapus");
         }
 	}
 	
