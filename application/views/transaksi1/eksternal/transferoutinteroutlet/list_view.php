@@ -130,7 +130,13 @@
                                 type: "post",
                                 data:{deleteArr: deleteidArr},
                                 success:function(res) {
-                                    dataTable.ajax.reload();
+                                    cek = JSON.parse(res);
+                                    if(!cek.data){
+                                        alert(cek.message);
+                                    }else{
+                                        location.reload(true);
+                                        getTable.row($(this).closest("tr")).remove().draw();
+                                    }
                                 }
                             });
                         }
