@@ -516,13 +516,20 @@ class Transferout_model extends CI_Model {
 	}
   
     function t_gistonew_out_header_delete($id_gistonew_out_header){
+      $data = $this->gistonew_out_header_select($id_gistonew_out_header);
+      $back = $data['back'];
+      if($back != 0){
         if($this->t_gistonew_out_details_delete($id_gistonew_out_header)){
-            $this->db->where('id_gistonew_out_header', $id_gistonew_out_header);
-            if($this->db->delete('t_gistonew_out_header'))
-                return TRUE;
-            else
-                return FALSE;
+          $this->db->where('id_gistonew_out_header', $id_gistonew_out_header);
+          if($this->db->delete('t_gistonew_out_header'))
+            return TRUE;
+          else
+            return FALSE;
         }
+      }else{
+        return false;
+      }
+        
     }
 
     function t_gistonew_out_details_delete($id_gistonew_out_header) {
