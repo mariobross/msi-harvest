@@ -21,12 +21,11 @@
                                             <div class="form-group row">
 												<label class="col-lg-3 col-form-label">Item Group</label>
 												<div class="col-lg-9">
-												<select class="form-control form-control-select2" data-live-search="true">
-														<option value="">Pilih 1</option>
-														<option value="">Pilih 2</option>
-														<option value="">Pilih 3</option>
-														<option value="">Pilih 4</option>
-														<option value="">Pilih 5</option>
+												<select class="form-control form-control-select2" data-live-search="true" id="itemGroup" name="itemGroup">
+													<option value="all">--- All ---</option>
+														<?php foreach($itemGroup as $key=>$val):?>
+															<option value="<?=$val['ItmsGrpNam']?>"><?=$val['ItmsGrpNam']?></option>
+														<?php endforeach;?>
 													</select>
 												</div>
 											</div>
@@ -67,8 +66,17 @@
 		<?php  $this->load->view("_template/js.php")?>
 		<script>
 		$(document).ready(function () {
-			$('#fromDate').datepicker();
-			$('#toDate').datepicker();
+			const date = new Date();
+			const today = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+			var optSimple = {
+				format: 'dd-mm-yyyy',
+				todayHighlight: true,
+				orientation: 'bottom right',
+				autoclose: true
+			};
+
+			$('#fromDate').datepicker(optSimple);
+			$('#toDate').datepicker(optSimple);
 
 			const table = document.getElementById("tblReportOnhand");
 			const search = document.getElementById("btnSearch");
