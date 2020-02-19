@@ -10,6 +10,16 @@
 			<div class="content-wrapper">
                 <!-- <?php  $this->load->view("_template/breadcrumb.php")?> -->
 				<div class="content">
+                    <?php if ($this->session->flashdata('success')): ?>
+						<div class="alert alert-success" role="alert">
+							<?php echo $this->session->flashdata('success'); ?>
+						</div>
+					<?php endif; ?>
+					<?php if ($this->session->flashdata('failed')): ?>
+						<div class="alert alert-danger" role="alert">
+							<?php echo $this->session->flashdata('failed'); ?>
+						</div>
+					<?php endif; ?>
                     <div class="card">
                         <div class="card-header">
                             <legend class="font-weight-semibold"><i class="icon-search4 mr-2"></i>Search of Whole to Slice</legend>  
@@ -21,16 +31,16 @@
                                     <div class="form-group row">
                                         <label class="col-lg-3 col-form-label">Status</label>
                                         <div class="col-lg-9">
-                                            <select class="form-control form-control-select2" data-live-search="true">
+                                            <select class="form-control form-control-select2" data-live-search="true" id="status" name="status">
                                                 <option value="">none selected</option>
-                                                <option value="approved">Approved</option>
-                                                <option value="notapproved">Not Approved</option>
+                                                <option value="2">Approved</option>
+                                                <option value="1">Not Approved</option>
                                             </select>
                                         </div>
                                     </div>
 
                                     <div class="text-right">
-                                        <button type="submit" class="btn btn-primary">Search<i class="icon-search4  ml-2"></i></button>
+                                        <button type="button" class="btn btn-primary" onclick="onSearch()">Search<i class="icon-search4  ml-2"></i></button>
                                     </div>
                                 </div>
                             </div>
@@ -79,35 +89,8 @@
         <?php  $this->load->view("_template/js.php")?>
         <script>
             $(document).ready(function(){
-                dataTable = $('#tableWhole').DataTable({
-                    "ordering":false,  "paging": true, "searching":true,
-                    "ajax": {
-                        "url":"<?php echo site_url('transaksi2/whole/showAllData');?>",
-                        "type":"POST"
-                    },
-                    "columns": [
-                        {"data":"no", "className":"dt-center", render:function(data, type, row, meta){
-                            rr=`<input type="checkbox" class="check_delete" id="chk_${data}" value="${data}" onclick="checkcheckbox();">`;
-                            return rr;
-                        }},
-                        {"data":"action", "className":"dt-center", render:function(data, type, row, meta){
-                                rr = `<a href='<?php echo site_url('transaksi2/whole/edit')?>' ><i class='icon-file-plus2' title="Edit"></i></a>&nbsp;
-                                        <a onClick="deleteConfirm('<?php echo site_url('transaksi2/whole/delete')?>')" href="#!"><i class='icon-cross2' title="Delete"></i></a>`;
-                                return rr;
-                        }},
-                        {"data":"id"},
-                        {"data":"date"},
-                        {"data":"item_no"},
-                        {"data":"item_description"},
-                        {"data":"quatity"},
-                        {"data":"status"},
-                        {"data":"created_by"},
-                        {"data":"approved_by"},
-                        {"data":"receipt_number"},
-                        {"data":"issue_number"},
-                        {"data":"log"}
-                    ]
-                });
+                
+                showListData();
 
                 // untuk check all
                 $("#checkall").click(function(){
@@ -132,11 +115,18 @@
                         var confirmDelete = confirm("Do you really want to Delete records?");
                         if(confirmDelete == true){
                             $.ajax({
-                                url:"", //masukan url untuk delete
+                                url:"<?php echo site_url('transaksi2/whole/deleteData');?>", //masukan url untuk delete
                                 type: "post",
                                 data:{deleteArr: deleteidArr},
                                 success:function(res) {
-                                    dataTable.ajax.reload();
+                                    cek = JSON.parse(res);
+                                    if(!cek.data){
+                                        alert(cek.message);
+                                    }else{
+                                        location.reload(true);
+                                        getTable.row($(this).closest("tr")).remove().draw();
+                                    }
+                                    
                                 }
                             });
                         }
@@ -169,6 +159,57 @@
                 }
 
             });
+
+            function onSearch(){
+                const status = $('#status').val();
+
+                showListData();
+            }
+
+            function showListData(){
+                const obj = $('#tableWhole tbody tr').length;
+
+                if(obj > 0){
+                    const dataTable = $('#tableWhole').DataTable();
+                    dataTable.destroy();
+                    $('#tableWhole > tbody > tr').remove();
+                    
+                }
+
+                const status = $('#status').val();
+
+
+                dataTable = $('#tableWhole').DataTable({
+                    "ordering":false,  "paging": true, "searching":true,
+                    "ajax": {
+                        "url":"<?php echo site_url('transaksi2/whole/showAllData');?>",
+                        "type":"POST",
+                        "data":{stts: status}
+                    },
+                    "columns": [
+                        {"data":"id_twtsnew_header", "className":"dt-center", render:function(data, type, row, meta){
+                            // console.log(row['dataInTo'])
+                            rr=`<input type="checkbox" class="check_delete" id="chk_${data}" value="${data}" onclick="checkcheckbox();">`;
+                            return rr;
+                        }},
+                        {"data":"id_twtsnew_header", "className":"dt-center", render:function(data, type, row, meta){
+                            rr = `<a href='<?php echo site_url('transaksi2/whole/edit/')?>${data}'><i class='icon-file-plus2' title="Edit"></i></a>`;
+                            return rr;
+                        }},
+                        {"data":"id_twtsnew_header", "className":"dt-center"},
+                        {"data":"last_update", "className":"dt-center"},
+                        {"data":"kode_paket"},
+                        {"data":"nama_paket"},
+                        {"data":"quantity_paket"},
+                        {"data":"status"},
+                        {"data":"admin_input"},
+                        {"data":"admin_approved"},
+                        {"data":"gr_no"},
+                        {"data":"gi_no"},
+                        {"data":"log"}
+                    ]
+                });
+            }
         
         </script>
 	</body>
