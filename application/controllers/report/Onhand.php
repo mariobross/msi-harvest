@@ -24,5 +24,43 @@ class Onhand extends CI_Controller{
         $object['itemGroup'] = $this->onh_model->item_group();
         $this->load->view("report/onhand_view",$object);
     }
+
+    public function showAllData(){
+        $itemGroup = $this->input->post('item_Group');
+        $onHandData = $this->onh_model->getData($itemGroup);
+
+        $dt = array();
+        $no = 1;
+        if($onHandData){
+            foreach($onHandData as $key=>$val){
+                $netedData = [];
+                $nestedData['no'] = $no;
+                $nestedData['code'] = $val['ItemCode'];
+                $nestedData['Description'] = $val['ItemName'];
+                $nestedData['OnHand'] = number_format($val['OnHand'],2,",",".");
+                $nestedData['ItmsGrpNam'] = $val['ItmsGrpNam'];
+                $dt[] = $nestedData;
+                $no++;
+            }
+        }
+        $json_data = array(
+            "data" => $dt
+        );
+        echo json_encode($json_data) ;
+    }
+
+    function printExcel(){
+        parse_str(substr(strrchr($_SERVER['REQUEST_URI'], "?"),1), $_GET);
+        $kd_plant = $this->session->userdata['ADMIN']['plant'];
+
+        $itemGroup = $_GET['item_group'];
+        $object['page_title'] = 'Onhand Report';
+        $object['plant1'] = $kd_plant;
+        $object['plant_name'] = 'THE HARVEST MANGGA BESAR';
+        $object['item_group_code'] = $itemGroup;
+        $object['dataOnHand'] = $this->onh_model->getData($itemGroup);
+        
+        $this->load->view("report/excel/onhand_excel",$object);
+    }
 }
 ?>
