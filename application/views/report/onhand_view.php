@@ -2,6 +2,11 @@
 <html lang="en">
 	<head>
 		<?php  $this->load->view("_template/head.php")?>
+		<style>
+		.hide{
+			display: none;
+		}
+		</style>
 	</head>
 	<body>
 	<?php  $this->load->view("_template/nav.php")?>
@@ -31,34 +36,39 @@
 											</div>
 
                                             <div class="text-right">
-                                                <button type="button" id="btnSearch" class="btn btn-primary">Search<i class="icon-search4 ml-2"></i></button>
+												<button type="button" class="btn btn-primary" onclick="onSearch()">Search<i class="icon-search4  ml-2"></i></button>
 											</div>
-											
-
-											
-                                        </fieldset>
+										</fieldset>
                                     </div>
 								</div>	
-								<br>
-								<div class="row">
-									<div class="col-md-12" style="overflow: auto">
-									<fieldset>
-										<table class="table table-bordered table-striped" id="tblReportOnhand" style="display:none">
-											<thead>
-												<tr>
-													<th style="text-align: center">No</th>
-													<th style="text-align: center">Code</th>
-													<th style="text-align: center">Description</th>
-													<th style="text-align: center">On Hand</th>
-												</tr>
-											</thead>
-										</table>
-									<fieldset>	
-									</div>
-								</div>
-                            </form>
+							</form>
                         </div>
-                    </div>                    
+                    </div>  
+					<div class="card hide">
+						<div class="card-header">
+                            <legend class="font-weight-semibold"><i class="icon-list mr-2"></i>List of Onhand Report</legend>
+                            <button onclick="printExcel()" class="btn btn-success"> Download To Excel</button>
+                            
+                        </div>
+						<div class="card-body">
+							<div class="row">
+								<div class="col-md-12" style="overflow: auto">
+								<fieldset>
+									<table class="table table-striped" id="tblReportOnhand">
+										<thead>
+											<tr>
+												<th style="text-align: center">No</th>
+												<th style="text-align: center">Code</th>
+												<th style="text-align: center">Description</th>
+												<th style="text-align: center">On Hand</th>
+											</tr>
+										</thead>
+									</table>
+								<fieldset>	
+								</div>
+							</div>
+						</div>
+					</div>                  
 				</div>
 				<?php  $this->load->view("_template/footer.php")?>
 			</div>
@@ -78,12 +88,50 @@
 			$('#fromDate').datepicker(optSimple);
 			$('#toDate').datepicker(optSimple);
 
-			const table = document.getElementById("tblReportOnhand");
-			const search = document.getElementById("btnSearch");
-			search.addEventListener('click', function () {
-				table.style.display = "table";
-			});
+			// const table = document.getElementById("tblReportOnhand");
+			// const search = document.getElementById("btnSearch");
 		});
+
+		function printExcel(){
+			const itemGroup = $('#itemGroup').val();
+			// $.post('report/onhand/printExcel',{item_group:itemGroup},)
+			const uri = "<?php echo base_url()?>report/onhand/printExcel/?item_group="+itemGroup
+			window.location= uri;
+		}
+
+		function onSearch(){
+			$(".card").removeClass('hide');
+			const itemGroup = $('#itemGroup').val();
+			console.log(itemGroup);
+
+			showDataList(itemGroup);
+		}
+
+		function showDataList(itemGroup){
+                const obj = $('#tblReportOnhand tbody tr').length;
+
+                if(obj > 0){
+                    const dataTable = $('#tblReportOnhand').DataTable();
+                    dataTable.destroy();
+                    $('#tblReportOnhand > tbody > tr').remove();
+                    
+                }         
+
+                dataTable = $('#tblReportOnhand').DataTable({
+                    "ordering":false,  "paging": true, "searching":true,
+                    "ajax": {
+                        "url":"<?php echo site_url('report/onhand/showAllData');?>",
+                        "type":"POST",
+                        "data":{item_Group: itemGroup}
+                    },
+                    "columns": [
+                        {"data":"no", "className":"dt-center"},
+                        {"data":"code", "className":"dt-center"},
+                        {"data":"Description", "className":"dt-center"},
+                        {"data":"OnHand", "className":"dt-center"}
+                    ]
+                });
+            }
 		</script>
 	</body>
 </html>
