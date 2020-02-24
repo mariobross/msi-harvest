@@ -52,11 +52,12 @@ class Onhand extends CI_Controller{
     function printExcel(){
         parse_str(substr(strrchr($_SERVER['REQUEST_URI'], "?"),1), $_GET);
         $kd_plant = $this->session->userdata['ADMIN']['plant'];
+        $plant_name = $this->session->userdata['ADMIN']['plant_name'];
 
         $itemGroup = $_GET['item_group'];
         $object['page_title'] = 'Onhand Report';
         $object['plant1'] = $kd_plant;
-        $object['plant_name'] = 'THE HARVEST MANGGA BESAR';
+        $object['plant_name'] = 'THE HARVEST '. strtoupper($plant_name);
         $object['item_group_code'] = $itemGroup;
         $object['dataOnHand'] = $this->onh_model->getData($itemGroup);
         
