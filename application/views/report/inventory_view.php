@@ -2,6 +2,11 @@
 <html lang="en">
 	<head>
 		<?php  $this->load->view("_template/head.php")?>
+		<style>
+		.hide{
+			display: none;
+		}
+		</style>
 	</head>
 	<body>
 	<?php  $this->load->view("_template/nav.php")?>
@@ -44,7 +49,7 @@
 													<select class="form-control form-control-select2" data-live-search="true" id="warehouse" name="warehouse">
 														<option value="">Select Item</option>
 														<?php foreach($warehouse as $key=>$val):?>
-															<option value="<?=$val['WhsCode']?>"><?=$val['WhsName']?></option>
+															<option value="<?=$val['WhsCode']?>"><?=$val['WhsName'].'-'.$val['WhsCode']?></option>
 														<?php endforeach;?>
 													</select>
 												</div>
@@ -63,56 +68,21 @@
 											</div>
 
                                             <div class="text-right">
-                                                <button type="button" id="btnSearch" class="btn btn-primary">Search<i class="icon-search4 ml-2"></i></button>
+												<button type="button" class="btn btn-primary" onclick="onSearch()">Search<i class="icon-search4  ml-2"></i></button>
 											</div>
-											
-
-											
-                                        </fieldset>
+										</fieldset>
                                     </div>
 								</div>	
 								<br>
-								<div class="row">
-									<div class="col-md-12" style="overflow: auto">
-									<fieldset>
-										<table class="table table-bordered table-striped" id="tblReportInventory" style="display:none">
-											<thead>
-												<tr>
-													<th rowspan="2">No</th>
-													<th rowspan="2">Code</th>
-													<th rowspan="2">Description</th>
-													<th rowspan="2">Unit</th>
-													<th rowspan="2" style="text-align: center">Beginning Stock</th>
-													<th colspan="7" style="text-align: center">Qty In</th>
-													<th rowspan="2" style="text-align: center">Total In</th>
-													<th colspan="6" style="text-align: center">Qty Out</th>
-													<th rowspan="2" style="text-align: center">Total Out</th>
-													<th rowspan="2">Subtotal</th>
-												</tr>
-												<tr>
-													<th style="text-align: center">GR From CK</th>
-													<th style="text-align: center">GR PO</th>
-													<th style="text-align: center">GR From Outlet</th>
-													<th style="text-align: center">GR Production</th>
-													<th style="text-align: center">GR Whole Cake</th>
-													<th style="text-align: center">GR No PO</th>
-													<th style="text-align: center">GR Return</th>
-													<th style="text-align: center">ISSUE Sales</th>
-													<th style="text-align: center">ISSUE Transfer Outlet</th>
-													<th style="text-align: center">ISSUE Production</th>
-													<th style="text-align: center">ISSUE Whole Cake</th>
-													<th style="text-align: center">ISSUE Waste Material</th>
-													<th style="text-align: center">ISSUE Return Out</th>
-												</tr>
-											</thead>
-										</table>
-									<fieldset>	
-									</div>
-								</div>
                             </form>
                         </div>
                     </div>  
-					<div class="card" style="display:none" id="crdTable">
+					<div class="card hide">
+						<div class="card-header">
+                            <legend class="font-weight-semibold"><i class="icon-list mr-2"></i>List of Onhand Report</legend>
+                            <button onclick="printExcel()" class="btn btn-success"> Download To Excel</button>
+                            
+                        </div>
 						<div class="card-body" >
 							<div class="row">
 								<div class="col-md-12" style="overflow: auto">
@@ -163,7 +133,7 @@
 			const date = new Date();
 			const today = new Date(date.getFullYear(), date.getMonth(), date.getDate());
 			var optSimple = {
-				format: 'dd-mm-yyyy',
+				format: 'yyyy-mm-dd',
 				todayHighlight: true,
 				orientation: 'bottom right',
 				autoclose: true
@@ -172,12 +142,68 @@
 			$('#fromDate').datepicker(optSimple);
 			$('#toDate').datepicker(optSimple);
 
-			const table = document.getElementById("tblReportInventory");
-			const search = document.getElementById("btnSearch");
-			search.addEventListener('click', function () {
-				table.style.display = "block";
-			});
+			// const table = document.getElementById("tblReportInventory");
+			// const search = document.getElementById("btnSearch");
+			// search.addEventListener('click', function () {
+			// 	table.style.display = "block";
+			// });
 		});
+
+		function onSearch(){
+			$(".card").removeClass('hide');
+			
+			const fromDate = $('#fromDate').val();
+			const toDate = $('#toDate').val();
+			const warehouse = $('#warehouse').val();
+			const itemGroup = $('#itemGroup').val();
+
+			console.log(warehouse);
+
+			showDataList(itemGroup, fromDate, toDate, warehouse);
+		}
+
+		function showDataList(itemGroup, fromDate, toDate, warehouse){
+			const obj = $('#tblReportInventory tbody tr').length;
+
+			if(obj > 0){
+				const dataTable = $('#tblReportInventory').DataTable();
+				dataTable.destroy();
+				$('#tblReportInventory > tbody > tr').remove();
+				
+			}         
+
+			dataTable = $('#tblReportInventory').DataTable({
+				"ordering":false,  "paging": true, "searching":true,
+				"ajax": {
+					"url":"<?php echo site_url('report/inventory/showAllData');?>",
+					"type":"POST",
+					"data":{item_Group: itemGroup, fromDate:fromDate, toDate:toDate, whs:warehouse}
+				},
+				"columns": [
+					{"data":"no", "className":"dt-center"},
+					{"data":"itemcode", "className":"dt-center"},
+					{"data":"ItemName", "className":"dt-center"},
+					{"data":"InvntryUom", "className":"dt-center"},
+					{"data":"stock_awal", "className":"dt-center"},
+					{"data":"qty_ck", "className":"dt-center"},
+					{"data":"qty_po", "className":"dt-center"},
+					{"data":"qty_fo", "className":"dt-center"},
+					{"data":"qty_produc", "className":"dt-center"},
+					{"data":"qty_wc", "className":"dt-center"},
+					{"data":"qty_nonpo", "className":"dt-center"},
+					{"data":"qty_retin", "className":"dt-center"},
+					{"data":"total_in", "className":"dt-center"},
+					{"data":"qty_sales", "className":"dt-center"},
+					{"data":"qty_to", "className":"dt-center"},
+					{"data":"qty_produc_out", "className":"dt-center"},
+					{"data":"qty_wc_out", "className":"dt-center"},
+					{"data":"qty_waste", "className":"dt-center"},
+					{"data":"qty_ro", "className":"dt-center"},
+					{"data":"total_out", "className":"dt-center"},
+					{"data":"subtotal", "className":"dt-center"}
+				]
+			});
+		}
 		</script>
 	</body>
 </html>
