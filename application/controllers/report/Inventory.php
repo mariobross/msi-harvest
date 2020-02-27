@@ -34,15 +34,20 @@ class Inventory extends CI_Controller
         $fromDate = $this->input->post('fromDate');
         $toDate = $this->input->post('toDate');
         $warehouse = $this->input->post('whs');
-
-        $inventoryData = $this->inv_model->getData($itemGroup, $fromDate, $toDate, $warehouse);
-
+        $draw = intval($this->input->post("draw"));
+        $length = intval($this->input->post("length"));
+        $start = intval($this->input->post("start"));
+        
+        $inventoryData = $this->inv_model->getData($itemGroup, $fromDate, $toDate, $warehouse, $length, $start);
+               
+        $totalInventory = $this->totalData($itemGroup, $fromDate, $toDate, $warehouse);
         $dt = array();
         $no = 1;
         if($inventoryData){
             foreach($inventoryData as $key=>$val){
+                
                 $item = $val['itemcode'];
-                $netedData = [];
+                $nestedData = array();
                 $nestedData['no'] = $no;
                 $nestedData['itemcode'] = $val['itemcode'];
                 $nestedData['ItemName'] = $val['ItemName'];
@@ -57,15 +62,15 @@ class Inventory extends CI_Controller
                 $qty_nonpo = $this->inv_model->qty_nonpo($item, $fromDate, $toDate);
                 $qty_retin = $this->inv_model->qty_retin($item, $fromDate, $toDate);
 
-                $total_in = number_format($qty_ck['qty_ck'] + $qty_po['qty_po'] + $qty_fo['qty_fo'] + $qty_produc['qty_produc'] + $qty_wc['qty_wc'] + $qty_nonpo['qty_nonpo'] + $qty_retin['qty_retin']);
+                $total_in = number_format($qty_ck[0]['qty_ck'] + $qty_po[0]['qty_po'] + $qty_fo[0]['qty_fo'] + $qty_produc[0]['qty_produc'] + $qty_wc[0]['qty_wc'] + $qty_nonpo[0]['qty_nonpo'] + $qty_retin[0]['qty_retin']);
                 
-                $nestedData['qty_ck'] = $qty_ck ? $qty_ck['qty_ck'] : '';
-                $nestedData['qty_po'] = $qty_po ? $qty_po['qty_po'] : '';
-                $nestedData['qty_fo'] = $qty_fo ? $qty_fo['qty_fo'] : '';
-                $nestedData['qty_produc'] = $qty_produc ? $qty_produc['qty_produc'] : '';
-                $nestedData['qty_wc'] = $qty_wc ? $qty_wc['qty_wc'] : '';
-                $nestedData['qty_nonpo'] = $qty_nonpo ? $qty_nonpo['qty_nonpo'] : '';
-                $nestedData['qty_retin'] = $qty_retin ? $qty_retin['qty_retin'] : '';
+                $nestedData['qty_ck'] = $qty_ck ? $qty_ck[0]['qty_ck'] : '';
+                $nestedData['qty_po'] = $qty_po ? $qty_po[0]['qty_po'] : '';
+                $nestedData['qty_fo'] = $qty_fo ? $qty_fo[0]['qty_fo'] : '';
+                $nestedData['qty_produc'] = $qty_produc ? $qty_produc[0]['qty_produc'] : '';
+                $nestedData['qty_wc'] = $qty_wc ? $qty_wc[0]['qty_wc'] : '';
+                $nestedData['qty_nonpo'] = $qty_nonpo ? $qty_nonpo[0]['qty_nonpo'] : '';
+                $nestedData['qty_retin'] = $qty_retin ? $qty_retin[0]['qty_retin'] : '';
                 $nestedData['total_in'] = $total_in;
 
                 $qty_to = $this->inv_model->qty_to($item, $fromDate, $toDate);
@@ -73,28 +78,39 @@ class Inventory extends CI_Controller
                 $qty_wc_out = $this->inv_model->qty_wc_out($item, $fromDate, $toDate);
                 $qty_waste = $this->inv_model->qty_waste($item, $fromDate, $toDate);
                 $qty_ro = $this->inv_model->qty_ro($item, $fromDate, $toDate);
-                $total_out = $qty_ck['qty_to'] + $qty_produc_out['qty_produc_out'] + $qty_wc_out['qty_wc_out'] + $qty_waste['qty_waste'] + $qty_ro['qty_ro'];
+                $total_out = number_format($qty_to[0]['qty_to'] + $qty_produc_out[0]['qty_produc_out'] + $qty_wc_out[0]['qty_wc_out'] + $qty_waste[0]['qty_waste'] + $qty_ro[0]['qty_ro']);
 
                 $nestedData['qty_sales'] = '';
-                $nestedData['qty_to'] = $qty_to ? $qty_ck['qty_to'] : '';
-                $nestedData['qty_produc_out'] = $qty_produc_out ? $qty_produc_out['qty_produc_out'] : '';
-                $nestedData['qty_wc_out'] = $qty_wc_out ? $qty_wc_out['qty_wc_out'] : '';
-                $nestedData['qty_waste'] = $qty_waste ? $qty_waste['qty_waste'] : '';
-                $nestedData['qty_ro'] = $qty_ro ? $qty_ro['qty_ro'] : '';
+                $nestedData['qty_to'] = $qty_to ? $qty_to[0]['qty_to'] : '';
+                $nestedData['qty_produc_out'] = $qty_produc_out ? $qty_produc_out[0]['qty_produc_out'] : '';
+                $nestedData['qty_wc_out'] = $qty_wc_out ? $qty_wc_out[0]['qty_wc_out'] : '';
+                $nestedData['qty_waste'] = $qty_waste ? $qty_waste[0]['qty_waste'] : '';
+                $nestedData['qty_ro'] = $qty_ro ? $qty_ro[0]['qty_ro'] : '';
                 $nestedData['total_out'] = $total_out;
-
-                $nestedData['subtotal'] = $val['stock_awal'] + $total_in - $total_out;
+                
+                $nestedData['subtotal'] = number_format($val['stock_awal'] + $total_in - $total_out);
 
                 $dt[] = $nestedData;
                 $no++;
             }
         }
         $json_data = array(
+            "draw" => $draw,
+            "recordsTotal" => $totalInventory,
+            "recordsFiltered" => $totalInventory,
             "data" => $dt
         );
         echo json_encode($json_data) ;
+    }
 
-        // print_r($itemGroup.'/'.$fromDate.'----'.$toDate.'/'.$warehouse);
+    function totalData($itemGroup, $fromDate, $toDate, $warehouse){
+        $total=$this->inv_model->totalDataInventory($itemGroup, $fromDate, $toDate, $warehouse);
+        if($total){
+            return $total[0]['num'];
+        } else{
+            return 0;
+        }
+
     }
 }
 ?>

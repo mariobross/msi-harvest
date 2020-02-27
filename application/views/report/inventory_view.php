@@ -86,22 +86,15 @@
 						<div class="card-body" >
 							<div class="row">
 								<div class="col-md-12" style="overflow: auto">
-								<fieldset>
+								
 									<table class="table table-striped" id="tblReportInventory">
 										<thead>
 											<tr>
-												<th rowspan="2">No</th>
-												<th rowspan="2">Code</th>
-												<th rowspan="2">Description</th>
-												<th rowspan="2">Unit</th>
-												<th rowspan="2" style="text-align: center">Beginning Stock</th>
-												<th colspan="7" style="text-align: center">Qty In</th>
-												<th rowspan="2" style="text-align: center">Total In</th>
-												<th colspan="6" style="text-align: center">Qty Out</th>
-												<th rowspan="2" style="text-align: center">Total Out</th>
-												<th rowspan="2">Subtotal</th>
-											</tr>
-											<tr>
+												<th>No</th>
+												<th>Code</th>
+												<th>Description</th>
+												<th>Unit</th>
+												<th style="text-align: center">Beginning Stock</th>
 												<th style="text-align: center">GR From CK</th>
 												<th style="text-align: center">GR PO</th>
 												<th style="text-align: center">GR From Outlet</th>
@@ -109,16 +102,21 @@
 												<th style="text-align: center">GR Whole Cake</th>
 												<th style="text-align: center">GR No PO</th>
 												<th style="text-align: center">GR Return</th>
+												<th style="text-align: center">Total In</th>
 												<th style="text-align: center">ISSUE Sales</th>
 												<th style="text-align: center">ISSUE Transfer Outlet</th>
 												<th style="text-align: center">ISSUE Production</th>
 												<th style="text-align: center">ISSUE Whole Cake</th>
 												<th style="text-align: center">ISSUE Waste Material</th>
 												<th style="text-align: center">ISSUE Return Out</th>
+												<th style="text-align: center">Total Out</th>
+												<th>Subtotal</th>
 											</tr>
+											
 										</thead>
-									</table>
-								<fieldset>	
+										<tbody>
+                                        </tbody>
+									</table>	
 								</div>
 							</div>
 						</div>
@@ -135,7 +133,6 @@
 			var optSimple = {
 				format: 'yyyy-mm-dd',
 				todayHighlight: true,
-				orientation: 'bottom right',
 				autoclose: true
 			};
 
@@ -157,23 +154,30 @@
 			const warehouse = $('#warehouse').val();
 			const itemGroup = $('#itemGroup').val();
 
-			console.log(warehouse);
-
-			showDataList(itemGroup, fromDate, toDate, warehouse);
+			showDataList();
 		}
 
-		function showDataList(itemGroup, fromDate, toDate, warehouse){
+		function showDataList(){
 			const obj = $('#tblReportInventory tbody tr').length;
 
 			if(obj > 0){
 				const dataTable = $('#tblReportInventory').DataTable();
 				dataTable.destroy();
 				$('#tblReportInventory > tbody > tr').remove();
-				
-			}         
+			}     
+
+			const fromDate = $('#fromDate').val();
+			const toDate = $('#toDate').val();
+			const warehouse = $('#warehouse').val();
+			const itemGroup = $('#itemGroup').val();    
 
 			dataTable = $('#tblReportInventory').DataTable({
-				"ordering":false,  "paging": true, "searching":true,
+				"ordering":false,  
+				"paging": true, 
+				"searching":true,
+				"pageLength" : 10,
+				"processing": true,
+            	"serverSide": true,
 				"ajax": {
 					"url":"<?php echo site_url('report/inventory/showAllData');?>",
 					"type":"POST",
@@ -201,6 +205,9 @@
 					{"data":"qty_ro", "className":"dt-center"},
 					{"data":"total_out", "className":"dt-center"},
 					{"data":"subtotal", "className":"dt-center"}
+				],
+				columnDefs: [
+					{ targets: 2, width: '100%' },
 				]
 			});
 		}
