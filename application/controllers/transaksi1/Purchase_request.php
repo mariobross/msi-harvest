@@ -58,9 +58,9 @@ class Purchase_request extends CI_Controller{
 
         foreach($rs as $key=>$val){
 			if($val['status'] =='1'){
-				$status_string= 'Not Apporeed';
+				$status_string= 'Not Approved';
 			}else if($val['status'] =='2'){
-				$status_string= 'Apporeed';
+				$status_string= 'Approved';
 			}else{
 				$status_string= 'Cancel';
 			}
