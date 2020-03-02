@@ -29,7 +29,7 @@ class Inventory_model extends CI_Model{
         return $ret;
     }
 
-    function getData($itemGroup, $fromDate, $toDate, $warehouse){
+    function getData($itemGroup, $fromDate, $toDate, $warehouse='',$length,$start){
         $kd_plant = $this->session->userdata['ADMIN']['plant'];
         $SAP_MSI = $this->load->database('SAP_MSI', TRUE);
         $SAP_MSI->select('c.itemcode,c.ItemName,c.U_Small,c.BVolume BVolume,c.InvntryUom,d.MinStock,d.MaxStock, 
@@ -43,10 +43,13 @@ class Inventory_model extends CI_Model{
         $SAP_MSI->join('oitb e', 'e.itmsgrpcod = c.itmsgrpcod');
         $SAP_MSI->where('d.WhsCode',$kd_plant);
         $SAP_MSI->where('LEFT(d.WhsCode,2)!=','T.');
+        $SAP_MSI->where('c.CreateDate >=', $fromDate);
+        $SAP_MSI->where('c.CreateDate <=', $toDate);
         if($itemGroup != 'all'){
             $SAP_MSI->where('ItmsGrpNam', $itemGroup);
         }
         $SAP_MSI->group_by('c.ItemCode, d.WhsCode, c.ItemName, c.BVolume, c.U_Small, c.InvntryUom, d.MinStock, d.MaxStock, c.onhand');
+        $SAP_MSI->limit($length,$start);
         $query = $SAP_MSI->get();
         // echo $SAP_MSI->last_query();
 
@@ -54,6 +57,31 @@ class Inventory_model extends CI_Model{
             return $query->result_array();
 		else
 			return FALSE;
+    }
+
+    function totalDataInventory($itemGroup, $fromDate, $toDate, $warehouse){
+        $kd_plant = $this->session->userdata['ADMIN']['plant'];
+        $SAP_MSI = $this->load->database('SAP_MSI', TRUE);
+
+        $SAP_MSI->select('COUNT(*) num');
+        $SAP_MSI->from('oitm c');
+        $SAP_MSI->join('OITW d', 'c.ItemCode=d.ItemCode');
+        $SAP_MSI->join('oitb e', 'e.itmsgrpcod = c.itmsgrpcod');
+        $SAP_MSI->where('d.WhsCode',$kd_plant);
+        $SAP_MSI->where('LEFT(d.WhsCode,2)!=','T.');
+        $SAP_MSI->where('c.CreateDate >=', $fromDate);
+        $SAP_MSI->where('c.CreateDate <=', $toDate);
+        if($itemGroup != 'all'){
+            $SAP_MSI->where('ItmsGrpNam', $itemGroup);
+        }
+        $query = $SAP_MSI->get();
+        // echo $SAP_MSI->last_query();
+
+        if(($query)&&($query->num_rows()>0))
+            return $query->result_array();
+		else
+			return FALSE;
+
     }
 
     // Quantity In start
@@ -64,7 +92,7 @@ class Inventory_model extends CI_Model{
         $this->db->join('t_grpodlv_detail c', 'b.id_grpodlv_header = c.id_grpodlv_header');
         $this->db->where('b.do_no !=', '');
         $this->db->where('b.grpodlv_no !=', '');
-        $this->db->where('b.kode_paket', $itemCode);
+        $this->db->where('c.material_no', $itemCode);
         $this->db->where('b.plant', $kd_plant);
         $this->db->not_like('b.do_no', '%C%');
         $this->db->not_like('b.grpodlv_no', '%C%');
@@ -87,7 +115,7 @@ class Inventory_model extends CI_Model{
         $this->db->join('t_grpo_detail c', 'b.id_grpo_header = c.id_grpo_header');
         $this->db->where('b.po_no !=', '');
         $this->db->where('b.grpo_no !=', '');
-        $this->db->where('b.kode_paket', $itemCode);
+        $this->db->where('c.material_no', $itemCode);
         $this->db->where('b.plant', $kd_plant);
         $this->db->not_like('b.po_no', '%C%');
         $this->db->not_like('b.grpo_no', '%C%');
@@ -111,7 +139,7 @@ class Inventory_model extends CI_Model{
         $this->db->where('b.po_no !=', '');
         $this->db->where('b.grsto_no !=', '');
         $this->db->where('b.no_doc_gist !=', '');
-        $this->db->where('b.kode_paket', $itemCode);
+        $this->db->where('c.material_no', $itemCode);
         $this->db->where('b.plant', $kd_plant);
         $this->db->not_like('b.po_no', '%C%');
         $this->db->not_like('b.grsto_no', '%C%');
@@ -227,7 +255,7 @@ class Inventory_model extends CI_Model{
         $this->db->where('c.material_no', $itemCode);
         $this->db->where('b.plant', $kd_plant);
         $this->db->not_like('b.gistonew_out_no', '%C%');
-        $this->db->not_like('b.do_no', '%C%');
+        $this->db->not_like('b.po_no', '%C%');
         $this->db->where('b.posting_date >=', $fromDate);
         $this->db->where('b.posting_date <=', $toDate);
         

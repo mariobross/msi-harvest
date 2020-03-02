@@ -10,6 +10,16 @@
 			<div class="content-wrapper">
                 <!-- <?php  $this->load->view("_template/breadcrumb.php")?> -->
 				<div class="content">
+                    <?php if ($this->session->flashdata('success')): ?>
+						<div class="alert alert-success" role="alert">
+							<?php echo $this->session->flashdata('success'); ?>
+						</div>
+					<?php endif; ?>
+					<?php if ($this->session->flashdata('failed')): ?>
+						<div class="alert alert-danger" role="alert">
+							<?php echo $this->session->flashdata('failed'); ?>
+						</div>
+					<?php endif; ?>
                     <div class="card">
                         <div class="card-header">
                             <legend class="font-weight-semibold"><i class="icon-search4 mr-2"></i>Search of Retur Out</legend>  
@@ -21,7 +31,7 @@
                                 <div class="form-group row">
                                         <label class="col-lg-3 col-form-label">Dari Tanggal</label>
                                         <div class="col-lg-3 input-group date">
-                                            <input type="text" class="form-control" id="fromDate">
+                                            <input type="text" class="form-control" id="fromDate" autocomplete="off">
                                             <div class="input-group-prepend">
                                                 <span class="input-group-text" id="basic-addon1">
                                                     <i class="icon-calendar"></i>
@@ -30,7 +40,7 @@
                                         </div>
                                         <label class="col-lg-2 col-form-label">Sampai Tanggal</label>
                                         <div class="col-lg-4 input-group date">
-                                            <input type="text" class="form-control" id="toDate">
+                                            <input type="text" class="form-control" id="toDate" autocomplete="off">
                                             <div class="input-group-prepend">
                                                 <span class="input-group-text" id="basic-addon1">
                                                     <i class="icon-calendar"></i>
@@ -42,16 +52,16 @@
                                     <div class="form-group row">
                                         <label class="col-lg-3 col-form-label">Status</label>
                                         <div class="col-lg-9">
-                                            <select class="form-control form-control-select2" data-live-search="true">
+                                            <select class="form-control form-control-select2" data-live-search="true" id="status" name="status" >
                                                 <option value="">none selected</option>
-                                                <option value="approved">Approved</option>
-                                                <option value="notapproved">Not Approved</option>
+                                                <option value="2">Approved</option>
+                                                <option value="1">Not Approved</option>
                                             </select>
                                         </div>
                                     </div>
 
                                     <div class="text-right">
-                                        <button type="submit" class="btn btn-primary">Search<i class="icon-search4  ml-2"></i></button>
+                                        <button type="button" class="btn btn-primary" onclick="onSearch()">Search<i class="icon-search4  ml-2"></i></button>
                                     </div>
                                 </div>
                             </div>
@@ -63,7 +73,7 @@
                             <legend class="font-weight-semibold"><i class="icon-list mr-2"></i>List of Retur Out</legend>
                             <a href="<?php echo site_url('transaksi1/returnout/add') ?>" class="btn btn-primary"> Add New</a>
                             <input type="button" value="Delete" class="btn btn-danger" id="deleteRecord"> 
-                            <input type="button" value="Export To Excel" class="btn btn-success" id="btnExpExcel"> 
+                            <!-- <input type="button" value="Export To Excel" class="btn btn-success" id="btnExpExcel">  -->
                         </div>
                         <div class="card-body">
                             <div class="row">
@@ -99,40 +109,10 @@
         <?php  $this->load->view("_template/js.php")?>
         <script>
             $(document).ready(function(){
-                $('#fromDate').datepicker();
-                $('#toDate').datepicker();
+                $('#fromDate').datepicker({autoclose:true});
+                $('#toDate').datepicker({autoclose:true});
 
-                $('#tableWhole').DataTable({
-                    "ordering":false,
-                });
-
-                // dataTable = $('#tableWhole').DataTable({
-                //     "ordering":false,  "paging": true, "searching":true,
-                //     "ajax": {
-                //         "url":"<?php echo site_url('transaksi1/grnopo/showAllData');?>",
-                //         "type":"POST"
-                //     },
-                //     "columns": [
-                //         {"data":"no", "className":"dt-center", render:function(data, type, row, meta){
-                //             rr=`<input type="checkbox" class="check_delete" id="chk_${data}" value="${data}" onclick="checkcheckbox();">`;
-                //             return rr;
-                //         }},
-                //         {"data":"action", "className":"dt-center", render:function(data, type, row, meta){
-                //                 rr = `<a href='<?php echo site_url('transaksi1/grnopo/edit')?>' ><i class='icon-file-plus2' title="Edit"></i></a>&nbsp;
-                //                         <a onClick="deleteConfirm('<?php echo site_url('transaksi1/grnopo/delete')?>')" href="#!"><i class='icon-cross2' title="Delete"></i></a>`;
-                //                 return rr;
-                //         }},
-                //         {"data":"id"},
-                //         {"data":"grnopo"},
-                //         {"data":"posting_date"},
-                //         {"data":"status"},
-                //         {"data":"log"},
-                //         {"data":"grnopo"},
-                //         {"data":"posting_date"},
-                //         {"data":"status"},
-                //         {"data":"log"}
-                //     ]
-                // });
+                showDataList()
 
                 // untuk check all
                 $("#checkall").click(function(){
@@ -193,7 +173,69 @@
 	                $('#deleteModal').modal();
                 }
 
+                printPdf = (data)=>{
+                    // console.log(data);
+                    uri = "<?php echo site_url('transaksi1/returnout/printpdf/')?>"+data
+                    // console.log(uri);
+                    window.open(uri);
+
+                }
+
             });
+
+            function onSearch(){
+                const fromDate = $('#fromDate').val();
+                const toDate = $('#toDate').val();
+                const status = $('#status').val();
+
+                showDataList();
+            }
+
+            function showDataList(){
+                const obj = $('#tableWhole tbody tr').length;
+
+                if(obj > 0){
+                    const dataTable = $('#tableWhole').DataTable();
+                    dataTable.destroy();
+                    $('#tableWhole > tbody > tr').remove();
+                    
+                }
+                
+
+                // console.log(fromDate, '----', toDate, '-------', status, '------'); 
+                const fromDate = $('#fromDate').val();
+                const toDate = $('#toDate').val();
+                const status = $('#status').val();           
+
+                dataTable = $('#tableWhole').DataTable({
+                    "ordering":false,  "paging": true, "searching":true,
+                    "ajax": {
+                        "url":"<?php echo site_url('transaksi1/returnout/showAllData');?>",
+                        "type":"POST",
+                        "data":{fDate: fromDate, tDate: toDate, stts: status}
+                    },
+                    "columns": [
+                        {"data":"id_gisto_dept_header", "className":"dt-center", render:function(data, type, row, meta){
+                            rr=`<input type="checkbox" class="check_delete" id="chk_${data}" value="${data}" onclick="checkcheckbox();">`;
+                            return rr;
+                        }},
+                        {"data":"id_gisto_dept_header", "className":"dt-center", render:function(data, type, row, meta){
+                                rr = `<a href='<?php echo site_url('transaksi1/returnout/edit')?>' ><i class='icon-file-plus2' title="Edit"></i></a>&nbsp;
+									<a onClick="printPdf(${data})" href="#" ><i class='icon-printer' title="Print"></i></a>`;
+                                return rr;
+                        }},
+                        {"data":"id_gisto_dept_header"},
+                        {"data":"gisto_dept_no"},
+                        {"data":"posting_date"},
+                        {"data":"receiving_plant"},
+                        {"data":"status_string"},
+                        {"data":"user_input"},
+                        {"data":"user_approved"},
+                        {"data":"lastmodified"},
+                        {"data":"log"}
+                    ]
+                });
+            }
         
         </script>
 	</body>
