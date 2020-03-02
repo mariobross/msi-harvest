@@ -329,7 +329,7 @@
 					if(td.eq(4).find('input').val() == ''){
 						validasi = false;
 					}	
-					matrialNo.push(td.eq(2).find('select').val()); 
+					matrialNo.push(td.eq(2).text()); 
 					matrialDesc.push(td.eq(3).text());
 					qty.push(td.eq(4).find('input').val());
 					price.push(td.eq(5).text());
@@ -344,7 +344,7 @@
 
 			// console.log(requestRespon,'-',matrialGroup,'-',requestToOutlet,'-',delivDate,'-',createDate, matrialNo.join('/'), matrialDesc.join('^'), qty.join('%'), uom.join('*'));
 			$.post("<?php echo site_url('transaksi1/purchase_request/addDataUpdate')?>", {
-				idpr_header:idpr_header, appr: approve, stts: status, matGroup: MatrialGroup, stts: status, deliveDate: deliveDate, detMatrialNo: matrialNo, detMatrialDesc: matrialDesc, detQty: qty, detPrice:price, detVendor:vendor, detUom: uom, detOnHand:onHand
+				idpr_header:idpr_header, appr: approve, stts: status, stts: status, deliveDate: deliveDate, detMatrialNo: matrialNo, detMatrialDesc: matrialDesc, detQty: qty, detPrice:price, detVendor:vendor, detUom: uom, detOnHand:onHand
 			}, function(res){
 				location.reload(true);
 			}
