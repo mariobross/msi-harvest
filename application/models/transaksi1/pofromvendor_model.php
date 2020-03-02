@@ -45,7 +45,7 @@ class Pofromvendor_model extends CI_Model {
     $SAP_MSI->where('WhsCode',$kd_plant);
     $SAP_MSI->where('OPOR.DocStatus' ,'O');
     // $SAP_MSI->where('POR1.TrgetEntry is NULL', NULL, TRUE);
-    $SAP_MSI->where('and OpenQty >', 0);
+    $SAP_MSI->where('OpenQty >', 0);
     // $SAP_MSI->where('BSTMG >',0);
     
     if(!empty($po_no)) {
