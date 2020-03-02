@@ -3,9 +3,10 @@
 class Returnin_model extends CI_Model {
 
     public function getDataReturnIn_Header($fromDate='', $toDate='', $status=''){
+        $kd_plant = $this->session->userdata['ADMIN']['plant'];
         $this->db->select('*, (select DISTINCT ok_cancel from t_retin_detail where id_retin_header = t_retin_header.id_retin_header)ok_cancel');
         $this->db->from('t_retin_header');
-        $this->db->where('plant','WMSISNST');
+        $this->db->where('plant', $kd_plant);
         if((!empty($fromDate)) || (!empty($toDate))){
             if( (!empty($fromDate)) || (!empty($toDate)) ) {
             $this->db->where("posting_date BETWEEN '$fromDate' AND '$toDate'");
@@ -69,7 +70,7 @@ class Returnin_model extends CI_Model {
     }
 
     public function sap_do_select_all($kd_plant="",$do_no="",$do_item=""){
-        $kd_plant = 'WMSISNST';
+        $kd_plant = $this->session->userdata['ADMIN']['plant'];
         $SAP_MSI = $this->load->database('SAP_MSI', TRUE);
 
         $SAP_MSI->select('U_TransFor');
@@ -215,7 +216,7 @@ class Returnin_model extends CI_Model {
   
     function sap_item_groups_select_all() {
         // $kd_plant = $this->session->userdata['ADMIN']['plant'];
-        $kd_plant = 'WMSISNST';
+        $kd_plant = $this->session->userdata['ADMIN']['plant'];
         $this->db->from('m_item_group');
         $this->db->where('kdplant', $kd_plant);
 
