@@ -253,7 +253,7 @@
 												<td>${qtyOutstanding}</td>
 												<td><input type="text" class="form-control" name="grOutstanding" id="grOutstanding" required></td>
 												<td>${val.BSTME}</td>
-												<td><input type="text" class="form-control" name="qc" id="qc"></td>
+												<td><input type="text" class="form-control" name="qc_${val.no}" id="qc_${val.no}"></td>
 											</tr>`);
 					})
 
@@ -286,6 +286,26 @@
 				pstDate 	= $('#postingDate').val();
 				delvDate 	= $('#delivDate').val();
 				approve		= id_approve;
+
+				splitDate = pstDate.split('-');
+				dayPostingDate = splitDate[0];
+				monthPostingDate = splitDate[1];
+				yearPostingDate = splitDate[2];
+				posDate= `${yearPostingDate}/${monthPostingDate}/${dayPostingDate}`;
+
+				splitdelvDate = delvDate.split('-');
+				dayDeliveryDate = splitdelvDate[0];
+				monthDeliveryDate = splitdelvDate[1];
+				yearDeliveryDate = splitdelvDate[2];
+				delDate= `${yearDeliveryDate}/${monthDeliveryDate}/${dayDeliveryDate}`;
+
+				postingDate = new Date(posDate);
+				deliverDate = new Date(delDate);
+				if(postingDate > deliverDate){
+					alert('Tanggal Posting tidak boleh lebih besar dari Tanggal Delivery');
+					return false;
+				}
+				
 
 				table = $('#table-manajemen > tbody');
 

@@ -88,11 +88,21 @@
 												<div class="col-lg-9"><input type="text" value="<?php echo $gr_list['item_group_code']; ?>" class="form-control" readonly></div>
 											</div>
 											
+											
 											<div class="form-group row">
 												<label class="col-lg-3 col-form-label">Posting Date</label>
 												<div class="col-lg-9"><input type="text" value="<?php echo date("d-m-Y", strtotime($gr_list['posting_date'])); ?>" class="form-control" readonly></div>
 											</div>
 											
+											<?php if($gr_list['status']=='2'): ?>
+											<div class="form-group row">
+												<div class="col-lg-12 text-right">
+													<div class="text-right">
+														<button type="button" class="btn btn-success" id="cancelRecord">Cancel <i class="icon-paperplane ml-2"></i></button>
+													</div>
+												</div>
+											</div>
+											<?php else :?>
 											<div class="form-group row">
 												<div class="col-lg-12 text-right">
 													<div class="text-right">
@@ -106,7 +116,7 @@
 													</div>
 												</div>
 											</div>
-											
+											<?php endif; ?>
 										</fieldset>
 									</div>
 								</div>
@@ -115,7 +125,7 @@
 									
 						<div class="card">
 							<div class="card-header">
-								<legend class="font-weight-semibold"><i class="icon-list mr-2"></i>List Transfer Out Inter Outlet</legend>
+								<legend class="font-weight-semibold"><i class="icon-list mr-2"></i>List Good Receipt From Kitchen</legend>
 							</div>
 							<div class="card-body">
 								<table id="tblWhole" class="table table-striped " style="width:100%">
@@ -146,7 +156,7 @@
 				let IDheader = <?php echo $gr_list['id_grpodlv_header']; ?>;
 
                 $('#tblWhole').DataTable({
-                    "ordering":false,  "paging": true, "searching":true,
+                    "ordering":false,  "paging": false, "searching":true,
                     "ajax": {
                         "url":"<?php echo site_url('transaksi1/grfromkitchensentul/showEditData/'.$gr_list['id_grpodlv_header']);?>",
                         "type":"POST",
@@ -162,8 +172,9 @@
 						{"data":"tf_qty"},
 						{"data":"gr_qty", "className":"dt-center", render:function(data, type, row, meta){
 							//let gr = data;
+							let readOnly =  row['status'] == 2 ? 'readonly' : '';
 							let gr_qty =  data //gr.replace(".", "")
-                            rr=`<input type="number" style="text-align: right;" class="form-control" value="${gr_qty}">`;
+                            rr=`<input type="number" style="text-align: right;" class="form-control" value="${gr_qty}" ${readOnly} > `;
                             return rr;
                         }},
                         {"data":"uom"},
@@ -173,6 +184,44 @@
                         }},
                     ]
                 });
+
+				$("#cancelRecord").click(function(){
+					const idGrpoHeader = $('#id_grpo_header').val();
+                    let deleteidArr=[];
+                    $("input:checkbox[class=check_delete]:checked").each(function(){
+                        deleteidArr.push($(this).val());
+						console.log(deleteidArr);
+                    })
+
+
+                    // mengecek ckeckbox tercheck atau tidak
+                    if(deleteidArr.length > 0){
+                        var confirmDelete = confirm("Apa Kamu Yakin Akan Mengbatalkan Good Receipt from Kitchen ini?");
+                        if(confirmDelete == true){
+                            $.ajax({
+                                url:"<?php echo site_url('transaksi1/grfromkitchensentul/cancelPoFromVendor');?>", //masukan url untuk delete
+                                type: "post",
+                                data:{deleteArr: deleteidArr, id_grpo_header:idGrpoHeader},
+                                success:function(res) {
+                                    // dataTable.ajax.reload();
+									location.reload(true);
+                                }
+                            });
+                        }
+                    }
+                });
+
+				checkcheckbox = () => {
+                    
+                    const lengthcheck = $(".check_delete").length;
+                    
+                    let totalChecked = 0;
+                    $(".check_delete").each(function(){
+                        if($(this).is(":checked")){
+                            totalChecked += 1;
+                        }
+                    });
+                }
 			});
 			
 			function btnSave(id_approve=''){ 

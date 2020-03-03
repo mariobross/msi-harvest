@@ -9,7 +9,6 @@ class Grfromkitchensentul extends CI_Controller
 			redirect(base_url());
         }
         $this->load->library('form_validation');
-        $this->load->library('form_validation');
         // $this->load->library('l_general');
         //load model
         $this->load->model('transaksi1/Grfromkitchensentul_model','dokitchen');
@@ -330,6 +329,7 @@ class Grfromkitchensentul extends CI_Controller
         $rs = $this->dokitchen->getDataPoKitchen_Header($date_from2,$date_to2,$status);
 
         $data = array();
+        $log = '';
         foreach($rs as $key=>$val){
             $nestedData = array();
             $nestedData['action'] = $val['id_grpodlv_header'];
@@ -344,14 +344,15 @@ class Grfromkitchensentul extends CI_Controller
             $nestedData['id_user_input'] = $val['id_user_input'];
             $nestedData['id_user_approved'] = $val['id_user_approved'];
             $nestedData['lastmodified'] = $val['lastmodified'];
-            $nestedData['integrated'] = 'Not Integrated';
-            // if($val['grpodlv_no'] != '' && $val['grpodlv_no'] != 'C' && $val['back'] == 0){
-            //     $nestedData['integrated'] = 'Integrated';
-            // }else if($val['back'] == 1 && ($val['grpodlv_no'] == '' || $val['grpodlv_no'] == 'C')){
-            //     $nestedData['integrated'] = 'Not Integrated';
-            // }else if($val['back'] == 0 && $val['grpodlv_no'] == 'C'){
-            //     $nestedData['integrated'] = 'Close Document';
-            // }
+            
+            if($val['grpodlv_no'] != '' && $val['grpodlv_no'] != 'C' && $val['back'] == 0){
+                $log = 'Integrated';
+            }else if($val['back'] == 1 && ($val['grpodlv_no'] == '' || $val['grpodlv_no'] == 'C')){
+                $log = 'Not Integrated';
+            }else if($val['back'] == 0 && $val['grpodlv_no'] == 'C'){
+                $log = 'Close Document';
+            }
+            $nestedData['integrated'] = $log;
             $nestedData['outlet_name'] = $val['OUTLET_NAME1'];
             $data[] = $nestedData;
         }
@@ -364,48 +365,9 @@ class Grfromkitchensentul extends CI_Controller
         echo json_encode($json_data);
     }
 	
-	public function showAllData(){
-       $dt= array(
-           array(
-            "no" => "1",
-            "item_no" => "AT-MBP0001",
-            "item_desc"=>"Box 10x20-AT (Active)",
-            "gi_qty"=> "200.00",
-            "gr_qty"=> "200.00",
-            "rcv_qty"=> "",
-            "uom"=> "pcs",
-           ),
-		   
-        ); 
-
-        $data = array(
-            "data"=> $dt
-		);
-        
-        echo json_encode($data);
-    }
-	
 	public function showEditData($ID=""){
-
-        // $ID = $this->input->post('ID');
-        //    $dt= array(
-        //        array(
-        //         "no" => $ID,
-        //         "material_no" => "AT-FDG0159",
-        //         "material_desc"=>"Blueberry Jam @5000gr/pail (Almondtree)",
-        //         "quantity"=> "15,000.00",
-        //         "gr_qty"=> "15000.00",
-        //         "uom"=> "pcs",
-        //         "val"=> "",
-        //         "variance"=> "0.00",
-        //         "cancel"=> ""
-        //        ),	   
-        //     ); 
-        //     $data = array(
-        //         "data"=> $dt
-        //     );
-
         $res = $this->dokitchen->grpodlv_details_select($ID);
+        $gr_list_header = $this->dokitchen->grpodlv_header_select($ID);
         
         $recordsTotal = 10;
         $recordsFiltered = 12;
@@ -424,7 +386,8 @@ class Grfromkitchensentul extends CI_Controller
                 $nestedData['tf_qty'] = $val['outstanding_qty'];
                 $nestedData['gr_qty'] = $val['gr_quantity'];
                 $nestedData['uom'] = $val['uom'];
-                $nestedData['cancel'] = "";
+                $nestedData['cancel'] = $val['id_grpodlv_detail'];
+                $nestedData['status'] = $gr_list_header['status'];
                 $data[] = $nestedData;
                 $no++;
             }

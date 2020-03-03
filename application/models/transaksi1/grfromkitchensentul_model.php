@@ -11,9 +11,10 @@ class Grfromkitchensentul_model extends CI_Model {
 
   public function getDataPoKitchen_Header($fromDate,$toDate,$status)
   {
+    $kd_plant = $this->session->userdata['ADMIN']['plant'];
       $this->db->from('t_grpodlv_header');
       $this->db->join('m_outlet', 'm_outlet.OUTLET = t_grpodlv_header.plant');
-      $this->db->where('plant','T.DFRHTM');
+      $this->db->where('plant',$kd_plant);
 
       if((!empty($fromDate)) || (!empty($toDate))){
 
@@ -39,7 +40,8 @@ class Grfromkitchensentul_model extends CI_Model {
 
   function sap_grpodlv_headers_select_slip_number($slipNumberHeader = "", $ItmsGrpNam = ""){
     $response = NULL;
-    
+    $kd_plant = $this->session->userdata['ADMIN']['plant'];
+    $SAP_MSI = $this->load->database('SAP_MSI', TRUE); 
     $SAP_MSI->select("OWTQ.U_DocNum as VBELN, 
                             convert(date, OWTQ.DocDate) as DELIV_DATE, 
                             OWTQ.ToWhsCode, 
@@ -52,7 +54,7 @@ class Grfromkitchensentul_model extends CI_Model {
                             OWHS.WhsName, 
                             WTQ1.ItemCode as Material_Code, 
                             OITM.ItemName as Material_Desc, 
-                            WTQ1.Quantity as TF_QTY, 
+                            WTQ1.OpenCreQty as TF_QTY, 
                             WTQ1.unitMsr as UOM, 
                             OWTQ.Filler,
                             OITB.ItmsGrpNam,OITB.ItmsGrpNam");
@@ -63,7 +65,8 @@ class Grfromkitchensentul_model extends CI_Model {
     $SAP_MSI->join('NNM1','OWTQ.Series=NNM1.Series','inner');
     $SAP_MSI->join('OITB','OITM.ItmsGrpCod = OITB.ItmsGrpCod','inner');
 
-    $SAP_MSI->where('OWTQ.ToWhsCode', 'T.DFRHTM');
+    $SAP_MSI->where('OWTQ.ToWhsCode', $kd_plant);
+    $SAP_MSI->where('WTQ1.OpenCreQty >', 0);
     
     if(empty($slipNumberHeader) && empty($ItmsGrpNam)) {
       $SAP_MSI->where('OWTQ.U_DocNum is NOT NULL', NULL, FALSE);
@@ -81,6 +84,8 @@ class Grfromkitchensentul_model extends CI_Model {
     } else {}
     
     $query = $SAP_MSI->get();
+    // echo $SAP_MSI->last_query();
+    // die();
     
     $k=1;
     foreach ($query->result_array() as $row)
@@ -119,7 +124,7 @@ class Grfromkitchensentul_model extends CI_Model {
     }
 
     function getDataQtyU_grqty_web($base, $item){
-      
+      $SAP_MSI = $this->load->database('SAP_MSI', TRUE);
       $SAP_MSI->from('WTR1');
       $SAP_MSI->where('DocEntry', $base);
       $SAP_MSI->where('LineNum', $item);
@@ -182,6 +187,7 @@ class Grfromkitchensentul_model extends CI_Model {
     public function sap_do_select_all($kd_plant="",$do_no="",$do_item="") { 
 
       // $SAP_MSI->from('WTR1');
+      $SAP_MSI = $this->load->database('SAP_MSI', TRUE);
 
       $SAP_MSI->select("OWTR.DocEntry VBELN,
                               OWTR.DocDate DELIV_DATE,
@@ -257,6 +263,7 @@ class Grfromkitchensentul_model extends CI_Model {
     }
     
     function Update_StatOwtr($data, $DOcEntry) {
+      $SAP_MSI = $this->load->database('SAP_MSI', TRUE);
       $SAP_MSI->where('DOcEntry', $DOcEntry);
       if($SAP_MSI->update('OWTR', $data))
         return TRUE;
@@ -265,7 +272,7 @@ class Grfromkitchensentul_model extends CI_Model {
     }
 
     function Update_U_grqty_web_WTR1($data, $DOcEntry, $LineNum) {
-      
+      $SAP_MSI = $this->load->database('SAP_MSI', TRUE);
       $SAP_MSI->where('DOcEntry', $DOcEntry);
       $SAP_MSI->where('LineNum', $LineNum);
 
@@ -302,6 +309,7 @@ class Grfromkitchensentul_model extends CI_Model {
     }
     function sap_grpodlv_headers_select_by_kd_do($kd_plant="",$do_no="",$do_item="")
     {
+        $SAP_MSI = $this->load->database('SAP_MSI', TRUE);
         $filler=Array('WMSISTBS','WMSISTFG','WMSISTPR','WMSISTQC','WMSISTRM','WMSISTTR','WDFGSYBS','WDFGSYFG','WDFGSYPR','WDFGSYRM','WDFGSYQC','WDFGSTRM');
 																									
         $SAP_MSI->select("OWTR.DocEntry VBELN, 

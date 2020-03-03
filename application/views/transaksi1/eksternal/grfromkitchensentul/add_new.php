@@ -2,6 +2,11 @@
 <html lang="en">
 	<head>
 		<?php  $this->load->view("_template/head.php")?>
+		<style>
+		.hide{
+			display: none;
+		}
+		</style>
 	</head>
 	<body>
 	<?php  $this->load->view("_template/nav.php")?>
@@ -31,11 +36,11 @@
 										<fieldset>
 											<legend class="font-weight-semibold"><i class="icon-reading mr-2"></i>GR from Central Kitchen Sentul</legend>
 											
-											<div class="form-group row">
+											<!-- <div class="form-group row">
 												<label class="col-lg-3 col-form-label">Data SAP per Tanggal/Jam</label>
 												<div class="col-lg-9">Data tidak ditemukan. 
 												</div>
-											</div>
+											</div> -->
 											
 											<div class="form-group row">
 												<label class="col-lg-3 col-form-label">ID Transaksi</label>
@@ -289,7 +294,9 @@
 					// console.log(value.dataOption)
 					if (value){
 
-						$("#form1").css('display', 'inline');
+						$("#form1").css('display', '');
+						$("#form2").removeClass('hide');
+						$("#form3").removeClass('hide');
 						document.getElementById('DeliveryDate').value = value.data[1].DELIV_DATE
 						document.getElementById('OutletFrom').value = value.data[1].PLANT + ' - ' + value.data[1].Outlet
 						document.getElementById('StoreLocation').value = value.data[1].Filler + ' - ' + value.data[1].WhsName
