@@ -22,7 +22,7 @@
                                     <div class="form-group row">
                                         <label class="col-lg-3 col-form-label">Dari Tanggal</label>
                                         <div class="col-lg-3 input-group date">
-                                            <input type="text" class="form-control" id="fromDate">
+                                            <input type="text" class="form-control" id="fromDate" autocomplete="off" readonly>
                                             <div class="input-group-prepend">
                                                 <span class="input-group-text" id="basic-addon1">
                                                     <i class="icon-calendar"></i>
@@ -31,7 +31,7 @@
                                         </div>
                                         <label class="col-lg-2 col-form-label">Sampai Tanggal</label>
                                         <div class="col-lg-4 input-group date">
-                                            <input type="text" class="form-control" id="toDate">
+                                            <input type="text" class="form-control" id="toDate" autocomplete="off" readonly>
                                             <div class="input-group-prepend">
                                                 <span class="input-group-text" id="basic-addon1">
                                                     <i class="icon-calendar"></i>
@@ -53,7 +53,7 @@
                                     </div>
 
                                     <div class="text-right">
-                                    <button type="submit" class="btn btn-primary" onclick="search()">Search<i class="icon-search4  ml-2"></i></button>
+                                    <button type="button" class="btn btn-primary" onclick="search()">Search<i class="icon-search4  ml-2"></i></button>
                                     </div>
                                 </div>
                             </div>
