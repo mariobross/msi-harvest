@@ -46,9 +46,14 @@ class Grfromkitchensentul extends CI_Controller
     	// 	}
         // }
 
-        $data['do_no'] = $this->dokitchen->sap_grpodlv_headers_select_slip_number();
-        
-        $this->load->view('transaksi1/eksternal/grfromkitchensentul/add_new',$data);
+        $data['do_nos'] = $this->dokitchen->sap_grpodlv_headers_select_slip_number(); 
+        $object['do_no']['-'] = '';
+        if($data['do_nos'] != FALSE) {
+            foreach ($data['do_nos'] as $do_no) {
+                $object['do_no'][$do_no['VBELN']] = $do_no['VBELN'];
+            }
+        }    
+        $this->load->view('transaksi1/eksternal/grfromkitchensentul/add_new', $object);
     }
 
     public function getDataListHeader(){

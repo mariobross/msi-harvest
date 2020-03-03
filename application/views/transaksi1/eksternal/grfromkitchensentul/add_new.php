@@ -53,8 +53,8 @@
 													<select class="form-control form-control-select2" data-live-search="true" name="slipNumberEntry" id="slipNumberEntry" onchange="getDataHeader(this.value)">
 														<option value="" selected>None selected</option>
 														<?php foreach($do_no as $value):?>
-															<option value="<?php echo $value["VBELN"]; ?>">
-																<?php echo $value["Doc_Num"]; ?>
+															<option value="<?php echo $value; ?>">
+																<?php echo $value; ?>
 															</option>
 														<?php endforeach;?>
 													</select>

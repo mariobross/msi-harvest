@@ -42,7 +42,7 @@ class Grfromkitchensentul_model extends CI_Model {
     $response = NULL;
     $kd_plant = $this->session->userdata['ADMIN']['plant'];
     $SAP_MSI = $this->load->database('SAP_MSI', TRUE); 
-    $SAP_MSI->select("OWTQ.U_DocNum as VBELN, 
+    $SAP_MSI->select("OWTQ.DocNum as VBELN, 
                             convert(date, OWTQ.DocDate) as DELIV_DATE, 
                             OWTQ.ToWhsCode, 
                             OITM.ItmsGrpCod as DISPO, 
@@ -69,15 +69,15 @@ class Grfromkitchensentul_model extends CI_Model {
     $SAP_MSI->where('WTQ1.OpenCreQty >', 0);
     
     if(empty($slipNumberHeader) && empty($ItmsGrpNam)) {
-      $SAP_MSI->where('OWTQ.U_DocNum is NOT NULL', NULL, FALSE);
+      // $SAP_MSI->where('OWTQ.U_DocNum is NOT NULL', NULL, FALSE);
     } else if(!empty($slipNumberHeader) && empty($ItmsGrpNam)) {
-      $SAP_MSI->where('OWTQ.U_DocNum',(int)$slipNumberHeader);
+      $SAP_MSI->where('OWTQ.DocNum',(int)$slipNumberHeader);
     } else if(!empty($slipNumberHeader) && !empty($ItmsGrpNam)){
 
       if($ItmsGrpNam == 'all'){
-        $SAP_MSI->where('OWTQ.U_DocNum', (int)$slipNumberHeader);
+        $SAP_MSI->where('OWTQ.DocNum', (int)$slipNumberHeader);
       } else {
-        $SAP_MSI->where('OWTQ.U_DocNum', (int)$slipNumberHeader);
+        $SAP_MSI->where('OWTQ.DocNum', (int)$slipNumberHeader);
         $SAP_MSI->where('OITB.ItmsGrpNam', $ItmsGrpNam);
       }
       
@@ -363,8 +363,8 @@ class Grfromkitchensentul_model extends CI_Model {
     function sap_grpodlv_details_select_by_do_no($do_no)
     {
         if (empty($this->session->userdata['do_nos'])) {          
-          $doitems = $this->sap_grpodlv_headers_select_slip_number($do_no);
-            //$doitems = $this->sap_grpodlv_headers_select_by_kd_do("",$do_no);
+          $doitems= $this->sap_grpodlv_headers_select_slip_number($do_no);
+          // $doitems = $doitem->result_array();
         } else {
             $do_nos = $this->session->userdata['do_nos'];
             $count = count($do_nos);
@@ -375,7 +375,8 @@ class Grfromkitchensentul_model extends CI_Model {
               }
             }
         }
-        
+        // print_r($doitems);
+        // die();
         $count = count($doitems);
         if ($count > 0) {
             $k=1;
