@@ -97,7 +97,7 @@
 					<a href="#" class="nav-link"><i class="icon-width"></i> <span>Report Summary</span></a>
 					<ul class="nav nav-group-sub" data-submenu-title="Report Summary">
 						<li class="nav-item"><a href="<?php echo site_url('/report/inventory');?>" class="nav-link">Inventory Audit</a></li>
-						<li class="nav-item"><a href="<?php echo site_url('/report/bincard');?>" class="nav-link">Bincard Report</a></li>
+						<!-- <li class="nav-item"><a href="<?php echo site_url('/report/bincard');?>" class="nav-link">Bincard Report</a></li> -->
 						<li class="nav-item"><a href="<?php echo site_url('/report/onhand');?>" class="nav-link">Onhand Report</a></li>
 					</ul>
 				</li>
