@@ -70,6 +70,12 @@ class Grfromkitchensentul extends CI_Controller
 
     public function saveDataGR(){
 
+        $plant = $this->session->userdata['ADMIN']['plant'];
+        $storage_location = $this->session->userdata['ADMIN']['storage_location'];
+        $plant_name = $this->session->userdata['ADMIN']['plant_name'];
+        $storage_location_name = $this->session->userdata['ADMIN']['storage_location_name'];
+        $admin_id = $this->session->userdata['ADMIN']['admin_id'];
+
         $input_detail_success = FALSE;
 
         $Header = $this->input->post('Header');
@@ -85,8 +91,8 @@ class Grfromkitchensentul extends CI_Controller
 
         $grpodlv_header['do_no'] = $Header['do_no'];
         $grpodlv_header['delivery_date'] = $delivery_date;
-        $grpodlv_header['plant'] = $Header['plant'];
-        $grpodlv_header['storage_location'] = $Header['storage_location'];
+        $grpodlv_header['plant'] = $plant;
+        $grpodlv_header['storage_location'] = $storage_location;
         $grpodlv_header['posting_date'] = $posting_date;
         $grpodlv_header['status'] = $Header['status'] ? $Header['status'] : '1';
         $grpodlv_header['id_user_input'] = $Header['id_user_input'];

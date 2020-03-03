@@ -31,6 +31,7 @@ class Grfromkitchensentul_model extends CI_Model {
       if((!empty($status))){
           $this->db->where('status', $status);
       }
+      $this->db->order_by('id_grpodlv_header','DESC');
       $query = $this->db->get();
       // echo $this->db->last_query();
       // die();
@@ -375,8 +376,7 @@ class Grfromkitchensentul_model extends CI_Model {
               }
             }
         }
-        // print_r($doitems);
-        // die();
+        
         $count = count($doitems);
         if ($count > 0) {
             $k=1;
@@ -393,9 +393,9 @@ class Grfromkitchensentul_model extends CI_Model {
 
     function sap_item_groups_select_all() {
   
-        // $kd_plant = $this->session->userdata['ADMIN']['plant'];
+        $kd_plant = $this->session->userdata['ADMIN']['plant'];
         $this->db->from('m_item_group');
-        $this->db->where('kdplant', 'T.DFRHTM');
+        $this->db->where('kdplant', $kd_plant);
     
         $query = $this->db->get();
         if(($query)&&($query->num_rows() > 0)) {
