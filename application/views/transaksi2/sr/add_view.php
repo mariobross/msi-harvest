@@ -73,7 +73,7 @@
 												</div>
 											</div>
 
-											<div class="form-group row">
+											<!-- <div class="form-group row">
 												<label class="col-lg-3 col-form-label">Request Reason</label>
 												<div class="col-lg-9">
 													<select class="form-control form-control-select2" data-live-search="true" id="rr" name="rr">
@@ -83,7 +83,7 @@
 														<?php endforeach;?>
 													</select>
 												</div>
-                                            </div>
+                                            </div> -->
 
 											<div class="form-group row">
 												<label class="col-lg-3 col-form-label">Material Group</label>
@@ -169,7 +169,7 @@
 														<th>Material Desc</th>
 														<th>Quantity</th>
 														<th>UOM</th>
-														<!-- <th>On Hand</th> -->
+														<th>On Hand</th>
 														<!-- <th>Min Stock</th> -->
 														<!-- <th>Outstanding Total</th> -->
 													</tr>
@@ -186,7 +186,7 @@
 														<td width="40%"></td>
 														<td><input type="text" class="form-control  qty" name="qty[]" id="qty" style="width:100%" autocomplete="off"></td>
 														<td></td>
-														<!-- <td></td> -->
+														<td></td>
 														<!-- <td></td> -->
 														<!-- <td></td> -->
 													</tr>
@@ -280,7 +280,7 @@
 				"3":"",
 				"4":`<input type="text" class="form-control qty" id="gr_qty_${count}" value="" style="width:100%" autocomplete="off">`,
 				"5":"",
-				// "6":"",
+				"6":"",
 				// "7":"",
 				// "8":""
 				}).draw();
@@ -296,13 +296,17 @@
 		}
 
 		function setValueTable(id,no){
+			const requestToOutlet = $('#rto').val();
 			table = document.getElementById("tblWhole").rows[no].cells;
 			$.post(
-				"<?php echo site_url('transaksi2/sr/getdataDetailMaterialSelect')?>",{ MATNR:id },(res)=>{
+				"<?php echo site_url('transaksi2/sr/getdataDetailMaterialSelect')?>",{ MATNR:id, RTO:requestToOutlet },(res)=>{
 					matSelect = JSON.parse(res);
-					matSelect.map((val)=>{
+					// console.log(matSelect['dataOnHand'][0].OnHand);
+					let onHand = matSelect['dataOnHand'][0].OnHand;
+					matSelect['data'].map((val)=>{
 						table[3].innerHTML = val.MAKTX;
-						table[5].innerHTML = val.UNIT
+						table[5].innerHTML = val.UNIT;
+						table[6].innerHTML = onHand == '.000000' ? 0 : onHand;
 					})
 				}
 			)
@@ -358,10 +362,10 @@
 
 		function addDatadb(id_approve=''){
 			if($('.qty').val() ==''){
-					alert('Quatity harus di isi');
-					return false;
-				}
-			const requestRespon= document.getElementById('rr').value;
+				alert('Quantity harus di isi');
+				return false;
+			}
+			
 			const matrialGroup= document.getElementById('materialGroup').value;
 			const requestToOutlet= document.getElementById('rto').value;
 			const delivDate= document.getElementById('deliveDate').value;
@@ -372,18 +376,26 @@
 			let matrialDesc =[];
 			let qty =[];
 			let uom =[];
+			let validateQty = true;
 			tbodyTable.find('tr').each(function(i, el){
 					let td = $(this).find('td');
+					if(td.eq(4).find('input').val() == '' || td.eq(4).find('input').val() == null){
+						validateQty = false
+					}
 					matrialNo.push(td.eq(2).find('select').val()); 
 					matrialDesc.push(td.eq(3).text());
 					qty.push(td.eq(4).find('input').val());
 					uom.push(td.eq(5).text());
 				})
+			if(!validateQty){
+				alert('Quantity harus di isi');
+				return false;
+			}
 
 
 			$.post("<?php echo site_url('transaksi2/sr/addData')?>", {
-				reqRes: requestRespon, matGrp: matrialGroup, reqToOutlet: requestToOutlet, appr: approve, dateDeliv: delivDate, dateCreate: createDate, detMatrialNo: matrialNo, detMatrialDesc: matrialDesc, detQty: qty, detUom: uom,
-			}, function(res){location.reload(true);;});
+				 matGrp: matrialGroup, reqToOutlet: requestToOutlet, appr: approve, dateDeliv: delivDate, dateCreate: createDate, detMatrialNo: matrialNo, detMatrialDesc: matrialDesc, detQty: qty, detUom: uom,
+			}, function(res){location.reload(true);});
 		}
 	
 	</script>

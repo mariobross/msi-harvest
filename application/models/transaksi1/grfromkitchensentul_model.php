@@ -43,13 +43,13 @@ class Grfromkitchensentul_model extends CI_Model {
     $response = NULL;
     $kd_plant = $this->session->userdata['ADMIN']['plant'];
     $SAP_MSI = $this->load->database('SAP_MSI', TRUE); 
-    $SAP_MSI->select("OWTQ.DocNum as VBELN, 
+    $SAP_MSI->select("OWTQ.DocEntry as VBELN, 
                             convert(date, OWTQ.DocDate) as DELIV_DATE, 
                             OWTQ.ToWhsCode, 
                             OITM.ItmsGrpCod as DISPO, 
                             OITM.InvntryUom as VRKME, 
                             WTQ1.LineNum as Item, 
-                            OWTQ.U_DocNum + ' - '+ NNM1.SeriesName + RIGHT('00000' + CONVERT(varchar, DocNum), 6) AS Doc_Num, 
+                            NNM1.SeriesName + RIGHT('00000' + CONVERT(varchar, DocNum), 6) AS Doc_Num,
                             OWTQ.ToWhsCode as PLANT, 
                             OWHS.WhsName as Outlet, 
                             OWHS.WhsName, 
@@ -72,13 +72,13 @@ class Grfromkitchensentul_model extends CI_Model {
     if(empty($slipNumberHeader) && empty($ItmsGrpNam)) {
       // $SAP_MSI->where('OWTQ.U_DocNum is NOT NULL', NULL, FALSE);
     } else if(!empty($slipNumberHeader) && empty($ItmsGrpNam)) {
-      $SAP_MSI->where('OWTQ.DocNum',(int)$slipNumberHeader);
+      $SAP_MSI->where('OWTQ.DocEntry',(int)$slipNumberHeader);
     } else if(!empty($slipNumberHeader) && !empty($ItmsGrpNam)){
 
       if($ItmsGrpNam == 'all'){
-        $SAP_MSI->where('OWTQ.DocNum', (int)$slipNumberHeader);
+        $SAP_MSI->where('OWTQ.DocEntry', (int)$slipNumberHeader);
       } else {
-        $SAP_MSI->where('OWTQ.DocNum', (int)$slipNumberHeader);
+        $SAP_MSI->where('OWTQ.DocEntry', (int)$slipNumberHeader);
         $SAP_MSI->where('OITB.ItmsGrpNam', $ItmsGrpNam);
       }
       
@@ -470,4 +470,23 @@ class Grfromkitchensentul_model extends CI_Model {
         // }
 
     }
+
+  function grpodlv_header_delete($id){
+    if($this->grpodlv_details_delete($id)){
+      $this->db->where('id_grpodlv_header', $id);
+      if($this->db->delete('t_grpodlv_header'))
+          return TRUE;
+      else
+          return FALSE;
+    }
+  }
+
+  function grpodlv_details_delete($id){
+    $this->db->where('id_grpodlv_header', $id);
+    if($this->db->delete('t_grpodlv_detail'))
+      return TRUE;
+    else
+      return FALSE;
+  }
+
 }

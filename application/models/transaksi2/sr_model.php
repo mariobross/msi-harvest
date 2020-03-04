@@ -104,6 +104,20 @@ class Sr_model extends CI_Model {
         }
     }
 
+    function getDataOnHand($itemSelect, $reqPlant){
+        $SAP_MSI = $this->load->database('SAP_MSI', TRUE);
+        $SAP_MSI->select('OnHand');
+        $SAP_MSI->from('OITW');
+        $SAP_MSI->where('WhsCode', $reqPlant); 
+        $SAP_MSI->where('ItemCode', $itemSelect);
+        $query = $SAP_MSI->get();
+
+        if(($query)&&($query->num_rows()>0))
+            return $query->result_array();
+		else
+			return FALSE;
+    }
+
     function id_stdstock_plant_new_select($id_outlet,$created_date="",$id_stdstock_header="") {
 
         if (empty($created_date))

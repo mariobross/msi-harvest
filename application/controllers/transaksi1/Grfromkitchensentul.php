@@ -50,7 +50,7 @@ class Grfromkitchensentul extends CI_Controller
         $object['do_no']['-'] = '';
         if($data['do_nos'] != FALSE) {
             foreach ($data['do_nos'] as $do_no) {
-                $object['do_no'][$do_no['VBELN']] = $do_no['VBELN'];
+                $object['do_no'][$do_no['VBELN']] = $do_no['VBELN'] .' - '.$do_no['Doc_Num'];
             }
         }    
         $this->load->view('transaksi1/eksternal/grfromkitchensentul/add_new', $object);
@@ -118,6 +118,8 @@ class Grfromkitchensentul extends CI_Controller
                     // $grpodlv_detail_to_save['outstanding_qty'] = $itemDetail['gr_qty'];
                     $grpodlv_detail_to_save['gr_quantity'] = $itemDetail['gr_qty'];
                     $grpodlv_detail_to_save['uom'] = $itemDetail['uom'];
+                    $grpodlv_detail_to_save['val'] = '0';
+                    $grpodlv_detail_to_save['var'] = '0';
                     $grpodlv_detail_to_save['ok'] = '1';
 
                     if ($grpodlv_detail['LFIMG'] >= $itemDetail['gr_qty'])
@@ -351,7 +353,7 @@ class Grfromkitchensentul extends CI_Controller
             $nestedData['do_no'] = $val['do_no'];
             $nestedData['delivery_date'] = date('d-m-Y',strtotime($val['delivery_date']));
             $nestedData['posting_date'] = date('d-m-Y',strtotime($val['posting_date']));
-            $nestedData['status'] = $val['status'] =='1'?'Not Apporeed':'Approved';
+            $nestedData['status'] = $val['status'] =='1'?'Not Approved':'Approved';
             $nestedData['id_user_input'] = $val['id_user_input'];
             $nestedData['id_user_approved'] = $val['id_user_approved'];
             $nestedData['lastmodified'] = $val['lastmodified'];
@@ -421,6 +423,25 @@ class Grfromkitchensentul extends CI_Controller
         }
 
         echo json_encode($json_data);
+    }
+
+    public function deleteData(){
+        $id_grpodlv_header = $this->input->post('deleteArr');
+        $deleteData = false;
+        foreach($id_grpodlv_header as $id){
+            $dataHeader = $this->dokitchen->grpodlv_header_select($id);
+            if($dataHeader['status'] == '2' || $dataHeader['back'] == 0){
+                $deleteData = false;
+            }else{
+                if($this->dokitchen->grpodlv_header_delete($id))
+                $deleteData = true;
+            }
+        }
+        if($deleteData){
+            return $this->session->set_flashdata('success', "GR from Central Kitchen Berhasil dihapus");
+        }else{
+            return $this->session->set_flashdata('failed', "GR from Central Kitchen Gagal dihapus");
+        }
     }
 }
 ?>
