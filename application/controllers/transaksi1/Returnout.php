@@ -14,6 +14,7 @@ class Returnout extends CI_Controller{
         // load model
         // $this->load->model("");
         $this->load->library('form_validation');
+        $this->load->library('l_general');
 
         $this->load->model('transaksi1/returnOut_model', 'retOut_model');
     }
@@ -105,11 +106,114 @@ class Returnout extends CI_Controller{
      public function add()
      {
          # code...
-         $this->load->view('transaksi1/eksternal/returnout/add_view');
+        $object['plants'] = $this->retOut_model->showOutlet();
+        $object['matrialGroup'] = $this->retOut_model->showMatrialGroup();
+		$object['plant'] = $this->session->userdata['ADMIN']['plant'].' - '.$this->session->userdata['ADMIN']['plant_name'];
+    	$object['storage_location'] = $this->session->userdata['ADMIN']['storage_location'].' - '.$this->session->userdata['ADMIN']['storage_location_name'];
+    
+        $this->load->view('transaksi1/eksternal/returnout/add_view', $object);
      }
 
-     public function edit(){
+    function getdataDetailMaterial(){
+        $item_group_code = $this->input->post('matGroup');
+        
+        
+        $data = $this->retOut_model->sap_items_select_by_item_group($item_group_code);
+        
+        echo json_encode($data);
+
+    }
+    
+    function getdataDetailMaterialSelect(){
+        $item_group_code = $this->input->post('DSNAM');
+        $itemSelect = $this->input->post('MATNR');
+        $reqPlant = $this->input->post('RTO');
+        
+        $dataMatrialSelect = $this->retOut_model->sap_items_select_by_item_group($item_group_code, $itemSelect);
+        $dataInWhsQty = $this->retOut_model->getDataInWhsQty($itemSelect,$reqPlant);
+
+        $json_data = array(
+            "data"              => $dataMatrialSelect,
+            "dataInWhsQty"      => $dataInWhsQty
+        );
+
+        echo json_encode($json_data);
+        
+    }
+
+    function addData(){
+        $plant = $this->session->userdata['ADMIN']['plant'];
+        $storage_location = $this->session->userdata['ADMIN']['storage_location'];
+        $plant_name = $this->session->userdata['ADMIN']['plant_name'];
+        $storage_location_name = $this->session->userdata['ADMIN']['storage_location_name'];
+        $admin_id = $this->session->userdata['ADMIN']['admin_id'];
+
+        $gisto_dept_header['plant'] = $plant;
+        $gisto_dept_header['plant_name'] = $plant_name;
+        $gisto_dept_header['posting_date'] = $this->l_general->str_to_date($this->input->post('posting_date'));
+        $gisto_dept_header['storage_location'] = $storage_location;
+        $gisto_dept_header['id_gisto_dept_plant'] = $this->retOut_model->id_gisto_dept_plant_new_select($gisto_dept_header['plant'],$gisto_dept_header['posting_date']);
+        $gisto_dept_header['receiving_plant'] = $this->input->post('reqOutlet');
+        $gisto_dept_header['receiving_plant_name'] = $this->input->post('reqOutletName');
+        $gisto_dept_header['po_no'] = '';
+        $gisto_dept_header['gisto_dept_no'] = '';
+        $gisto_dept_header['item_group_code'] = $this->input->post('matGroup');
+        $gisto_dept_header['status'] = $this->input->post('appr')? $this->input->post('appr') : '1';
+        $gisto_dept_header['id_user_input'] = $admin_id;
+        $gisto_dept_header['id_user_approved'] = $this->input->post('appr')? $admin_id : 0;
+        $gisto_dept_header['id_user_cancel'] = 0;
+        $gisto_dept_header['back'] = 1;
+
+        $detMatrialNo = $this->input->post('detMatrialNo');
+        $max = count($detMatrialNo);
+
+        if($id_gisto_dept_header= $this->retOut_model->gisto_dept_header_insert($gisto_dept_header)){
+            $input_detail_success = false;
+            for($i =0; $i < $max; $i++){
+                $gisto_dept_detail['id_gisto_dept_header'] = $id_gisto_dept_header;
+                $gisto_dept_detail['id_gisto_dept_h_detail'] = $i+1;
+                $gisto_dept_detail['material_no'] = $this->input->post('detMatrialNo')[$i];
+                $gisto_dept_detail['material_desc'] = $this->input->post('detMatrialDesc')[$i];
+                $gisto_dept_detail['gr_quantity'] = $this->input->post('detQty')[$i];
+                $gisto_dept_detail['uom'] = $this->input->post('detUom')[$i];
+                $gisto_dept_detail['ok'] = 0;
+                $gisto_dept_detail['ok_cancel'] = 0;
+                $gisto_dept_detail['reason'] = $this->input->post('detRemark')[$i];
+                $gisto_dept_detail['stock'] = (float)$this->input->post('inWhsQty')[$i];
+
+                if($this->retOut_model->gisto_dept_detail_insert($gisto_dept_detail))
+                $input_detail_success = TRUE;
+            }
+        }
+
+        if($input_detail_success){
+            return $this->session->set_flashdata('success', "Retur Out Telah Terbentuk");
+        }else{
+            return $this->session->set_flashdata('failed', "Retur Out Gagal Terbentuk");
+        }
+    }
+
+    public function edit(){
         $this->load->view('transaksi1/eksternal/returnout/edit_view');
+    }
+
+    public function deleteData(){
+        $id_gisto_dept_header = $this->input->post('deleteArr');
+        $deleteData = false;
+        foreach($id_gisto_dept_header as $id){
+            $dataHeader = $this->retOut_model->gisto_dept_header_select($id);
+            if($dataHeader['status'] == '2' && $dataHeader['back'] == 0){
+                $deleteData = false;
+            }else{
+                if($this->retOut_model->gisto_dept_header_delete($id))
+                $deleteData = true;
+            }
+        }
+        if($deleteData){
+            return $this->session->set_flashdata('success', "Retur Out Berhasil dihapus");
+        }else{
+            return $this->session->set_flashdata('failed', "Retur Out Gagal dihapus");
+        }
     }
 }
 ?>
