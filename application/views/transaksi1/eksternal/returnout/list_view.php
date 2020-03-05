@@ -221,7 +221,7 @@
                             return rr;
                         }},
                         {"data":"id_gisto_dept_header", "className":"dt-center", render:function(data, type, row, meta){
-                                rr = `<a href='<?php echo site_url('transaksi1/returnout/edit')?>' ><i class='icon-file-plus2' title="Edit"></i></a>&nbsp;
+                                rr = `<a href='<?php echo site_url('transaksi1/returnout/edit/')?>${data}' ><i class='icon-file-plus2' title="Edit"></i></a>&nbsp;
 									<a onClick="printPdf(${data})" href="#" ><i class='icon-printer' title="Print"></i></a>`;
                                 return rr;
                         }},

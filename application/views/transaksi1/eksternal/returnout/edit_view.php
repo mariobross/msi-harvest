@@ -18,7 +18,18 @@
 			<div class="content-wrapper">
                 <!-- <?php  $this->load->view("_template/breadcrumb.php")?> -->
 				<div class="content">
+					<?php if ($this->session->flashdata('success')): ?>
+						<div class="alert alert-success" role="alert">
+							<?php echo $this->session->flashdata('success'); ?>
+						</div>
+					<?php endif; ?>
+					<?php if ($this->session->flashdata('failed')): ?>
+						<div class="alert alert-danger" role="alert">
+							<?php echo $this->session->flashdata('failed'); ?>
+						</div>
+					<?php endif; ?>
                     <form action="#" method="POST">
+					<input type="hidden" name="status" id="status" value="<?=$retOut_header['status']?>">
 						<div class="card">
                         	<div class="card-body">
                                 <div class="row">
@@ -28,74 +39,68 @@
                                             <div class="form-group row">
 												<label class="col-lg-3 col-form-label">ID Transaksi</label>
 												<div class="col-lg-9">
-													<input type="text" class="form-control" placeholder="ID Transaksi" readOnly>
+													<input type="text" class="form-control" value="<?=$retOut_header['id_gisto_dept_header']?>" id="idreturnOut" name="idreturnOut" readOnly>
 												</div>
                                             </div>
                                             
                                             <div class="form-group row">
 												<label class="col-lg-3 col-form-label">Return No</label>
 												<div class="col-lg-9">
-													<input type="text" class="form-control" placeholder="(Auto Number after Posting to SAP)" readOnly>
+													<input type="text" class="form-control" value="<?= $retOut_header['status'] == 2 ? $retOut_header['gisto_dept_no'] :'(Auto Number after Posting to SAP)'?>" id="transfer_slip_number" id="retOutNo" name="retOutNo" readOnly>
 												</div>
                                             </div>
                                             
                                             <div class="form-group row">
 												<label class="col-lg-3 col-form-label">Outlet</label>
 												<div class="col-lg-9">
-													<input type="text" class="form-control" placeholder="Outlet" readOnly>
+													<input type="text" class="form-control" value="<?=$retOut_header['plant']?>" id="plant" name="plant" readOnly>
 												</div>
                                             </div>
                                             
                                             <div class="form-group row">
 												<label class="col-lg-3 col-form-label">Storage Location</label>
 												<div class="col-lg-9">
-													<input type="text" class="form-control" placeholder="Outlet" readOnly>
+													<input type="text" class="form-control" value="<?=$retOut_header['storage_location']?>" id="storageLocation" name="storageLocation" readOnly>
+												</div>
+											</div>
+											
+											<div class="form-group row">
+												<label class="col-lg-3 col-form-label">Retur Out to Outlet</label>
+												<div class="col-lg-9">
+													<input type="text" class="form-control" value="<?=$retOut_header['receiving_plant']?>" id="receiving_plant" name="receiving_plant" readOnly>
 												</div>
                                             </div>
 
 											<div class="form-group row">
 												<label class="col-lg-3 col-form-label">Status</label>
 												<div class="col-lg-9">
-													<input type="text" class="form-control" placeholder="Not Approved" readOnly>
-												</div>
-											</div>
-
-											<div class="form-group row">
-												<label class="col-lg-3 col-form-label">Retur Out to Outlet</label>
-												<div class="col-lg-9">
-													<select class="form-control form-control-select2" data-live-search="true">
-														<option value="">Select Item</option>
-														<option value="1">Pilih 1</option>
-														<option value="2">Pilih 2</option>
-													</select>
+													<input type="text" class="form-control" value="<?=$retOut_header['status_string']?>" id="status_string" name="status_string" readOnly>
 												</div>
 											</div>
 
                                            	<div class="form-group row">
 												<label class="col-lg-3 col-form-label">Material Group</label>
 												<div class="col-lg-9">
-													<select class="form-control form-control-select2" data-live-search="true">
-														<option value="">Select Item</option>
-														<option value="1">Pilih 1</option>
-														<option value="2">Pilih 2</option>
-													</select>
+													<input type="text" class="form-control" value="<?=$retOut_header['item_group_code']?>" name="MatrialGroup" id="MatrialGroup" readonly>
 												</div>
 											</div>
 
                                             <div class="form-group row">
                                                 <label class="col-lg-3 col-form-label">Posting Date</label>
                                                 <div class="col-lg-9 input-group date">
-                                                    <input type="text" class="form-control" id="postDate">
-                                                    <div class="input-group-prepend">
-                                                        <span class="input-group-text" id="basic-addon1">
-                                                            <i class="icon-calendar"></i>
-                                                        </span>
-                                                    </div>
+													<input type="text" class="form-control"  value="<?=date("d-m-Y", strtotime($retOut_header['posting_date']))?>" id="postingDate" <?= $retOut_header['status'] == 2 ? "readonly" :''?>>
+													<?php if($retOut_header['status'] !='2'): ?>
+														<div class="input-group-prepend">
+															<span class="input-group-text" id="basic-addon1">
+																<i class="icon-calendar"></i>
+															</span>
+														</div> 
+													<?php endif;?>
                                                 </div>
 											</div>
 
                                             <div class="text-right">
-                                                <button type="submit" class="btn btn-primary">Cancel<i class="icon-paperplane ml-2"></i></button>
+												<button type="button" class="btn btn-success" id="cancelRecord">Cancel <i class="icon-paperplane ml-2"></i></button>
 												<!-- <button type="submit" class="btn btn-success">Approve SAP<i class="icon-paperplane ml-2"></i></button> -->
                                             </div>
 
@@ -110,12 +115,13 @@
 								<div class="row">
 								<legend class="font-weight-semibold"><i class="icon-list mr-2"></i>List Item</legend>
 									<div class="col-md-12" style="overflow: auto">
-										<table class="table table-bordered table-striped" id="tblWhole">
+										<table class="table table-striped" id="tblWhole">
 											<thead>
 												<tr>
 													<th>No</th>
 													<th>Material No</th>
 													<th>Material Desc</th>
+													<th>In Whs Quantity</th>
 													<th>Quantity</th>
 													<th>UOM</th>
 													<th>Text</th>
@@ -135,11 +141,85 @@
         <?php  $this->load->view("_template/js.php")?>
 		<script>
 		$(document).ready(function(){
-			var table = $("#tblWhole").DataTable({
-				"ordering":false
+			const id_gisto_dept_header = $('#idreturnOut').val();
+			const stts = $('#status').val();
+
+			table = $("#tblWhole").DataTable({
+				"ordering":false,
+				"paging":false,
+				"ajax": {
+						"url":"<?php echo site_url('transaksi1/returnout/showReturnInDetail');?>",
+						"data":{ id: id_gisto_dept_header, status: stts },
+						"type":"POST"
+					},
+					"columns": [
+					{"data":"no", "className":"dt-center"},
+					{"data":"material_no", "className":"dt-center"},
+					{"data":"material_desc"},
+					{"data":"stock", "className":"dt-center"},
+					{"data":"gr_quantity", "className":"dt-center", render:function(data, type, row, meta){
+						rr= row['status'] == 1 ? `<input type="text" class="form-control" id="gr_qty_${data}" value="${data}">`: `${row['gr_quantity']}`;
+						return rr;
+					}},
+					{"data":"uom", "className":"dt-center"},
+					{"data":"reason", "className":"dt-center"},
+					{"data":"id_gisto_dept_detail", "className":"dt-center", render:function(data, type, row, meta){
+						rr=`<input type="checkbox" class="check_delete" id="chk_${data}" value="${data}" onclick="checkcheckbox();">`;
+						return rr;
+					}},
+				],
+				drawCallback: function() {
+					$('.form-control-select2').select2();
+				}
+			});				
+
+			$("#cancelRecord").click(function(){
+				const id_gisto_dept_header = $('#idreturnOut').val();
+				let deleteidArr=[];
+				$("input:checkbox[class=check_delete]:checked").each(function(){
+					deleteidArr.push($(this).val());
+					console.log(deleteidArr);
+				})
+
+
+				// mengecek ckeckbox tercheck atau tidak
+				if(deleteidArr.length > 0){
+					var confirmDelete = confirm("Apa Kamu Yakin Akan Membatalkan Return Out ini?");
+					if(confirmDelete == true){
+						$.ajax({
+							url:"<?php echo site_url('transaksi1/returnout/cancelReturnOut');?>", //masukan url untuk delete
+							type: "post",
+							data:{deleteArr: deleteidArr, id_gisto_dept_header:id_gisto_dept_header},
+							success:function(res) {
+								// dataTable.ajax.reload();
+								location.reload(true);
+							}
+						});
+					}
+				}
 			});
-			
-			$('#postDate').datepicker();
+
+			checkcheckbox = () => {
+                    
+				const lengthcheck = $(".check_delete").length;
+				
+				let totalChecked = 0;
+				$(".check_delete").each(function(){
+					if($(this).is(":checked")){
+						totalChecked += 1;
+					}
+				});
+			}
+
+			const date = new Date();
+			const today = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+			var optSimple = {
+				format: 'yyyy-mm-dd',
+				todayHighlight: true,
+				orientation: 'bottom right',
+				autoclose: true
+			};
+			$('#postingDate').datepicker(optSimple);
 		});
 		</script>
 	</body>

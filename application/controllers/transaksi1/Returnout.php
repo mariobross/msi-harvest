@@ -194,7 +194,55 @@ class Returnout extends CI_Controller{
     }
 
     public function edit(){
-        $this->load->view('transaksi1/eksternal/returnout/edit_view');
+        $id_gisto_dept_header = $this->uri->segment(4);
+        $object['data'] = $this->retOut_model->gisto_dept_header_select($id_gisto_dept_header);
+        $object['retOut_header']['id_gisto_dept_header'] = $id_gisto_dept_header;
+        if($object['data']['status'] == '1'){
+            $object['retOut_header']['status_string'] = 'Not Approved';                              
+        }else if($object['data']['status'] == '2'){
+            $object['retOut_header']['status_string'] = 'Approved';
+        }else{
+            $object['retOut_header']['status_string'] = 'Cancel';
+        }
+        $object['retOut_header']['plant'] = $object['data']['plant'].' - '.$object['data']['plant_name_new'];
+        $object['retOut_header']['gisto_dept_no'] = $object['data']['gisto_dept_no'];
+		$object['retOut_header']['storage_location'] = $object['data']['storage_location'].' - '.$object['data']['storage_location_name'];
+        $object['retOut_header']['receiving_plant'] = $object['data']['receiving_plant'].' - '.$object['data']['receiving_plant_name'];
+        $object['retOut_header']['posting_date'] = $object['data']['posting_date'];
+        $object['retOut_header']['item_group_code'] = $object['data']['item_group_code'];
+        $object['retOut_header']['status'] = $object['data']['status'];
+        // print_r($object['data']);
+
+        $this->load->view('transaksi1/eksternal/returnout/edit_view', $object);
+    }
+
+    public function showReturnInDetail(){
+        $id_gisto_dept_header = $this->input->post('id');
+        $stts = $this->input->post('status');
+        $rs = $this->retOut_model->gisto_dept_details_select($id_gisto_dept_header);
+        $dt = array();
+        $i = 1;
+       
+        if($rs){
+            foreach($rs as $key=>$value){
+                $nestedData=array();
+                $nestedData['id_gisto_dept_detail'] = $value['id_gisto_dept_detail'];
+                $nestedData['no'] = $i;
+                $nestedData['material_no'] = $value['material_no'];
+				$nestedData['material_desc'] = $value['material_desc'];
+				$nestedData['stock'] = $value['stock'];
+				$nestedData['gr_quantity'] = $value['gr_quantity'];
+                $nestedData['uom'] = $value['uom'];
+                $nestedData['reason'] = $value['reason'];
+                $dt[] = $nestedData;
+                $i++;
+            }
+        }
+
+        $json_data = array(
+                "data" => $dt
+            );
+        echo json_encode($json_data) ;
     }
 
     public function deleteData(){
@@ -214,6 +262,24 @@ class Returnout extends CI_Controller{
         }else{
             return $this->session->set_flashdata('failed', "Retur Out Gagal dihapus");
         }
+    }
+
+    public function cancelReturnOut(){
+        $retOut_header['id_gisto_dept_header'] = $this->input->post('id_gisto_dept_header');
+        $retOut_details = $this->input->post('deleteArr');
+
+        if($this->retOut_model->cancelHeaderReturnOut($retOut_header)){
+            $succes_cancel_ro_from_vendor = false;
+            for($i=0; $i<count($retOut_details); $i++){
+                if($this->retOut_model->cancelDetailsReturnOut($retOut_details[$i]))
+                $succes_cancel_ro_from_vendor = true;
+            }
+        }
+        if($succes_cancel_ro_from_vendor){
+            return $this->session->set_flashdata('success', "Return Out Berhasil di Cancel");
+        }else{
+            return $this->session->set_flashdata('failed', "Return Out Gagal di Cancel");
+        }  
     }
 }
 ?>
