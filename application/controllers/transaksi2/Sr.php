@@ -73,7 +73,7 @@ class Sr extends CI_Controller{
             $nestedData['admin_realname'] = $val['user_input'];
             $nestedData['admin_realname(1)'] = $val['user_approved'] ? $val['user_approved'] : '-';
             $nestedData['lastmodified'] = date("d-m-Y",strtotime($val['lastmodified']));
-            $nestedData['back'] = $val['back'] =='1'?'Integrated':'Not Integrated';
+            $nestedData['back'] = $val['back'] =='1'?'Not Integrated':'Integrated';
             $nestedData['stts'] = $val['status'];
             // $nestedData['dataInTo'] = $this->sr_model->cekNoSRinTO($val['pr_no']);
             $data[] = $nestedData;
@@ -112,10 +112,17 @@ class Sr extends CI_Controller{
 
     function getdataDetailMaterialSelect(){
         $itemSelect = $this->input->post('MATNR');
+        $reqPlant = $this->input->post('RTO');
         
         $dataMatrialSelect = $this->sr_model->getDataMaterialGroupSelect($itemSelect);
+        $dataOnHand = $this->sr_model->getDataOnHand($itemSelect,$reqPlant);
 
-        echo json_encode($dataMatrialSelect);
+        $json_data = array(
+            "data"            => $dataMatrialSelect,
+            "dataOnHand"      => $dataOnHand
+        );
+
+        echo json_encode($json_data);
         
     }
 
@@ -127,7 +134,7 @@ class Sr extends CI_Controller{
         $admin_id = $this->session->userdata['ADMIN']['admin_id'];
 
         $stdstock_header['delivery_date'] = $this->l_general->str_to_date($this->input->post('dateDeliv'));
-        $stdstock_header['request_reason'] = $this->input->post('reqRes');
+        $stdstock_header['request_reason'] = '';//$this->input->post('reqRes');
         $stdstock_header['item_group_code'] = $this->input->post('matGrp');
         $stdstock_header['to_plant'] = $this->input->post('reqToOutlet');
         $stdstock_header['created_date'] = $this->l_general->str_to_date($this->input->post('dateCreate'));

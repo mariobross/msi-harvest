@@ -46,9 +46,14 @@ class Grfromkitchensentul extends CI_Controller
     	// 	}
         // }
 
-        $data['do_no'] = $this->dokitchen->sap_grpodlv_headers_select_slip_number();
-        
-        $this->load->view('transaksi1/eksternal/grfromkitchensentul/add_new',$data);
+        $data['do_nos'] = $this->dokitchen->sap_grpodlv_headers_select_slip_number(); 
+        $object['do_no']['-'] = '';
+        if($data['do_nos'] != FALSE) {
+            foreach ($data['do_nos'] as $do_no) {
+                $object['do_no'][$do_no['VBELN']] = $do_no['VBELN'] .' - '.$do_no['Doc_Num'];
+            }
+        }    
+        $this->load->view('transaksi1/eksternal/grfromkitchensentul/add_new', $object);
     }
 
     public function getDataListHeader(){
@@ -65,6 +70,12 @@ class Grfromkitchensentul extends CI_Controller
 
     public function saveDataGR(){
 
+        $plant = $this->session->userdata['ADMIN']['plant'];
+        $storage_location = $this->session->userdata['ADMIN']['storage_location'];
+        $plant_name = $this->session->userdata['ADMIN']['plant_name'];
+        $storage_location_name = $this->session->userdata['ADMIN']['storage_location_name'];
+        $admin_id = $this->session->userdata['ADMIN']['admin_id'];
+
         $input_detail_success = FALSE;
 
         $Header = $this->input->post('Header');
@@ -80,8 +91,8 @@ class Grfromkitchensentul extends CI_Controller
 
         $grpodlv_header['do_no'] = $Header['do_no'];
         $grpodlv_header['delivery_date'] = $delivery_date;
-        $grpodlv_header['plant'] = $Header['plant'];
-        $grpodlv_header['storage_location'] = $Header['storage_location'];
+        $grpodlv_header['plant'] = $plant;
+        $grpodlv_header['storage_location'] = $storage_location;
         $grpodlv_header['posting_date'] = $posting_date;
         $grpodlv_header['status'] = $Header['status'] ? $Header['status'] : '1';
         $grpodlv_header['id_user_input'] = $Header['id_user_input'];
@@ -107,6 +118,8 @@ class Grfromkitchensentul extends CI_Controller
                     // $grpodlv_detail_to_save['outstanding_qty'] = $itemDetail['gr_qty'];
                     $grpodlv_detail_to_save['gr_quantity'] = $itemDetail['gr_qty'];
                     $grpodlv_detail_to_save['uom'] = $itemDetail['uom'];
+                    $grpodlv_detail_to_save['val'] = '0';
+                    $grpodlv_detail_to_save['var'] = '0';
                     $grpodlv_detail_to_save['ok'] = '1';
 
                     if ($grpodlv_detail['LFIMG'] >= $itemDetail['gr_qty'])
@@ -340,7 +353,7 @@ class Grfromkitchensentul extends CI_Controller
             $nestedData['do_no'] = $val['do_no'];
             $nestedData['delivery_date'] = date('d-m-Y',strtotime($val['delivery_date']));
             $nestedData['posting_date'] = date('d-m-Y',strtotime($val['posting_date']));
-            $nestedData['status'] = $val['status'] =='1'?'Not Apporeed':'Approved';
+            $nestedData['status'] = $val['status'] =='1'?'Not Approved':'Approved';
             $nestedData['id_user_input'] = $val['id_user_input'];
             $nestedData['id_user_approved'] = $val['id_user_approved'];
             $nestedData['lastmodified'] = $val['lastmodified'];
@@ -410,6 +423,25 @@ class Grfromkitchensentul extends CI_Controller
         }
 
         echo json_encode($json_data);
+    }
+
+    public function deleteData(){
+        $id_grpodlv_header = $this->input->post('deleteArr');
+        $deleteData = false;
+        foreach($id_grpodlv_header as $id){
+            $dataHeader = $this->dokitchen->grpodlv_header_select($id);
+            if($dataHeader['status'] == '2' || $dataHeader['back'] == 0){
+                $deleteData = false;
+            }else{
+                if($this->dokitchen->grpodlv_header_delete($id))
+                $deleteData = true;
+            }
+        }
+        if($deleteData){
+            return $this->session->set_flashdata('success', "GR from Central Kitchen Berhasil dihapus");
+        }else{
+            return $this->session->set_flashdata('failed', "GR from Central Kitchen Gagal dihapus");
+        }
     }
 }
 ?>

@@ -31,6 +31,7 @@ class Grfromkitchensentul_model extends CI_Model {
       if((!empty($status))){
           $this->db->where('status', $status);
       }
+      $this->db->order_by('id_grpodlv_header','DESC');
       $query = $this->db->get();
       // echo $this->db->last_query();
       // die();
@@ -42,13 +43,13 @@ class Grfromkitchensentul_model extends CI_Model {
     $response = NULL;
     $kd_plant = $this->session->userdata['ADMIN']['plant'];
     $SAP_MSI = $this->load->database('SAP_MSI', TRUE); 
-    $SAP_MSI->select("OWTQ.U_DocNum as VBELN, 
+    $SAP_MSI->select("OWTQ.DocEntry as VBELN, 
                             convert(date, OWTQ.DocDate) as DELIV_DATE, 
                             OWTQ.ToWhsCode, 
                             OITM.ItmsGrpCod as DISPO, 
                             OITM.InvntryUom as VRKME, 
                             WTQ1.LineNum as Item, 
-                            OWTQ.U_DocNum + ' - '+ NNM1.SeriesName + RIGHT('00000' + CONVERT(varchar, DocNum), 6) AS Doc_Num, 
+                            NNM1.SeriesName + RIGHT('00000' + CONVERT(varchar, DocNum), 6) AS Doc_Num,
                             OWTQ.ToWhsCode as PLANT, 
                             OWHS.WhsName as Outlet, 
                             OWHS.WhsName, 
@@ -69,15 +70,15 @@ class Grfromkitchensentul_model extends CI_Model {
     $SAP_MSI->where('WTQ1.OpenCreQty >', 0);
     
     if(empty($slipNumberHeader) && empty($ItmsGrpNam)) {
-      $SAP_MSI->where('OWTQ.U_DocNum is NOT NULL', NULL, FALSE);
+      // $SAP_MSI->where('OWTQ.U_DocNum is NOT NULL', NULL, FALSE);
     } else if(!empty($slipNumberHeader) && empty($ItmsGrpNam)) {
-      $SAP_MSI->where('OWTQ.U_DocNum',(int)$slipNumberHeader);
+      $SAP_MSI->where('OWTQ.DocEntry',(int)$slipNumberHeader);
     } else if(!empty($slipNumberHeader) && !empty($ItmsGrpNam)){
 
       if($ItmsGrpNam == 'all'){
-        $SAP_MSI->where('OWTQ.U_DocNum', (int)$slipNumberHeader);
+        $SAP_MSI->where('OWTQ.DocEntry', (int)$slipNumberHeader);
       } else {
-        $SAP_MSI->where('OWTQ.U_DocNum', (int)$slipNumberHeader);
+        $SAP_MSI->where('OWTQ.DocEntry', (int)$slipNumberHeader);
         $SAP_MSI->where('OITB.ItmsGrpNam', $ItmsGrpNam);
       }
       
@@ -363,8 +364,8 @@ class Grfromkitchensentul_model extends CI_Model {
     function sap_grpodlv_details_select_by_do_no($do_no)
     {
         if (empty($this->session->userdata['do_nos'])) {          
-          $doitems = $this->sap_grpodlv_headers_select_slip_number($do_no);
-            //$doitems = $this->sap_grpodlv_headers_select_by_kd_do("",$do_no);
+          $doitems= $this->sap_grpodlv_headers_select_slip_number($do_no);
+          // $doitems = $doitem->result_array();
         } else {
             $do_nos = $this->session->userdata['do_nos'];
             $count = count($do_nos);
@@ -392,9 +393,9 @@ class Grfromkitchensentul_model extends CI_Model {
 
     function sap_item_groups_select_all() {
   
-        // $kd_plant = $this->session->userdata['ADMIN']['plant'];
+        $kd_plant = $this->session->userdata['ADMIN']['plant'];
         $this->db->from('m_item_group');
-        $this->db->where('kdplant', 'T.DFRHTM');
+        $this->db->where('kdplant', $kd_plant);
     
         $query = $this->db->get();
         if(($query)&&($query->num_rows() > 0)) {
@@ -469,4 +470,23 @@ class Grfromkitchensentul_model extends CI_Model {
         // }
 
     }
+
+  function grpodlv_header_delete($id){
+    if($this->grpodlv_details_delete($id)){
+      $this->db->where('id_grpodlv_header', $id);
+      if($this->db->delete('t_grpodlv_header'))
+          return TRUE;
+      else
+          return FALSE;
+    }
+  }
+
+  function grpodlv_details_delete($id){
+    $this->db->where('id_grpodlv_header', $id);
+    if($this->db->delete('t_grpodlv_detail'))
+      return TRUE;
+    else
+      return FALSE;
+  }
+
 }

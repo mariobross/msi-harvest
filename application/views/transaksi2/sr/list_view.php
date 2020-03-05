@@ -100,7 +100,7 @@
                                                 <th style="text-align: center">Store Room Request (SR) No</th>
                                                 <th style="text-align: center">Request To</th>                                 <th style="text-align: center">Created Date</th>
                                                 <th style="text-align: center">Delivery Date</th>
-                                                <th style="text-align: center">Request Reason</th>
+                                                <!-- <th style="text-align: center">Request Reason</th> -->
                                                 <th style="text-align: center">Status</th>
                                                 <th style="text-align: center">Created by</th>
                                                 <th style="text-align: center">Approved by</th>
@@ -272,7 +272,7 @@
                         {"data":"request_to"},
                         {"data":"created_date"},
                         {"data":"delivery_date"},
-                        {"data":"request_reason"},
+                        // {"data":"request_reason"},
                         {"data":"status"},
                         {"data":"admin_realname"},
                         {"data":"admin_realname(1)"},
