@@ -151,6 +151,7 @@ class ReturnOut_model extends CI_Model {
     }
 
     function gisto_dept_header_select($gisto_dept_header) {
+        $this->db->select('t_gisto_dept_header.*, (select STOR_LOC_NAME from m_outlet where OUTLET = t_gisto_dept_header.plant) as plant_name_new, (select STOR_LOC_NAME from m_outlet where OUTLET = t_gisto_dept_header.storage_location) as storage_location_name');
         $this->db->from('t_gisto_dept_header');
         $this->db->where('id_gisto_dept_header', $gisto_dept_header);
   
@@ -160,6 +161,19 @@ class ReturnOut_model extends CI_Model {
           return $query->row_array();
         else
           return FALSE;
+    }
+
+    function gisto_dept_details_select($id_gisto_dept_header) {
+		$this->db->from('t_gisto_dept_detail');
+        $this->db->where('id_gisto_dept_header', $id_gisto_dept_header);
+
+        $query = $this->db->get();
+        // echo $this->db->last_query();
+
+        if(($query)&&($query->num_rows() > 0))
+            return $query->result_array();
+        else
+            return FALSE;
     }
 
     function gisto_dept_header_delete($id){
@@ -178,5 +192,25 @@ class ReturnOut_model extends CI_Model {
             return TRUE;
         else
             return FALSE;
+    }
+
+    function cancelHeaderReturnOut($data){
+        $this->db->set('status', '3');
+        $this->db->where('id_gisto_dept_header', $data['id_gisto_dept_header']);
+        if($this->db->update('t_gisto_dept_header')){
+            return TRUE;
+        }else{
+            return FALSE;
+        }
+    }
+
+    function cancelDetailsReturnOut($data){
+        $this->db->set('ok_cancel', '1');
+        $this->db->where('id_gisto_dept_detail', $data);
+        if($this->db->update('t_gisto_dept_detail')){
+            return TRUE;
+        }else{
+            return FALSE;
+        }
     }
 }
