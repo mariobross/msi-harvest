@@ -50,23 +50,21 @@ class ReturnOut_model extends CI_Model {
 
     function sap_items_select_by_item_group($item_group="", $itemSelect="") {
         $kd_plant = $this->session->userdata['ADMIN']['plant'];
-        $trans_type = 'gist';
-	
-     	$this->db->select('(REPLACE(m_item.MATNR,REPEAT("0",(12)),SPACE(0))) AS MATNR1, MAKTX, UNIT');
-		$this->db->from('m_item');
-		$this->db->join('m_map_item_trans','m_map_item_trans.MATNR = m_item.MATNR','inner');
-		$this->db->join('m_item_group','m_item_group.DISPO = m_item.DISPO','inner');
-		$this->db->where('transtype', $trans_type);
-        $this->db->where('m_item_group.kdplant',$kd_plant);
+        $SAP_MSI = $this->load->database('SAP_MSI', TRUE);
+        $SAP_MSI->select('t0.ItemCode as MATNR1,t0.ItemName as MAKTX,t0.ItmsGrpCod as DISPO,t0.BuyUnitMsr as UNIT,t1.ItmsGrpNam as DSNAM');
+        $SAP_MSI->from('OITM  t0');
+        $SAP_MSI->join('oitb t1','t1.ItmsGrpCod = t0.ItmsGrpCod','inner');
+        $SAP_MSI->where('validFor', 'Y');
+        $SAP_MSI->where('t0.InvntItem', 'Y');
 
         if($item_group != 'all'){
-            $this->db->where('m_item_group.DSNAM', $item_group);
+            $SAP_MSI->where('t1.ItmsGrpNam ', $item_group);
         }
         if($itemSelect!=""){
-            $this->db->where('m_item.MATNR', $itemSelect);
+            $SAP_MSI->where('t0.ItemCode', $itemSelect);
         }
 
-        $query = $this->db->get();
+        $query = $SAP_MSI->get();
         
         if(($query)&&($query->num_rows() > 0)) {
             return $query->result_array();

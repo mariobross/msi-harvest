@@ -43,6 +43,16 @@ class Grfromkitchensentul_model extends CI_Model {
     $response = NULL;
     $kd_plant = $this->session->userdata['ADMIN']['plant'];
     $SAP_MSI = $this->load->database('SAP_MSI', TRUE); 
+    $sub_query = $SAP_MSI->select('WhsCode')
+        ->from('OWHS')
+        ->where('U_CENTRALKITCHEN','Y')
+        ->get()
+        ->result_array();
+      // $sub_query = $SAP_MSI->get_compiled_select();
+    $filler=[];
+    foreach($sub_query as $key=>$val){
+      array_push($filler, $val['WhsCode']);
+    }
     $SAP_MSI->select("OWTQ.DocEntry as VBELN, 
                             convert(date, OWTQ.DocDate) as DELIV_DATE, 
                             OWTQ.ToWhsCode, 
@@ -68,6 +78,7 @@ class Grfromkitchensentul_model extends CI_Model {
 
     $SAP_MSI->where('OWTQ.ToWhsCode', $kd_plant);
     $SAP_MSI->where('WTQ1.OpenCreQty >', 0);
+    $SAP_MSI->where_in('Filler', $filler);
     
     if(empty($slipNumberHeader) && empty($ItmsGrpNam)) {
       // $SAP_MSI->where('OWTQ.U_DocNum is NOT NULL', NULL, FALSE);

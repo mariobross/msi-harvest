@@ -8,6 +8,7 @@
 	//   $reck_loc=$temp['Location'];
 ?>
 <style type="text/css">
+
 <!--
 .style5 {font-size: 10px}
 .style7 {
@@ -90,7 +91,7 @@
     <td width="59" align="center" bgcolor="#999999"><strong>Part Stock</strong></td>
     <td width="79" align="center" bgcolor="#999999"><strong>Stock On Hand</strong></td>
     <td width="56" align="center" bgcolor="#999999"><strong>Uom</strong></td>
-    <td width="128" bgcolor="#999999"><div align="center"><strong>Request Qty</strong></div></td>
+    <td width="56" bgcolor="#999999" align="center"><strong>Request Qty</strong></td>
   </tr>
  
  <?php
@@ -105,9 +106,9 @@ foreach($data as $row1)
     <td>&nbsp;      <?php 
 	$mat=$row1['material_no'] ? $row1['material_no'] : '';
 	echo $mat; ?></td>
-    <td>&nbsp;      <?php 
+    <td>&nbsp;   <div style="max-width:100%; white-space:nowrap;">   <?php 
 	$desc=$row1['material_desc'] ? $row1['material_desc'] : '';
-	echo $desc; ?></td>
+	echo $desc; ?></div></td>
     <td align="right"><?php
 	$plant=$row1['plant'] ? $row1['plant'] : ''; 
   $SAP_MSI->from('OITW');

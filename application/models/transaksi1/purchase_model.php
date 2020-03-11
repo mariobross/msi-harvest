@@ -67,7 +67,7 @@ class Purchase_model extends CI_Model {
     }
     
     $item_groups = $SAP_MSI->get();
-    // echo $this->db->last_query();
+    // echo $SAP_MSI->last_query();
     
     if ($item_groups->num_rows() > 0) {
       return $item_groups->result_array();

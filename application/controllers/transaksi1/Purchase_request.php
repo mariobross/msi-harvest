@@ -77,7 +77,7 @@ class Purchase_request extends CI_Controller{
             $nestedData['last_modified'] = date("d-m-Y",strtotime($val['lastmodified']));
             $nestedData['po_print'] = '';
             $nestedData['po'] = '';
-            $nestedData['back'] = $val['back'] =='1'?'Integrated':'Not Integrated';
+            $nestedData['back'] = $val['back'] =='1'?'Not Integrated':'Integrated';
             $nestedData['status_real'] = $val['status'];
             $data[] = $nestedData;
 
@@ -107,8 +107,9 @@ class Purchase_request extends CI_Controller{
 		if($item_group_code == 'all'){
 			$data = $this->pr_model->sap_item_groups_select_all_grnonpo();
 		}else{
-			$data = $this->pr_model->sap_items_select_by_item_group($item_group, 'pr');
-		}
+			$data = $this->pr_model->sap_items_select_by_item_group($item_group_code, 'pr');
+        }
+        
         echo json_encode($data);
 
 	}
@@ -141,6 +142,7 @@ class Purchase_request extends CI_Controller{
         $pr_header['status'] = $this->input->post('appr')? $this->input->post('appr') : '1';
         $pr_header['id_user_input'] = $admin_id;
         $pr_header['pr_no'] = '';
+        $pr_header['back'] = 1;
         $pr_header['id_user_approved'] = $this->input->post('appr')? $admin_id : 0;
 
         $pr_details['material_no'] = $this->input->post('detMatrialNo');

@@ -72,19 +72,13 @@ class whole_model extends CI_Model {
     //         return $query->result_array();
 	// 	else
 	// 		return FALSE;
-    // }
+    // }[@YBC_ITM_CC]
 
     function sap_item_groups_select_all_twts_back() {
-        $kd_plant = $this->session->userdata['ADMIN']['plant'];
-
-        $this->db->select('m_item.MATNR,m_item.MAKTX,m_item.DISPO,m_item.UNIT,space(0) as DSNAM');
-        $this->db->select('m_item.MATNR AS MATNR1,m_item.UNIT as UNIT1');
-        $this->db->from('m_item');
-        $this->db->join('m_mwts_header','m_mwts_header.kode_whi = m_item.MATNR','inner');
-        $this->db->where('m_mwts_header.plant',$kd_plant);
-        $this->db->group_by('m_item.MATNR');
+        $SAP_MSI = $this->load->database('SAP_MSI', TRUE);
         
-        $query = $this->db->get();
+        $query = $SAP_MSI->query('SELECT Code MATNR,Name MAKTX FROM [@YBC_ITM_CC]');
+        
         if(($query)&&($query->num_rows() > 0)) {
             return $query->result_array();
         } else {
@@ -136,22 +130,27 @@ class whole_model extends CI_Model {
 	}
 
     function sap_item_groups_select_all_twts_back_2($kode_item_paket, $MATNR='') {
-        $kd_plant = $this->session->userdata['ADMIN']['plant'];
-        $this->db->select('m_mwts_detail.material_no AS MATNR1, m_mwts_detail.material_desc AS MAKTX1, m_mwts_detail.quantity AS qty, m_mwts_detail.uom AS UOM');
-        $this->db->from('m_item');
-        $this->db->join('m_mapping_item','m_mapping_item.MATNR = m_item.MATNR','inner');
-        $this->db->join('m_uom','m_uom.UomEntry = m_item.UNIT','left');
-        $this->db->join('m_mwts_header','m_mwts_header.kode_whi = m_item.MATNR','inner');
-        $this->db->join('m_mwts_detail','m_mwts_detail.id_mwts_header = m_mwts_header.id_mwts_header','inner');
-        $this->db->where('m_mapping_item.kdplant',$kd_plant);   
-        $this->db->where('m_mwts_header.plant',$kd_plant);   
-        $this->db->where('m_mwts_header.kode_whi',$kode_item_paket);
+        $SAP_MSI = $this->load->database('SAP_MSI', TRUE);
+        // $kd_plant = $this->session->userdata['ADMIN']['plant'];
+        // $this->db->select('m_mwts_detail.material_no AS MATNR1, m_mwts_detail.material_desc AS MAKTX1, m_mwts_detail.quantity AS qty, m_mwts_detail.uom AS UOM');
+        // $this->db->from('m_item');
+        // $this->db->join('m_mapping_item','m_mapping_item.MATNR = m_item.MATNR','inner');
+        // $this->db->join('m_uom','m_uom.UomEntry = m_item.UNIT','left');
+        // $this->db->join('m_mwts_header','m_mwts_header.kode_whi = m_item.MATNR','inner');
+        // $this->db->join('m_mwts_detail','m_mwts_detail.id_mwts_header = m_mwts_header.id_mwts_header','inner');
+        // $this->db->where('m_mapping_item.kdplant',$kd_plant);   
+        // $this->db->where('m_mwts_header.plant',$kd_plant);   
+        // $this->db->where('m_mwts_header.kode_whi',$kode_item_paket);
+        // if($MATNR != ''){
+        //     $this->db->where('m_mwts_detail.material_no',$MATNR);
+        // }
         
-        if($MATNR != ''){
-            $this->db->where('m_mwts_detail.material_no',$MATNR);
-        }
-        
-        $query = $this->db->get();
+        $andWhere = ($MATNR != '' )? " AND u_Material = '".$MATNR."'":"";
+
+        $sql = " SELECT Code, u_Material MATNR1, u_description MAKTX1 , u_quantity qty, u_uom UOM FROM [@YBC_ITM_CC_DT] WHERE Code = '".$kode_item_paket."' ". $andWhere;
+
+        $query = $SAP_MSI->query($sql);
+         
         if(($query)&&($query->num_rows() > 0)) {
             return $query->result_array();
         } else {

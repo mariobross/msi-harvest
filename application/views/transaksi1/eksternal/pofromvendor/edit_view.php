@@ -297,7 +297,7 @@
 
                     // mengecek ckeckbox tercheck atau tidak
                     if(deleteidArr.length > 0){
-                        var confirmDelete = confirm("Apa Kamu Yakin Akan Mengbatalkan PO ini?");
+                        var confirmDelete = confirm("Apa Kamu Yakin Akan Membatalkan PO ini?");
                         if(confirmDelete == true){
                             $.ajax({
                                 url:"<?php echo site_url('transaksi1/pofromvendor/cancelPoFromVendor');?>", //masukan url untuk delete

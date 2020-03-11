@@ -49,7 +49,7 @@
 													<select class="form-control form-control-select2" data-live-search="true" id="itemCode" name="itemCode" onchange="setDetail(this)">
 														<option value="">Pilih item...</option>
 														<?php foreach($items as $key=>$val):?>
-															<option value="<?= $val['MATNR']?>"><?= $val['MATNR'].' - '.$val['MAKTX'].' - ('.$val['UNIT1'].')'?></option>
+															<option value="<?= $val['MATNR']?>"><?= $val['MATNR'].' - '.$val['MAKTX']?></option>
 														<?php endforeach?>
 													</select>
 												</div>

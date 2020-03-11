@@ -20,7 +20,7 @@
 							<?php echo $this->session->flashdata('failed'); ?>
 						</div>
 					<?php endif; ?>
-                    <div class="card">
+                    <div class="card" >
                         <div class="card-header">
                             <legend class="font-weight-semibold"><i class="icon-search4 mr-2"></i>Search of Purchase Request (PR)</legend>  
                         </div>
@@ -87,7 +87,7 @@
                                                 <th style="text-align: center">Purchase Request (PR) No</th>
                                                 <th style="text-align: center">Created Date</th>
                                                 <th style="text-align: center">Delivery Date</th>
-                                                <th style="text-align: center">Request Reason</th>
+                                                <!-- <th style="text-align: center">Request Reason</th> -->
                                                 <th style="text-align: center">Status</th>
                                                 <th style="text-align: center">Created by</th>
                                                 <th style="text-align: center">Approved by</th>
@@ -239,7 +239,7 @@
                         {"data":"pr_no", "className":"dt-center"},
                         {"data":"created_date"},
                         {"data":"delivery_date"},
-                        {"data":"request_reason"},
+                        // {"data":"request_reason"},
                         {"data":"status"},
                         {"data":"created_by"},
                         {"data":"approved_by"},

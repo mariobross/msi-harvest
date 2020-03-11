@@ -176,8 +176,9 @@
 					{"data":"material_no", "className":"dt-center"},
 					{"data":"material_desc"},
 					{"data":"requirement_qty", "className":"dt-center",render:function(data, type, row, meta){
-						rr=  `<input type="text" class="form-control" id="gr_qty_${data}" value="${data}"
-						${row['status']==1 ?'':'readonly'}>`;
+						// console.log(row);
+						rr=  `<input type="text" class="form-control" id="gr_qty_${row['no']}" value="${data ? data : 0}"
+						${row['status']!=1 ?'':'readonly'}>`;
 						return rr;
 					}},
 					{"data":"price", "className":"dt-center"},
@@ -237,19 +238,16 @@
 
 			
 			getTable.row.add({
-				"0":`<input type="checkbox" class="check_delete" id="chk_${count}" value="${count}">`,
-				"1":count,
-				"2":`<select class="form-control form-control-select2 dt_${count} testSelect" data-live-search="true" id="selectDetailMatrial" data-count="${count}">
+				"no":count,
+				"material_no":`<select class="form-control form-control-select2 dt_${count} testSelect" data-live-search="true" id="selectDetailMatrial" data-count="${count}">
 								<option value="">Select Item</option>
-								${showMatrialDetailData(requestReason, matrialGroup, elementSelect)}
+								${showMatrialDetailData( matrialGroup, elementSelect)}
 							</select>`,
-				"3":"",
-				"4":`<input type="text" class="form-control qty" id="gr_qty_${count}" value="" style="width:100%" autocomplete="off">`,
-				"5":"",
-				"6":"",
-				"7":"",
-				"8":"",
-				"9":""
+				"material_desc":"",
+				"price":"",
+				"vendor":"",
+				"uom":"",
+				"onHand":""
 				}).draw();
 				count++;
 
@@ -262,17 +260,17 @@
 			});
 		}
 
-		function showMatrialDetailData(requestReason='', matrialGroup='',  select){
+		function showMatrialDetailData( matrialGroup='',  select){
 			$.ajax({
 				url: "<?php echo site_url('transaksi1/purchase_request/getdataDetailMaterial');?>",
 				type: "POST",
 				data: {
-					reqReason: requestReason, 
 					matGroup: matrialGroup
 				},
 				success:function(res) {
 					optData = JSON.parse(res);
 					// localStorage.setItem('tmpDataMaterial', JSON.stringify(optData));
+					// console.log(optData);
 					
 					optData.forEach((val)=>{						
 						$("<option />", {value:val.MATNR, text:val.MAKTX +' - '+ val.MATNR+' - '+val.UNIT	}).appendTo(select);
@@ -286,9 +284,12 @@
 			$.post(
 				"<?php echo site_url('transaksi1/purchase_request/getdataDetailMaterialSelect')?>",{ MATNR:id },(res)=>{
 					matSelect = JSON.parse(res);
+					// console.log(matSelect);
 					matSelect.map((val)=>{
+						// console.log(val);
+						table[2].innerHTML = `<td>${val.MATNR}</td>`;
 						table[3].innerHTML = val.MAKTX;
-						table[5].innerHTML = val.UNIT
+						table[7].innerHTML = val.UNIT
 					})
 				}
 			)

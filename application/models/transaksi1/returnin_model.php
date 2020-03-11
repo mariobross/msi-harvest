@@ -73,29 +73,29 @@ class Returnin_model extends CI_Model {
         $kd_plant = $this->session->userdata['ADMIN']['plant'];
         $SAP_MSI = $this->load->database('SAP_MSI', TRUE);
 
-        $SAP_MSI->select('U_TransFor');
-        $SAP_MSI->from('OWHS');
-        $SAP_MSI->where('WhsCode',$kd_plant);
-        $querySAP = $SAP_MSI->get();
-        $ret = $querySAP->result_array();
-        $plant=$ret[0]['U_TransFor'];
+        // $SAP_MSI->select('U_TransFor');
+        // $SAP_MSI->from('OWHS');
+        // $SAP_MSI->where('WhsCode',$kd_plant);
+        // $querySAP = $SAP_MSI->get();
+        // $ret = $querySAP->result_array();
+        // $plant=$ret[0]['U_TransFor'];
 
-        $SAP_MSI->select("OWTR.DocEntry VBELN, OWTR.DocDate DELIV_DATE, OWTR.ToWhsCode, WTR1.LineNum POSNR,
-							OITM.ItmsGrpCod DISPO, WTR1.ItemCode MATNR, Dscription MAKTX, (OpenQty-U_grqty_web) LFIMG , unitMsr VRKME, WTR1.LineNum item, U_grqty_web, OWHS.WhsCode RETURN_FROM, OWHS.WhsName RETURN_FROM_NAME,
+        $SAP_MSI->select("OWTQ.DocEntry VBELN, OWTQ.DocDate DELIV_DATE, OWTQ.ToWhsCode, WTQ1.LineNum POSNR,
+							OITM.ItmsGrpCod DISPO, WTQ1.ItemCode MATNR, Dscription MAKTX, (OpenQty-U_grqty_web) LFIMG , unitMsr VRKME, WTQ1.LineNum item, U_grqty_web, OWHS.WhsCode RETURN_FROM, OWHS.WhsName RETURN_FROM_NAME,
                             (SELECT WhsCode FROM OWHS where WhsCode = '$kd_plant')PLANT,
                             (SELECT  WhsName FROM OWHS where WhsCode = '$kd_plant')PLANT_NAME");
-        $SAP_MSI->from('OWTR');
-        $SAP_MSI->join('WTR1','OWTR.DocEntry = WTR1.DocEntry','inner');
-        $SAP_MSI->join('OITM','WTR1.ItemCode = OITM.ItemCode','inner');
-        $SAP_MSI->join('OWHS','OWHS.WhsCode = OWTR.Filler','inner');
-        $SAP_MSI->where_in('ToWhsCode',$plant);
-        $SAP_MSI->where('U_Stat <>',1);
-        $SAP_MSI->where('U_Retur =',1); 
-        $SAP_MSI->where('(OpenQty-U_grqty_web) >', 0);
-        $SAP_MSI->where('OWTR.U_Reverse','N');
+        $SAP_MSI->from('OWTQ');
+        $SAP_MSI->join('WTQ1','OWTQ.DocEntry = WTQ1.DocEntry','inner');
+        $SAP_MSI->join('OITM','WTQ1.ItemCode = OITM.ItemCode','inner');
+        $SAP_MSI->join('OWHS','OWHS.WhsCode = OWTQ.Filler','inner');
+        $SAP_MSI->where('ToWhsCode',$kd_plant);
+        // $SAP_MSI->where('U_Stat <>',1);
+        $SAP_MSI->where('U_INVreturn', 'Y'); 
+        $SAP_MSI->where('WTQ1"."OpenCreQty >', 0);
+        // $SAP_MSI->where('U_INVRETURN','Y');
 
         if((!empty($do_no))){
-            $SAP_MSI->where('OWTR.DocEntry', $do_no);
+            $SAP_MSI->where('OWTQ.DocEntry', $do_no);
         }
 
         $query = $SAP_MSI->get();
