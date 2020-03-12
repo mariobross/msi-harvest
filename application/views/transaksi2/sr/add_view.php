@@ -301,8 +301,8 @@
 			$.post(
 				"<?php echo site_url('transaksi2/sr/getdataDetailMaterialSelect')?>",{ MATNR:id, RTO:requestToOutlet },(res)=>{
 					matSelect = JSON.parse(res);
-					// console.log(matSelect['dataOnHand'][0].OnHand);
-					let onHand = matSelect['dataOnHand'][0].OnHand;
+					// console.log(matSelect['dataOnHand']);
+					let onHand = matSelect['dataOnHand'] ? matSelect['dataOnHand'][0].OnHand : 0;
 					matSelect['data'].map((val)=>{
 						table[3].innerHTML = val.MAKTX;
 						table[5].innerHTML = val.UNIT;
