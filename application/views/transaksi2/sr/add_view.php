@@ -39,7 +39,7 @@
                                         <fieldset>
                                             <legend class="font-weight-semibold"><i class="icon-reading mr-2"></i> Tambah Store Room Request (SR)</legend>
                                             <div class="form-group row">
-												<label class="col-lg-3 col-form-label">ID Transaksi Test</label>
+												<label class="col-lg-3 col-form-label">ID Transaksi</label>
 												<div class="col-lg-9">
 													<input type="text" class="form-control" placeholder="ID Transaksi" readOnly>
 												</div>
