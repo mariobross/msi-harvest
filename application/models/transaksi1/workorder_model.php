@@ -4,8 +4,9 @@ class Workorder_model extends CI_Model {
 
   public function getDataWoVendor_Header($fromDate='', $toDate='', $status=''){
 	  $arr 		=	array();
+	  $kd_plant = $this->session->userdata['ADMIN']['plant'];
       $this->db->from('t_produksi_header');
-      $this->db->where('plant','WMSIMBST');
+      $this->db->where('plant', $kd_plant);
       if((!empty($fromDate)) || (!empty($toDate))){
           if( (!empty($fromDate)) || (!empty($toDate)) ) {
 			  $this->db->where("posting_date BETWEEN '$fromDate' AND '$toDate'");
@@ -122,7 +123,7 @@ class Workorder_model extends CI_Model {
   }
   
   function wo_detail_valid($material_no){
-	$SAP_MSI = $this->load->database('msi_sap', TRUE);
+	$SAP_MSI = $this->load->database('SAP_MSI', TRUE);
 	$SAP_MSI->select('OITM.validFor,OITB.DecreasAc');
 	$SAP_MSI->from('OITM');
 	$SAP_MSI->join('OITB','OITM.ItmsGrpCod = OITB.ItmsGrpCod');
@@ -137,11 +138,12 @@ class Workorder_model extends CI_Model {
   }
   
   function wo_detail_quantity($kode_paket,$material_no){
+	$kd_plant = $this->session->userdata['ADMIN']['plant'];
 	$this->db->select('quantity,quantity_paket');
 	$this->db->from('m_mpaket_detail');
 	$this->db->join('m_mpaket_header','m_mpaket_detail.id_mpaket_header = m_mpaket_header.id_mpaket_header');
 	$this->db->where('m_mpaket_header.kode_paket', $kode_paket);
-	$this->db->where('m_mpaket_header.plant', 'WMSIASST');
+	$this->db->where('m_mpaket_header.plant', $kd_plant);
 	$this->db->where('m_mpaket_detail.material_no', $material_no);
 	$query = $this->db->get();
 
@@ -153,11 +155,12 @@ class Workorder_model extends CI_Model {
   }
   
   function wo_detail_onhand($material_no){
-	$SAP_MSI = $this->load->database('msi_sap', TRUE);
+	$kd_plant = $this->session->userdata['ADMIN']['plant'];
+	$SAP_MSI = $this->load->database('SAP_MSI', TRUE);
 	$SAP_MSI->select("OnHand,MinStock");
 	$SAP_MSI->from('OITW');
 	$SAP_MSI->where('ItemCode',$material_no);
-	$SAP_MSI->where('WhsCode','WMSIASST');
+	$SAP_MSI->where('WhsCode',$kd_plant);
 	$query = $SAP_MSI->get();
 
     if(($query)&&($query->num_rows() > 0)){
@@ -168,7 +171,7 @@ class Workorder_model extends CI_Model {
   }
   
   function wo_detail_itemcodebom($kode_paket,$material_no){
-	$SAP_MSI = $this->load->database('msi_sap', TRUE);
+	$SAP_MSI = $this->load->database('SAP_MSI', TRUE);
 	$SAP_MSI->select("T1.U_SubsName as NAME,T1.U_ItemCodeBOM,T1.U_SubsQty,T1.U_SubsCode,T1.Code");
 	$SAP_MSI->from('@MSI_ALT_ITM_HDR T0');
 	$SAP_MSI->join('@MSI_ALT_ITM_DTL T1','T1.Code = T0.Code');
@@ -184,11 +187,12 @@ class Workorder_model extends CI_Model {
   } 
   
   function wo_detail_openqty($material_no){
-	$SAP_MSI = $this->load->database('msi_sap', TRUE);
+	$kd_plant = $this->session->userdata['ADMIN']['plant'];
+	$SAP_MSI = $this->load->database('SAP_MSI', TRUE);
 	$SAP_MSI->select("SUM(OpenQty) as OpenQty");
 	$SAP_MSI->from('WTQ1');
 	$SAP_MSI->where('ItemCode',$material_no);
-	$SAP_MSI->where('WhsCode','WMSIASST');
+	$SAP_MSI->where('WhsCode',$kd_plant);
 	$query = $SAP_MSI->get();
 
     if(($query)&&($query->num_rows() > 0)){
@@ -224,7 +228,7 @@ class Workorder_model extends CI_Model {
   }
   
   function wo_detail_ucaneditqty($kode_paket,$material_no){
-	$SAP_MSI = $this->load->database('msi_sap', TRUE);
+	$SAP_MSI = $this->load->database('SAP_MSI', TRUE);
 	$SAP_MSI->select("U_CanEditQty as CanEditQty");
 	$SAP_MSI->from('ITT1');
 	$SAP_MSI->where('Code',$kode_paket);
@@ -239,12 +243,14 @@ class Workorder_model extends CI_Model {
   }
   
   function sap_wo_headers_select_by_item(){
-	$SAP_MSI = $this->load->database('msi_sap', TRUE);
-	$SAP_MSI->query("T0.Code,T1.ItemName,T0.U_Locked");
+	$SAP_MSI = $this->load->database('SAP_MSI', TRUE);
+	$SAP_MSI->select("T0.Code,T1.ItemName,T0.U_Locked");
 	$SAP_MSI->from('OITT T0');
 	$SAP_MSI->join('OITM T1','T1.ItemCode = T0.Code');
 	//$SAP_MSI->where('T0.U_Locked !=', NULL);
 	$query = $SAP_MSI->get();
+	// echo $SAP_MSI->last_query();
+	// die();
 
     if(($query)&&($query->num_rows() > 0)){
 		return $query->result_array();

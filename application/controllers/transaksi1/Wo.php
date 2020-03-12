@@ -83,7 +83,7 @@ class Wo extends CI_Controller{
                 $object['wo_code'][$wo_no['Code']] = $wo_no['Code'].' - '.$wo_no['ItemName'];
             }
         }
-        $this->load->view('transaksi1/produksi/work_order/add_new',$object);
+        $this->load->view('transaksi1/produksi/work_order/add_view',$object);
      }
 	 
 	 public function wo_header_uom(){
