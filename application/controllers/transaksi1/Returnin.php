@@ -309,6 +309,59 @@ class Returnin extends CI_Controller{
         $this->load->view('transaksi1/eksternal/returnin/edit_view', $object);
     }
 
+    public function addDataUpdate(){
+        $retin_header['id_retin_header'] = $this->input->post('idRetH');
+        $retin_header['status'] = $this->input->post('appr') ? $this->input->post('appr') : '1';
+        $retin_header['posting_date'] = $this->l_general->str_to_date($this->input->post('posting_date'));
+        $retin_header['delivery_date'] = $this->l_general->str_to_date($this->input->post('delivery_date'));
+
+        $approve = $this->input->post('appr');
+ 
+        if($this->rIn_model->retin_header_update($retin_header)){
+            // if($this->tIn_model->grsto_details_delete($grsto_header['id_grsto_header'])){
+            //     if($count > 1){
+            //         for($i =0; $i < $count; $i++){
+            //             $grsto_details['id_grsto_header'] = $grsto_header['id_grsto_header'];
+            //             $grsto_details['id_grsto_h_detail'] = $i+1;
+            //             $grsto_details['item'] = $i;
+            //             $grsto_details['material_no'] = $this->input->post('detMatrialNo')[$i];
+            //             $grsto_details['material_desc'] = $this->input->post('detMatrialDesc')[$i];
+            //             $grsto_details['sr_qty'] = $this->input->post('detSrQty')[$i];
+            //             $grsto_details['outstanding_qty'] = $this->input->post('detTftQty')[$i];
+            //             $grsto_details['gr_quantity'] = $this->input->post('detGrQty')[$i];
+            //             $grsto_details['uom'] = $this->input->post('detUom')[$i];
+            //             $grsto_details['ok'] = 1;
+            //             $grsto_details['ok_cancel'] = 0;
+            //             $grsto_details['var'] = ((int)$this->input->post('detTftQty')[$i] - (int)$this->input->post('detGrQty')[$i]);
+
+
+            //             if($approve == 2){
+            //                 $cekQty = $this->tIn_model->cekQty($grsto_header['po_no'],$grsto_details['material_no']);
+            //                 $gistonew_out_header['po_no'] = $grsto_header['po_no'];
+            //                 $gistonew_out_header['material_no'] = $grsto_details['material_no'];
+            //                 $gistonew_out_header['receipt'] = $cekQty[0]['receipt'] + $grsto_details['gr_quantity'];
+            //                 $gistonew_out_header['var'] = $grsto_details['var'];
+            //                 $this->tIn_model->update_grstonew_out_detail($gistonew_out_header);
+                            
+            //             }
+
+            //             if($this->tIn_model->grsto_detail_insert($grsto_details))
+            //             $update_detail_success = TRUE;
+            //         }
+            //     }
+            //     $update_not_detail=TRUE;
+            // }
+            $update_detail_success = TRUE;
+            $update_not_detail=TRUE;
+        }
+
+        if($update_detail_success || $update_not_detail){
+            return $this->session->set_flashdata('success', "Retur In Inter Outlet Berhasil di Update");
+        }else{
+            return $this->session->set_flashdata('failed', "Retur In Inter Outlet Gagal di Update");
+        }
+    }
+
     public function showReturnInDetail(){
         $id_retin_header = $this->input->post('id');
         $stts = $this->input->post('status');

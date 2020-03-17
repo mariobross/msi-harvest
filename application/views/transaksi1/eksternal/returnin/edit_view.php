@@ -114,13 +114,18 @@
 															</span>
 														</div> 
 													<?php endif;?>
+													<input type="hidden" id="delivDate" value="<?=date("d-m-Y", strtotime($retin_header['delivery_date']))?>">
 												</div>
 											</div>
 
                                             <div class="text-right">
+												<?php if($retin_header['status'] =='2'): ?>
 												<button type="button" class="btn btn-success" id="cancelRecord">Cancel <i class="icon-paperplane ml-2"></i></button>
-													
-												<!-- <button type="submit" class="btn btn-success">Approve SAP<i class="icon-paperplane ml-2"></i></button> -->
+												<?php endif;?>
+												<?php if($retin_header['status'] !='2'): ?>
+												<!-- <button type="button" class="btn btn-primary" name="save" id="save" onclick="addDatadb()">Save<i class="icon-paperplane ml-2"></i></button> -->
+												<button type="button" class="btn btn-success" name="approve" id="approve" onclick="addDatadb(2)">Approve SAP<i class="icon-paperplane ml-2"></i></button>
+												<?php endif;?>
                                             </div>
 
 											
@@ -255,6 +260,49 @@
 						totalChecked += 1;
 					}
 				});
+			}
+
+			function addDatadb(id_approve = ''){
+
+				idretin		= $('#idreturn').val();
+				pstDate 	= $('#postingDate').val();
+				delvDate 	= $('#delivDate').val();
+				approve		= id_approve;
+
+				// retFrom 	= $('#rf').val();
+				// outlet 		= $('#plant').val();
+				// stts 		= $('#status').val();
+				// sLocation 	= $('#storageLocation').val();
+				// matrialGrp 	= $('#MatrialGroup').val();
+				// split_plant	= outlet.split(' - ');
+				// plant		= split_plant[0];
+
+				// table = $('#tblWhole > tbody');
+
+				// let matrialNo =[];
+				// let matrialDesc =[];
+				// let outStdQty = [];
+				// let qty =[];
+				// let uom =[];
+				// table.find('tr').each(function(i, el){
+				// 	let td = $(this).find('td');
+				// 	matrialNo.push(td.eq(1).text()); 
+				// 	matrialDesc.push(td.eq(2).text());
+				// 	outStdQty.push(parseInt(td.eq(3).text()));
+				// 	qty.push(parseInt(td.eq(4).text()));
+				// 	uom.push(td.eq(5).text());
+				// })
+
+				$.post("<?php echo site_url('transaksi1/returnin/addDataUpdate')?>",
+					{
+						//poNo:retOutEntry, returnFrom:retFrom, plant:outlet, storage_location:sLocation, status:stts, item_group_code:matrialGrp, posting_date:pstDate, delivery_date:delvDate, toPlant:plant, detMatrialNo: matrialNo, appr: approve, detMatrialDesc: matrialDesc, detOutStdQty: outStdQty, detQty: qty,detUom: uom
+						idRetH:idretin, posting_date:pstDate, delivery_date:delvDate, appr: approve
+					},
+					function(res){
+						location.reload(true);
+					}
+				);
+
 			}
 
 		</script>

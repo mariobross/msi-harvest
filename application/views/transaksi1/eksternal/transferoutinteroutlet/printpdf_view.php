@@ -100,21 +100,26 @@
   }
   ?>
   <tr>
-    <td colspan="8"><p><span class="style3 style5">Comments</span> : </p>
-    <p>
+    <td colspan="8">
+      <p><span class="style3 style5">Comments</span> : </p>
       <?php 
         $SAP_MSI->select('Comments');
         $SAP_MSI->from('OWTR');
         $SAP_MSI->where('DocEntry',$po);
         $query = $SAP_MSI->get();
         $sell2= $query->result_array();
-        $sel2Coment='';
-      if(count($sell2) > 0){
-        $sel2Coment = $sell2['Comments'];
+        // $sel2Coment='';
+        // if(count($sell2) > 0){
+        //   $sel2Coment = $sell2['Comments'];
+        // }
+        // echo $sel2Coment;
+        foreach ($sell2 as $sel2Coment) {
+	    ?>
+      <p><?php echo $sel2Coment['Comments'];?></p>
+      <?php
       }
-	      echo $sel2Coment;
-	?>
-    </p></td>
+      ?>
+    </td>
   </tr>
   
 </table>

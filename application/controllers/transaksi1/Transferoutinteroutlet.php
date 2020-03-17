@@ -68,7 +68,7 @@ class Transferoutinteroutlet extends CI_Controller
 			$nestedData['po_no'] = $val['po_no'];
 			$nestedData['posting_date'] = date("d-m-Y",strtotime($val['posting_date']));
             $nestedData['request_to'] = $val['to_plant'].' - '.$val['OUTLET_NAME1'];
-			$nestedData['status'] = $status_string; //$val['status'] =='1'?'Not Apporeed':'Approved';
+			$nestedData['status'] = $status_string; //$val['status'] =='1'?'Not Approved':'Approved';
             $nestedData['created_by'] = $val['user_input'];
             $nestedData['approved_by'] = $val['user_approved'];
             $nestedData['last_modified'] = date("d-m-Y",strtotime($val['lastmodified']));

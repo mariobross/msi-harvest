@@ -178,7 +178,7 @@ class Pofromvendor extends CI_Controller
             $nestedData['nm_vendor'] = $val['nm_vendor'];
             $nestedData['delivery_date'] = $val['delivery_date'];
             $nestedData['posting_date'] = date("d-m-Y",strtotime($val['posting_date']));
-            $nestedData['status'] = $val['status'] =='1'?'Not Apporeed':'Approved';
+            $nestedData['status'] = $val['status'] =='1'?'Not Approved':'Approved';
             $nestedData['id_user_input'] = $val['id_user_input'];
             $nestedData['id_user_approved'] = $val['id_user_approved'];
             $nestedData['lastmodified'] = date("d-m-Y",strtotime($val['lastmodified']));

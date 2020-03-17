@@ -362,6 +362,14 @@ class Returnin_model extends CI_Model {
                 return FALSE;
     }
 
+    function retin_header_update($data) {
+      $this->db->where('id_retin_header', $data['id_retin_header']);
+        if($this->db->update('t_retin_header', $data))
+          return TRUE;
+        else
+          return FALSE;
+    }
+
     function updateWtrGrQty($grQty, $po_no, $line){
         $SAP_MSI = $this->load->database('SAP_MSI', TRUE);
         $SAP_MSI->set('U_grqty_web', $grQty);

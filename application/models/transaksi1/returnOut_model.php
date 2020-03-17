@@ -148,6 +148,14 @@ class ReturnOut_model extends CI_Model {
             return FALSE;
     }
 
+    function retout_header_update($data) {
+        $this->db->where('id_gisto_dept_header', $data['id_gisto_dept_header']);
+        if($this->db->update('t_gisto_dept_header', $data))
+          return TRUE;
+        else
+          return FALSE;
+    }
+
     function gisto_dept_header_select($gisto_dept_header) {
         $this->db->select('t_gisto_dept_header.*, (select STOR_LOC_NAME from m_outlet where OUTLET = t_gisto_dept_header.plant) as plant_name_new, (select STOR_LOC_NAME from m_outlet where OUTLET = t_gisto_dept_header.storage_location) as storage_location_name');
         $this->db->from('t_gisto_dept_header');
@@ -210,5 +218,38 @@ class ReturnOut_model extends CI_Model {
         }else{
             return FALSE;
         }
+    }
+
+    function tampil($id_retout_header){
+        $this->db->select('a.id_user_approved,a.do_no, a.retin_no, a.posting_date,b.material_no,b.material_desc,b.uom,b.gr_quantity,a.plant, 
+        (select f.reason from t_gisto_dept_header d, t_gisto_dept_detail f where d.id_gisto_dept_header =f.id_gisto_dept_header
+        and a.do_no=d.gisto_dept_no
+        and d.receiving_plant=a.plant
+        and f.material_no=b.material_no ) reason,
+        (select D.plant from t_gisto_dept_header d, t_gisto_dept_detail f where d.id_gisto_dept_header =f.id_gisto_dept_header
+        and a.do_no=d.gisto_dept_no
+        and d.receiving_plant=a.plant
+        and f.material_no=b.material_no )  FromPlant ,
+        (select e.OUTLET_NAME1 from t_gisto_dept_header d, t_gisto_dept_detail f ,m_outlet e where d.id_gisto_dept_header =f.id_gisto_dept_header
+        and a.do_no=d.gisto_dept_no
+        and d.receiving_plant=a.plant
+        and D.plant=e.OUTLET
+        and f.material_no=b.material_no )  OUTLET_NAME1,
+        (select D.posting_date from t_gisto_dept_header d, t_gisto_dept_detail f where d.id_gisto_dept_header =f.id_gisto_dept_header
+        and a.do_no=d.gisto_dept_no
+        and d.receiving_plant=a.plant
+        and f.material_no=b.material_no )  delivery,
+        (select f.gr_quantity from t_gisto_dept_header d, t_gisto_dept_detail f where d.id_gisto_dept_header =f.id_gisto_dept_header
+        and a.do_no=d.gisto_dept_no
+        and d.receiving_plant=a.plant
+        and f.material_no=b.material_no ) Qty_Retur, (SELECT admin_realname FROM d_admin WHERE admin_id = a.id_user_approved) nameApproved');
+        $this->db->from('t_retin_header a');
+        $this->db->join('t_retin_detail b','a.id_retin_header = b.id_retin_header','left');
+        $this->db->where('a.id_retin_header',$id_retout_header);
+
+        $query = $this->db->get();
+        // echo $this->db->last_query();
+
+        return $query->result_array();
     }
 }

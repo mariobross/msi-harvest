@@ -1,5 +1,5 @@
 <?php
-    $this->DB_SAP = $this->load->database('db2', TRUE);
+    $this->DB_SAP = $this->load->database('SAP_MSI', TRUE);
     foreach($data->result() as $row)
 
     $plant=$row->plant;
@@ -102,12 +102,12 @@
 
 <table style="border-collapse:collapse;" width="47%" border="1" align="center">
     <tr>
-        <td width="32" align="center" bgcolor="#999999"><strong>No</strong></td>
-        <td width="111" align="center" bgcolor="#999999"><strong>Code</strong></td>
+        <td width="22" align="center" bgcolor="#999999"><strong>No</strong></td>
+        <td width="65" align="center" bgcolor="#999999"><strong>Code</strong></td>
         <td width="178" align="center" bgcolor="#999999"><strong>Description</strong></td>
-        <td width="62" align="center" bgcolor="#999999"><strong>Uom</strong></td>
-        <td width="100" align="center" bgcolor="#999999"><strong>Qty Request</strong></td>
-        <td width="100" align="center" bgcolor="#999999"><strong>Qty FROM CK</strong></td>
+        <td width="35" align="center" bgcolor="#999999"><strong>Uom</strong></td>
+        <td width="80" align="center" bgcolor="#999999"><strong>Qty Request</strong></td>
+        <td width="83" align="center" bgcolor="#999999"><strong>Qty From CK</strong></td>
         <td width="76"  align="center" bgcolor="#999999"><strong>Qty Receipt</strong></td>
     </tr>
     <?php 

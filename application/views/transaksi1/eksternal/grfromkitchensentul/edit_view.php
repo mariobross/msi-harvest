@@ -196,7 +196,7 @@
 
                     // mengecek ckeckbox tercheck atau tidak
                     if(deleteidArr.length > 0){
-                        var confirmDelete = confirm("Apa Kamu Yakin Akan Mengbatalkan Good Receipt from Kitchen ini?");
+                        var confirmDelete = confirm("Apa Kamu Yakin Akan Membatalkan Good Receipt from Kitchen ini?");
                         if(confirmDelete == true){
                             $.ajax({
                                 url:"<?php echo site_url('transaksi1/grfromkitchensentul/cancelPoFromVendor');?>", //masukan url untuk delete

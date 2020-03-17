@@ -1,6 +1,6 @@
 <div class="navbar navbar-expand-md navbar-dark">
     <div class="navbar-brand" style="padding:0px;">
-        <a href="index.html" class="d-inline-block">
+        <a href="<?php echo site_url('msi/dashboard'); ?>" class="d-inline-block">
             <h4 style="margin-top: .625rem;"><?php echo SITE_NAME ?></h4>
         </a>
     </div>

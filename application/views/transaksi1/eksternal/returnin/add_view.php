@@ -31,7 +31,7 @@
 								<div class="row">
 									<div class="col-md-12">
 										<fieldset>
-											<legend class="font-weight-semibold"><i class="icon-reading mr-2"></i>Retrun In</legend>
+											<legend class="font-weight-semibold"><i class="icon-reading mr-2"></i>Retur In</legend>
 
 											<div class="form-group row">
 												<label class="col-lg-3 col-form-label"><b>Data SAP per Tanggal/Jam</b></label>
@@ -143,7 +143,7 @@
 												<div class="col-lg-12 text-right">
 													<div class="text-right">
 														<button type="button" class="btn btn-primary" name="save" id="save" onclick="addDatadb()">Save <i class="icon-pencil5 ml-2"></i></button>
-														<button type="button" class="btn btn-success" name="approve" id="approve" onclick="addDatadb(2)" >Approve <i class="icon-paperplane ml-2" ></input></i>
+														<button type="button" class="btn btn-success" name="approve" id="approve" onclick="addDatadb(2)" >Approve <i class="icon-paperplane ml-2" ></i></button>
 													</div>
 												</div>
 											</div>

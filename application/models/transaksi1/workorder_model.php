@@ -5,8 +5,14 @@ class Workorder_model extends CI_Model {
   public function getDataWoVendor_Header($fromDate='', $toDate='', $status=''){
 	  $arr 		=	array();
 	  $kd_plant = $this->session->userdata['ADMIN']['plant'];
-      $this->db->from('t_produksi_header');
-      $this->db->where('plant', $kd_plant);
+	  $this->db->select('a.*,
+	  b.doc_issue,
+	  (SELECT admin_realname FROM d_admin WHERE admin_id = a.id_user_input)created_by,
+	  (SELECT admin_realname FROM d_admin WHERE admin_id = a.id_user_approved)approved_by');
+	  $this->db->from('t_produksi_header a');
+	  $this->db->join('t_produksi_detail b', 'a.id_produksi_header = b.id_produksi_header');
+	  $this->db->where('a.plant', $kd_plant);
+	  
       if((!empty($fromDate)) || (!empty($toDate))){
           if( (!empty($fromDate)) || (!empty($toDate)) ) {
 			  $this->db->where("posting_date BETWEEN '$fromDate' AND '$toDate'");
@@ -16,79 +22,20 @@ class Workorder_model extends CI_Model {
 			  $this->db->where("posting_date <= '$toDate'");
 		  }
 	  }
+
 	  if((!empty($status))){
 		  $this->db->where('status', $status);
 	  }
-	  //$this->db->where('plant', 'WMSISNST');
-	  $this->db->order_by('id_produksi_header', 'asc');
+	  $this->db->group_by('a.id_produksi_header');
+	  $this->db->order_by('a.id_produksi_header', 'DESC');
+
 	  $query = $this->db->get();
-	  $ret = $query->result_array();
-	  $issue = '';
-	  $created = '';
-	  $approved = '';
-	  $back = '';
-	
-	  foreach($ret as $data){
-	    $query2	=	$this->db->query('SELECT doc_issue FROM t_produksi_detail WHERE  id_produksi_header = "'.$data['id_produksi_header'].'"');
-		if($query2->num_rows() > 0){
-			$dataSQL2 		= $query2->result_array();
-			if(count($dataSQL2) != 0){
-				$issue = $dataSQL2[0]['doc_issue'];
-			}
-		}
-		$query3	=	$this->db->query('SELECT admin_realname FROM d_admin WHERE admin_id = "'.$data['id_user_input'].'"');
-		if($query3->num_rows() > 0){
-			$dataSQL3 		= $query3->result_array();
-			if(count($dataSQL3) != 0){
-				$created = $dataSQL3[0]['admin_realname'];
-			}
-		}
-		$query4	=	$this->db->query('SELECT admin_realname FROM d_admin WHERE admin_id = "'.$data['id_user_approved'].'"');
-		if($query4->num_rows() > 0){
-			$dataSQL4 		= $query4->result_array();
-			if(count($dataSQL4) != 0){
-				$approved = $dataSQL4[0]['admin_realname'];
-			}
-		}
-		$log = $data['back'];
-		$po = $data['produksi_no'];
-		if ($log==0 && $po !='' && $po !='C'){
-			$back = "Integrated";
-		}else if ($log==1 && ($po =='' || $po =='C')){
-			$back = "Not Integrated";
-		}else if ($log==0 &&  $po =='C'){
-			$back = "Close Document";
-		}
-		array_push($arr,
-			array(
-				"id_produksi_header"		=>	$data['id_produksi_header'],
-				"id_produksi_plant"			=>	$data['id_produksi_plant'],
-				"posting_date"				=>	$data['posting_date'],
-				"produksi_no"				=>	$data['produksi_no'],
-				"plant"						=>	$data['plant'],
-				"plant_name"				=>	$data['plant_name'],
-				"storage_location"			=>	$data['storage_location'],
-				"storage_location_name"		=>	$data['storage_location_name'],
-				"created_date"				=>	date("d-m-Y",strtotime($data['created_date'])),
-				"kode_paket"				=>	$data['kode_paket'],
-				"nama_paket"				=>	$data['nama_paket'],
-				"qty_paket"					=>	$data['qty_paket'],
-				"status"					=>	$data['status'] =='1'?'Not Approved':'Approved',
-				"id_user_input"				=>	$data['id_user_input'],
-				"id_user_approved"			=>	$data['id_user_approved'],
-				"id_user_cancel"			=>	$data['id_user_cancel'],
-				"filename"					=>	$data['filename'],
-				"lastmodified"				=>	date("d-m-Y",strtotime($data['lastmodified'])),
-				"num"						=>	$data['num'],
-				"uom_paket"					=>	$data['uom_paket'],
-				"issue"						=>	$issue,
-				"created_by"				=>	$created,
-				"approved_by"				=>	$approved,
-				"back"						=>	$back
-			)
-		);
-      }
-	  return $arr;
+
+	  if($query->num_rows() > 0){
+		  return $query->result_array();
+	  }else{
+		  return FALSE;
+	  }
   }
   
   function wo_header_delete($id_wo_header){
@@ -102,12 +49,13 @@ class Workorder_model extends CI_Model {
   }
   
   function wo_details_delete($id_wo_header) {
-	$this->db->where('id_mpaket_header', $id_wo_header);
-	if($this->db->delete('m_mpaket_detail_temp'))
+	$this->db->where('id_produksi_header', $id_wo_header);
+	if($this->db->delete('t_produksi_detail'))
 		return TRUE;
 	else
 		return FALSE;
   }
+
   
   function wo_header_select($id_wo_header){
 	$arr 	=	array();
@@ -137,23 +85,6 @@ class Workorder_model extends CI_Model {
     }
   }
   
-  function wo_detail_quantity($kode_paket,$material_no){
-	$kd_plant = $this->session->userdata['ADMIN']['plant'];
-	$this->db->select('quantity,quantity_paket');
-	$this->db->from('m_mpaket_detail');
-	$this->db->join('m_mpaket_header','m_mpaket_detail.id_mpaket_header = m_mpaket_header.id_mpaket_header');
-	$this->db->where('m_mpaket_header.kode_paket', $kode_paket);
-	$this->db->where('m_mpaket_header.plant', $kd_plant);
-	$this->db->where('m_mpaket_detail.material_no', $material_no);
-	$query = $this->db->get();
-
-    if(($query)&&($query->num_rows() > 0)){
-		return $query->result_array();
-    }else{
-      return FALSE;
-    }
-  }
-  
   function wo_detail_onhand($material_no){
 	$kd_plant = $this->session->userdata['ADMIN']['plant'];
 	$SAP_MSI = $this->load->database('SAP_MSI', TRUE);
@@ -172,11 +103,12 @@ class Workorder_model extends CI_Model {
   
   function wo_detail_itemcodebom($kode_paket,$material_no){
 	$SAP_MSI = $this->load->database('SAP_MSI', TRUE);
+	$SAP_MSI->distinct();
 	$SAP_MSI->select("T1.U_SubsName as NAME,T1.U_ItemCodeBOM,T1.U_SubsQty,T1.U_SubsCode,T1.Code");
 	$SAP_MSI->from('@MSI_ALT_ITM_HDR T0');
 	$SAP_MSI->join('@MSI_ALT_ITM_DTL T1','T1.Code = T0.Code');
-	$SAP_MSI->where('T0.Code',$material_no);
-	$SAP_MSI->where('T1.U_ItemCodeBOM',$kode_paket);
+	$SAP_MSI->where('T0.Code',$kode_paket);
+	$SAP_MSI->where('T1.U_ItemCodeBOM',$material_no);
 	$query = $SAP_MSI->get();
 
     if(($query)&&($query->num_rows() > 0)){
@@ -231,8 +163,23 @@ class Workorder_model extends CI_Model {
 	$SAP_MSI = $this->load->database('SAP_MSI', TRUE);
 	$SAP_MSI->select("U_CanEditQty as CanEditQty");
 	$SAP_MSI->from('ITT1');
-	$SAP_MSI->where('Code',$kode_paket);
-	$SAP_MSI->where('Father',$material_no);
+	$SAP_MSI->where('Code',$material_no);
+	$SAP_MSI->where('Father',$kode_paket);
+	$query = $SAP_MSI->get();
+
+
+    if(($query)&&($query->num_rows() > 0)){
+		return $query->result_array();
+    }else{
+      return FALSE;
+    }
+  }
+
+  function sap_wo_select_locked($material_no){
+	$SAP_MSI = $this->load->database('SAP_MSI', TRUE);
+	$SAP_MSI->select("U_Locked");
+	$SAP_MSI->from('OITT');
+	$SAP_MSI->where('Code', $material_no);
 	$query = $SAP_MSI->get();
 
     if(($query)&&($query->num_rows() > 0)){
@@ -242,11 +189,15 @@ class Workorder_model extends CI_Model {
     }
   }
   
-  function sap_wo_headers_select_by_item(){
+  function sap_wo_headers_select_by_item($material_no=''){
 	$SAP_MSI = $this->load->database('SAP_MSI', TRUE);
-	$SAP_MSI->select("T0.Code,T1.ItemName,T0.U_Locked");
+	$SAP_MSI->select("T0.Code,T1.ItemName,T0.U_Locked, T1.BuyUnitMsr");
 	$SAP_MSI->from('OITT T0');
 	$SAP_MSI->join('OITM T1','T1.ItemCode = T0.Code');
+
+	if($material_no != ''){
+		$SAP_MSI->where('T0.Code',$material_no);
+	}
 	//$SAP_MSI->where('T0.U_Locked !=', NULL);
 	$query = $SAP_MSI->get();
 	// echo $SAP_MSI->last_query();
@@ -271,13 +222,31 @@ class Workorder_model extends CI_Model {
       return FALSE;
     }
   }
+
+  function wo_detail_quantity($kode_paket,$material_no){
+	$kd_plant = $this->session->userdata['ADMIN']['plant'];
+	$this->db->select('quantity,quantity_paket');
+	$this->db->from('m_mpaket_detail');
+	$this->db->join('m_mpaket_header','m_mpaket_detail.id_mpaket_header = m_mpaket_header.id_mpaket_header');
+	$this->db->where('m_mpaket_header.kode_paket', $kode_paket);
+	$this->db->where('m_mpaket_header.plant', $kd_plant);
+	$this->db->where('m_mpaket_detail.material_no', $material_no);
+	$query = $this->db->get();
+
+    if(($query)&&($query->num_rows() > 0)){
+		return $query->result_array();
+    }else{
+      return FALSE;
+    }
+  }
   
   function wo_details_input_select($kode_paket){
+	$kd_plant = $this->session->userdata['ADMIN']['plant'];
 	$this->db->select('a.id_mpaket_header,a.id_mpaket_h_detail,a.material_no,a.material_desc,a.quantity,a.uom');
 	$this->db->from('m_mpaket_detail a');
 	$this->db->join('m_mpaket_header b','a.id_mpaket_header=b.id_mpaket_header');
     $this->db->where('b.kode_paket', $kode_paket);
-    $this->db->where('b.plant', 'WMSIASST');
+    $this->db->where('b.plant', $kd_plant);
 	$query = $this->db->get();
 
     if(($query)&&($query->num_rows() > 0)){
@@ -288,9 +257,10 @@ class Workorder_model extends CI_Model {
   }
   
   function posting_date_select_max() {
+	$kd_plant = $this->session->userdata['ADMIN']['plant'];
     $this->db->select_max('posting_date');
     $this->db->from('t_posinc_header');
-    $this->db->where('plant', 'WMSISNST');
+    $this->db->where('plant', $kd_plant);
     $this->db->where('status', 2);
 
     $query = $this->db->get();
@@ -428,5 +398,42 @@ class Workorder_model extends CI_Model {
 	}
 	return $arr;
   }
+
+	function wo_header_batch($item,$whs){
+		$this->db->select('*');
+		$this->db->from('m_batch');
+		$this->db->where('ItemCode', $item);
+		$this->db->where('Whs', $whs);
+		$query = $this->db->get();
+
+		if(($query)&&($query->num_rows() > 0)){
+			return $query->result_array();
+		}else{
+		return FALSE;
+		}
+	}
+
+	function produksi_detail_insert($data) {
+		if($this->db->insert('t_produksi_detail', $data))
+			return $this->db->insert_id();
+		else
+			return FALSE;
+	}
+
+	function produksi_header_insert($data) {
+		if($this->db->insert('t_produksi_header', $data))
+			return $this->db->insert_id();
+		else
+			return FALSE;
+	}
+
+	function update_produksi_header($produksi_header){
+		$this->db->where('id_produksi_header', $produksi_header['id_produksi_header']);
+        if($this->db->update('t_produksi_header', $produksi_header))
+			return TRUE;
+		else
+			return FALSE;
+	}
+
 
 }

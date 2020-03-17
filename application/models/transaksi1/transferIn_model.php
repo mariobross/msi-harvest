@@ -50,12 +50,12 @@ class TransferIn_model extends CI_Model {
 		    $this->db->join('m_outlet','m_outlet.outlet = t_gistonew_out_header.plant','inner');
 		    $this->db->where('receiving_plant',$kd_plant);
   	    $this->db->where('status',2);
-     	  $this->db->where('po_no != ""');
-		    $this->db->where('gistonew_out_no != ""');
-		    $this->db->where('gistonew_out_no != "C"');
+        $this->db->where('po_no !=', '');
+		    $this->db->where('gistonew_out_no !=','');
+		    $this->db->where('gistonew_out_no != ','C');
 		    $this->db->where('(gr_quantity-receipt) > 0');
-		    $this->db->where('close = 0');
-        $this->db->where('plant != "05WHST"');
+		    $this->db->where('close', '0');
+        $this->db->where('plant !=',  '05WHST');
 
         if((!empty($do_no))){
           $this->db->where('po_no', $do_no);

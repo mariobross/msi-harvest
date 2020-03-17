@@ -216,6 +216,25 @@ class Returnout extends CI_Controller{
         $this->load->view('transaksi1/eksternal/returnout/edit_view', $object);
     }
 
+    public function addDataUpdate(){
+        $retout_header['id_gisto_dept_header'] = $this->input->post('idRetOut');
+        $retout_header['status'] = $this->input->post('appr') ? $this->input->post('appr') : '1';
+        $retout_header['posting_date'] = $this->l_general->str_to_date($this->input->post('posting_date'));
+        
+        $approve = $this->input->post('appr');
+ 
+        if($this->retOut_model->retout_header_update($retout_header)){
+            $update_detail_success = TRUE;
+            $update_not_detail=TRUE;
+        }
+
+        if($update_detail_success || $update_not_detail){
+            return $this->session->set_flashdata('success', "Retur Out Inter Outlet Berhasil di Update");
+        }else{
+            return $this->session->set_flashdata('failed', "Retur Out Inter Outlet Gagal di Update");
+        }
+    }
+
     public function showReturnInDetail(){
         $id_gisto_dept_header = $this->input->post('id');
         $stts = $this->input->post('status');
@@ -281,5 +300,31 @@ class Returnout extends CI_Controller{
             return $this->session->set_flashdata('failed', "Return Out Gagal di Cancel");
         }  
     }
+
+    public function printpdf()
+	{
+		$id_retout_header = $this->uri->segment(4);
+		$data['data'] = $this->retOut_model->tampil($id_retout_header);
+
+		ob_start();
+		$content = $this->load->view('transaksi1/eksternal/returnout/printpdf_view',$data);
+		$content = ob_get_clean();		
+        
+        require_once(APPPATH.'libraries/html2pdf/html2pdf.class.php');
+        
+		try
+		{
+			$html2pdf = new HTML2PDF('P','A4','fr', false, 'ISO-8859-15',array(5, 0, 10, 0));
+			$html2pdf->setTestTdInOnePage(false);
+			$html2pdf->pdf->SetDisplayMode('fullpage');
+			$html2pdf->writeHTML($content, isset($_GET['vuehtml']));
+            $html2pdf->Output('print.pdf');
+		}
+		catch(HTML2PDF_exception $e) {
+			echo $e;
+			exit;
+		}
+		
+	}
 }
 ?>

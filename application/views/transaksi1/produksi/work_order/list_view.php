@@ -10,6 +10,16 @@
 			<div class="content-wrapper">
                 <!-- <?php  $this->load->view("_template/breadcrumb.php")?> -->
 				<div class="content">
+                <?php if ($this->session->flashdata('success')): ?>
+						<div class="alert alert-success" role="alert">
+							<?php echo $this->session->flashdata('success'); ?>
+						</div>
+					<?php endif; ?>
+					<?php if ($this->session->flashdata('failed')): ?>
+						<div class="alert alert-danger" role="alert">
+							<?php echo $this->session->flashdata('failed'); ?>
+						</div>
+					<?php endif; ?>
                     <div class="card">
                         <div class="card-header">
                             <legend class="font-weight-semibold"><i class="icon-search4 mr-2"></i>Search of Produksi</legend>  

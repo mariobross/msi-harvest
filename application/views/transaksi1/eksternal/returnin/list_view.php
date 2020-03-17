@@ -61,7 +61,7 @@
                                     </div>
 
                                     <div class="text-right">
-                                    <button type="button" class="btn btn-primary" onclick="onSearch()">Search<i class="icon-search4  ml-2"></i></button>
+                                        <button type="button" class="btn btn-primary" onclick="onSearch()">Search<i class="icon-search4  ml-2"></i></button>
                                     </div>
                                 </div>
                             </div>

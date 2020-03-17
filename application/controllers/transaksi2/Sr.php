@@ -68,8 +68,8 @@ class Sr extends CI_Controller{
             $nestedData['created_date'] = date("d-m-Y",strtotime($val['created_date']));
             $nestedData['delivery_date'] = date("d-m-Y",strtotime($val['delivery_date']));
             $nestedData['request_reason'] = $val['request_reason'];
-            $nestedData['status'] = $val['status'] =='1'?'Not Apporeed':'Approved';
-            // $nestedData['status_string'] = $val['status'] =='1'?'Not Apporeed':'Approved';
+            $nestedData['status'] = $val['status'] =='1'?'Not Approved':'Approved';
+            // $nestedData['status_string'] = $val['status'] =='1'?'Not Approved':'Approved';
             $nestedData['admin_realname'] = $val['user_input'];
             $nestedData['admin_realname(1)'] = $val['user_approved'] ? $val['user_approved'] : '-';
             $nestedData['lastmodified'] = date("d-m-Y",strtotime($val['lastmodified']));

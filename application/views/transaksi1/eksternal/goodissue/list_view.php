@@ -21,7 +21,7 @@
                                 <div class="form-group row">
                                         <label class="col-lg-3 col-form-label">Dari Tanggal</label>
                                         <div class="col-lg-3 input-group date">
-                                            <input type="text" class="form-control" id="fromDate">
+                                            <input type="text" class="form-control" id="fromDate" name="fDate">
                                             <div class="input-group-prepend">
                                                 <span class="input-group-text" id="basic-addon1">
                                                     <i class="icon-calendar"></i>
@@ -30,7 +30,7 @@
                                         </div>
                                         <label class="col-lg-2 col-form-label">Sampai Tanggal</label>
                                         <div class="col-lg-4 input-group date">
-                                            <input type="text" class="form-control" id="toDate">
+                                            <input type="text" class="form-control" id="toDate" name="tDate">
                                             <div class="input-group-prepend">
                                                 <span class="input-group-text" id="basic-addon1">
                                                     <i class="icon-calendar"></i>
@@ -42,16 +42,16 @@
                                     <div class="form-group row">
                                         <label class="col-lg-3 col-form-label">Status</label>
                                         <div class="col-lg-9">
-                                            <select class="form-control form-control-select2" data-live-search="true">
-                                                <option value="">none selected</option>
-                                                <option value="approved">Approved</option>
-                                                <option value="notapproved">Not Approved</option>
+                                            <select class="form-control form-control-select2" data-live-search="true" id="status" name="status">
+                                                <option value="">--- All ---</option>
+                                                <option value="2">Approved</option>
+                                                <option value="1">Not Approved</option>
                                             </select>
                                         </div>
                                     </div>
 
                                     <div class="text-right">
-                                        <button type="submit" class="btn btn-primary">Search<i class="icon-search4  ml-2"></i></button>
+                                        <button type="button" class="btn btn-primary" onclick="onSearch()">Search<i class="icon-search4  ml-2"></i></button>
                                     </div>
                                 </div>
                             </div>
@@ -105,21 +105,21 @@
                         "type":"POST"
                     },
                     "columns": [
-                        {"data":"no", "className":"dt-center", render:function(data, type, row, meta){
+                        {"data":"id_issue_header", "className":"dt-center", render:function(data, type, row, meta){
                             rr=`<input type="checkbox" class="check_delete" id="chk_${data}" value="${data}" onclick="checkcheckbox();">`;
                             return rr;
                         }},
-                        {"data":"action", "className":"dt-center", render:function(data, type, row, meta){
-                                rr = `<a href='<?php echo site_url('transaksi1/goodissue/edit')?>' ><i class='icon-file-plus2' title="Edit"></i></a>&nbsp;
+                        {"data":"id_issue_header", "className":"dt-center", render:function(data, type, row, meta){
+                                rr = `<a href='<?php echo site_url('transaksi1/goodissue/edit')?>${data}' ><i class='icon-file-plus2' title="Edit"></i></a>&nbsp;
                                         <a href='#' ><i class='icon-printer' title="Print"></i></a>&nbsp;
-                                        <a onClick="deleteConfirm('<?php echo site_url('transaksi1/goodissue/delete')?>')" href="#!"><i class='icon-cross2' title="Delete"></i></a>`;
+                                        <a onClick="deleteConfirm('<?php echo site_url('transaksi1/goodissue/delete')?>${data}')" href="#!"><i class='icon-cross2' title="Delete"></i></a>`;
                                 return rr;
                         }},
-                        {"data":"id"},
-                        {"data":"issue_no"},
-                        {"data":"posting_date"},
-                        {"data":"status"},
-                        {"data":"log"}
+                        {"data":"id_issue_header", "className":"dt-center"},
+                        {"data":"id_issue_header", "className":"dt-center"},
+                        {"data":"posting_date", "className":"dt-center"},
+                        {"data":"status_string", "className":"dt-center"},
+                        {"data":"id_issue_header", "className":"dt-center"}
                     ]
                 });
 
@@ -139,7 +139,6 @@
                     $("input:checkbox[class=check_delete]:checked").each(function(){
                         deleteidArr.push($(this).val());
                     })
-
 
                     // mengecek ckeckbox tercheck atau tidak
                     if(deleteidArr.length > 0){
@@ -183,6 +182,56 @@
                 }
 
             });
+
+            function onSearch(){
+                const fromDate = $('#fromDate').val();
+                const toDate = $('#toDate').val();
+                const status = $('#status').val();
+
+                showDataList();
+            }
+
+            function showDataList(){
+                const obj = $('#tableWhole tbody tr').length;
+
+                if(obj > 0){
+                    const dataTable = $('#tableWhole').DataTable();
+                    dataTable.destroy();
+                    $('#tableWhole > tbody > tr').remove();
+                    
+                }
+                 
+                const fromDate = $('#fromDate').val();
+                const toDate = $('#toDate').val();
+                const status = $('#status').val();           
+
+                dataTable = $('#tableWhole').DataTable({
+                    "ordering":false,  "paging": true, "searching":true,
+                    "ajax": {
+                        "url":"<?php echo site_url('transaksi1/goodissue/showAllData');?>",
+                        "type":"POST",
+                        "data":{fDate: fromDate, tDate: toDate, stts: status}
+                    },
+                    "columns": [
+                        {"data":"id_issue_header", "className":"dt-center", render:function(data, type, row, meta){
+                            rr=`<input type="checkbox" class="check_delete" id="chk_${data}" value="${data}" onclick="checkcheckbox();">`;
+                            return rr;
+                        }},
+                        {"data":"id_issue_header", "className":"dt-center", render:function(data, type, row, meta){
+                                rr = `<div style="width:100px">
+										<a onClick="printPdf(${data})" href="#" ><i class='icon-printer' title="Print"></i></a>&nbsp;
+                                        <a href='<?php echo site_url('transaksi1/goodissue/edit/')?>${data}' ><i class='icon-file-plus2' title="Edit"></i></a>&nbsp;
+                                    </div>`;
+                                return rr;
+                        }},
+                        {"data":"id_issue_header", "className":"dt-center"},
+                        {"data":"id_issue_header", "className":"dt-center"},
+                        {"data":"posting_date", "className":"dt-center"},
+                        {"data":"status_string", "className":"dt-center"},
+                        {"data":"id_issue_header", "className":"dt-center"}
+                    ]
+                });
+            }
         
         </script>
 	</body>

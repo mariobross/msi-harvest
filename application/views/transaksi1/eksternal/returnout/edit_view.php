@@ -100,8 +100,13 @@
 											</div>
 
                                             <div class="text-right">
+											<?php if($retOut_header['status'] =='2'): ?>
 												<button type="button" class="btn btn-success" id="cancelRecord">Cancel <i class="icon-paperplane ml-2"></i></button>
-												<!-- <button type="submit" class="btn btn-success">Approve SAP<i class="icon-paperplane ml-2"></i></button> -->
+												<?php endif;?>
+												<?php if($retOut_header['status'] !='2'): ?>
+												<!-- <button type="button" class="btn btn-primary" name="save" id="save" onclick="addDatadb()">Save<i class="icon-paperplane ml-2"></i></button> --> 
+												<button type="button" class="btn btn-success" name="approve" id="approve" onclick="addDatadb(2)">Approve SAP<i class="icon-paperplane ml-2"></i></button>
+												<?php endif;?>
                                             </div>
 
 											
@@ -124,7 +129,7 @@
 													<th>In Whs Quantity</th>
 													<th>Quantity</th>
 													<th>UOM</th>
-													<th>Text</th>
+													<th>Remark</th>
 													<th>Cancel</th>
 												</tr>
 											</thead>
@@ -221,6 +226,45 @@
 			};
 			$('#postingDate').datepicker(optSimple);
 		});
+
+		function addDatadb(id_approve=''){
+			const approve = id_approve;
+			const postDate= document.getElementById('postingDate').value;
+			const idreto  = document.getElementById('idreturnOut').value;
+
+			// const status= document.getElementById('status').value;
+			// const reqtOutlet = document.getElementById('receiving_plant').value;
+			// const arrOutletVal = reqtOutlet.split(' - ');
+			// const requestOutlet = arrOutletVal[0];
+			// const requestOutletName= arrOutletVal[1];
+			// const MatrialGroup= document.getElementById('MatrialGroup').value;
+			// const postDate= document.getElementById('postingDate').value;
+			// const approve = id_approve;
+			// const tbodyTable = $('#tblWhole > tbody');
+			// let matrialNo =[];
+			// let matrialDesc =[];
+			// let whsQty =[];
+			// let qty =[];
+			// let uom =[]; 
+			// let remark =[];
+			// tbodyTable.find('tr').each(function(i, el){
+			// 	let td = $(this).find('td');
+			// 	matrialNo.push(td.eq(1).text()); 
+			// 	matrialDesc.push(td.eq(2).text());
+			// 	whsQty.push(td.eq(3).text());
+			// 	qty.push(td.eq(4).text());
+			// 	uom.push(td.eq(5).text());
+			// 	remark.push(td.eq(6).text());
+			// })
+
+			$.post("<?php echo site_url('transaksi1/returnout/addDataUpdate')?>", {
+				//appr: approve, stts: status, reqOutlet:requestOutlet, reqOutletName:requestOutletName,matGroup: MatrialGroup, stts: status, posting_date: postDate, detMatrialNo: matrialNo, detMatrialDesc: matrialDesc, inWhsQty:whsQty, detQty: qty, detUom: uom, detRemark:remark
+				idRetOut: idreto, appr: approve, posting_date: postDate
+			}, function(res){
+				location.reload(true);
+			}
+			);
+		}
 		</script>
 	</body>
 </html>

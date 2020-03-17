@@ -150,7 +150,7 @@
                             let urlPrint = '<?php echo site_url('transaksi1/grfromkitchensentul/printpdf/') ?>';
                             rr = `<div style="width:100px">
                                         <a href=${urlEdit}${data}><i class='icon-file-plus2' title="Edit"></i></a>&nbsp;
-                                        <a href=${urlPrint}${data}><i class='icon-printer' title="Print"></i></a>&nbsp;
+                                        <a href=${urlPrint}${data} target="_blank"><i class='icon-printer' title="Print"></i></a>&nbsp;
                                     </div>`;
                                         return rr;
                         }},

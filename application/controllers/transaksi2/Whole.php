@@ -41,8 +41,8 @@ class Whole extends CI_Controller{
             $nestedData['kode_paket'] = $val['kode_paket'];
             $nestedData['nama_paket'] = $val['nama_paket'];
             $nestedData['quantity_paket'] = number_format($val['quantity_paket'], 2, '.', '');
-            $nestedData['status'] = $val['status'] =='1'?'Not Apporeed':'Approved';
-            // $nestedData['status_string'] = $val['status'] =='1'?'Not Apporeed':'Approved';
+            $nestedData['status'] = $val['status'] =='1'?'Not Approved':'Approved';
+            // $nestedData['status_string'] = $val['status'] =='1'?'Not Approved':'Approved';
             $nestedData['admin_input'] = $val['user_input'];
             $nestedData['admin_approved'] = $val['user_approved'] ? $val['user_approved'] : '-';
             $nestedData['gr_no'] = $val['gr_no'];

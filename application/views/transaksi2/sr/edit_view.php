@@ -196,8 +196,9 @@
 					{"data":"material_no", "className":"dt-center"},
 					{"data":"material_desc"},
 					{"data":"requirement_qty", "className":"dt-center",render:function(data, type, row, meta){
-						rr=  `<input type="text" class="form-control" id="gr_qty_${data}" value="${data}"
-						${row['status']==1 ?'':'readonly'}>`;
+						//rr=  `<input type="text" class="form-control" id="gr_qty_${data}" value="${data}"
+						//${row['status']==1 ?'':'readonly'}>`;
+						rr=  `<input type="text" class="form-control" id="gr_qty_${data}" value="${data}">`;
 						return rr;
 					}},
 					{"data":"uom", "className":"dt-center"},
@@ -310,16 +311,34 @@
 			});			
 		}
 
+		// function setValueTable(id,no){
+		// 	const table = document.getElementById("tblWhole").rows[no].cells;
+		// 	// console.log(id);
+		// 	$.post(
+		// 		"<?php echo site_url('transaksi2/sr/getdataDetailMaterialSelect')?>",{ MATNR:id },(res)=>{
+		// 			matSelect = JSON.parse(res);
+		// 			matSelect.map((val)=>{
+		// 				table[2].innerHTML = `<td>${val.MATNR}</td>`;
+		// 				table[3].innerHTML = val.MAKTX;
+		// 				table[5].innerHTML = val.UNIT
+		// 			})
+		// 		}
+		// 	)
+		// }
+
 		function setValueTable(id,no){
-			const table = document.getElementById("tblWhole").rows[no].cells;
-			// console.log(id);
+			const requestToOutlet = $('#rto').val();
+			table = document.getElementById("tblWhole").rows[no].cells;
 			$.post(
-				"<?php echo site_url('transaksi2/sr/getdataDetailMaterialSelect')?>",{ MATNR:id },(res)=>{
+				"<?php echo site_url('transaksi2/sr/getdataDetailMaterialSelect')?>",{ MATNR:id, RTO:requestToOutlet },(res)=>{
 					matSelect = JSON.parse(res);
-					matSelect.map((val)=>{
+					// console.log(matSelect['dataOnHand']);
+					let onHand = matSelect['dataOnHand'] ? matSelect['dataOnHand'][0].OnHand : 0;
+					matSelect['data'].map((val)=>{
 						table[2].innerHTML = `<td>${val.MATNR}</td>`;
 						table[3].innerHTML = val.MAKTX;
-						table[5].innerHTML = val.UNIT
+						table[5].innerHTML = val.UNIT;
+						//table[6].innerHTML = onHand == '.000000' ? 0 : onHand;
 					})
 				}
 			)
