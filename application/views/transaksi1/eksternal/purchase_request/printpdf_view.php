@@ -9,7 +9,8 @@
       $SAP_MSI->where('WhsCode',$plant);
       $query = $SAP_MSI->get();
       $temp = $query->result_array();
-
+      print_r($plant);
+      die();
       $reck=$temp[0]['WhsName'];
       $reck_loc=$temp[0]['Location'];
 

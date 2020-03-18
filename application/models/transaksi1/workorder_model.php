@@ -240,21 +240,21 @@ class Workorder_model extends CI_Model {
     }
   }
   
-  function wo_details_input_select($kode_paket){
-	$kd_plant = $this->session->userdata['ADMIN']['plant'];
-	$this->db->select('a.id_mpaket_header,a.id_mpaket_h_detail,a.material_no,a.material_desc,a.quantity,a.uom');
-	$this->db->from('m_mpaket_detail a');
-	$this->db->join('m_mpaket_header b','a.id_mpaket_header=b.id_mpaket_header');
-    $this->db->where('b.kode_paket', $kode_paket);
-    $this->db->where('b.plant', $kd_plant);
-	$query = $this->db->get();
+	function wo_details_input_select($kode_paket){
+		$SAP_MSI = $this->load->database('SAP_MSI', TRUE);
+		$SAP_MSI->select("a.Father id_mpaket_header,a.ChildNum id_mpaket_h_detail, a.Code material_no, b.ItemName material_desc, a.Quantity quantity, b.InvntryUom uom");
+		$SAP_MSI->from('ITT1 a');
+		$SAP_MSI->join('OITM b','a.Code = b.ItemCode');
+		$SAP_MSI->where('a.Father', $kode_paket);
 
-    if(($query)&&($query->num_rows() > 0)){
-		return $query->result_array();
-    }else{
-      return FALSE;
-    }
-  }
+		$query = $SAP_MSI->get();
+
+		if(($query)&&($query->num_rows() > 0)){
+			return $query->result_array();
+		}else{
+		return FALSE;
+		}
+	}
   
   function posting_date_select_max() {
 	$kd_plant = $this->session->userdata['ADMIN']['plant'];

@@ -247,12 +247,12 @@ class Wo extends CI_Controller{
 					$decreasAc = $querySAP[0]['DecreasAc'];
 				}
 				
-				$qty = $this->wovendor->wo_detail_quantity($kode_paket,$data['material_no']);
+				// $qty = $this->wovendor->wo_detail_quantity($kode_paket,$data['material_no']);
 				$qty_paket = $data['quantity'];
 				
-				$quantity = $qty[0]['quantity'];
-				$quantity_paket = $qty[0]['quantity_paket'];
-				$resqty = $quantity *$qty_paket/$quantity_paket;
+				// $quantity = $qty[0]['quantity'];
+				// $quantity_paket = $qty[0]['quantity_paket'];
+				// $resqty = $quantity *$qty_paket/$quantity_paket;
 				
 				$getonhand = $this->wovendor->wo_detail_onhand($data['material_no']);
 				$onhand = '';
@@ -279,12 +279,12 @@ class Wo extends CI_Controller{
 					$getucaneditqty = '<input type="text" id="editqty" class="form-control" value="'.$data['quantity'] * (float)$qty_header.'" readonly>';
 				}
 
-				$matqty = '';
-				if($quantity_paket > 0){
-					$matqty = '<input style="text-align:right;" type="text" value="'.number_format($resqty, 4, '.', '').'" class="error_number prodqty" size="8">';
-				}else{
-					$matqty = '<div class="matqty" style="text-align:right;">'.number_format($resqty, 4, '.', '').'</div>';
-				}
+				// $matqty = '';
+				// if($quantity_paket > 0){
+				// 	$matqty = '<input style="text-align:right;" type="text" value="'.number_format($resqty, 4, '.', '').'" class="error_number prodqty" size="8">';
+				// }else{
+				// 	$matqty = '<div class="matqty" style="text-align:right;">'.number_format($resqty, 4, '.', '').'</div>';
+				// }
 				
 				
 				
