@@ -60,7 +60,8 @@
 						</li>
 						<li class="nav-item nav-item-submenu"><a href="#" class="nav-link active">PRODUKSI</a>
 							<ul class="nav nav-group-sub">
-								<li class="nav-item"><a href="<?php echo site_url('/transaksi1/wo');?>" class="nav-link">Work Order</a></li>	
+								<li class="nav-item"><a href="<?php echo site_url('/transaksi1/wo');?>" class="nav-link">Work Order</a></li>
+								<li class="nav-item"><a href="<?php echo site_url('/transaksi1/disassembly');?>" class="nav-link">Disassembly</a></li>	
 							</ul>
 						</li>
 						<li class="nav-item nav-item-submenu"><a href="#" class="nav-link active">STOCK OUTLET</a>
