@@ -53,7 +53,7 @@ class Disassembly extends CI_Controller{
 		if($rs){
 			foreach($rs as $key=>$val){
 				$log = $val['back'];
-				$po = $val['produksi_no'];
+				$po = $val['disassembly_no'];
 				if ($log==0 && $po !='' && $po !='C'){
 					$back = "Integrated";
 				}else if ($log==1 && ($po =='' || $po =='C')){
@@ -205,8 +205,8 @@ class Disassembly extends CI_Controller{
 				
 				$nestedData=array();
 				$nestedData['no'] = $i;
-				$nestedData['id_produksi_detail'] = $data['id_produksi_detail'];
-				$nestedData['id_produksi_header'] = $data['id_produksi_header'];
+				$nestedData['id_disassembly_detail'] = $data['id_disassembly_detail'];
+				$nestedData['id_disassembly_header'] = $data['id_disassembly_header'];
 				$nestedData['material_no'] = $data['material_no'];
 				$nestedData['material_desc'] = $data['material_desc'];
 				$nestedData['qty'] = $data['qty'];
@@ -370,12 +370,6 @@ class Disassembly extends CI_Controller{
 		$disassembly_header['posting_date'] = $this->l_general->str_to_date($this->input->post('postDate'));
 		$disassembly_header['id_disassembly_plant'] = $this->diss_model->id_produksi_plant_new_select($this->session->userdata['ADMIN']['plant'],$this->input->post('postDate'));
 		$disassembly_header['disassembly_no'] = '';
-
-		// if(isset($_POST['button']['approve']))
-		// 	$disassembly_header['status'] = '2';
-		// else
-		// 	$disassembly_header['status'] = '1';
-
 		$disassembly_header['status'] = $this->input->post('approve')? $this->input->post('approve') : '1';
 		$disassembly_header['kode_paket'] = $this->input->post('woNumber');
 		$disassembly_header['nama_paket'] = $this->input->post('woDesc');
@@ -424,9 +418,9 @@ class Disassembly extends CI_Controller{
 			}
 		}
         if($input_detail_success){
-            return $this->session->set_flashdata('success', "Work Order Telah Terbentuk");
+            return $this->session->set_flashdata('success', "Disassembly Telah Terbentuk");
         }else{
-            return $this->session->set_flashdata('failed', "Work Order Gagal Terbentuk");
+            return $this->session->set_flashdata('failed', "Disassembly Gagal Terbentuk");
         } 
 	}
 	
@@ -463,9 +457,9 @@ class Disassembly extends CI_Controller{
 			}
 		}
 		if($succes_update){
-            return $this->session->set_flashdata('success', "WO Telah Berhasil Terupdate");
+            return $this->session->set_flashdata('success', "Disassembly Telah Berhasil Terupdate");
         }else{
-            return $this->session->set_flashdata('failed', "WO Gagal Terupdate");
+            return $this->session->set_flashdata('failed', "Disassembly Gagal Terupdate");
         }
 	} 
 }

@@ -78,7 +78,7 @@
 												</div>
 											</div>
 
-											<?php if($wo_header['status'] != "2"):?>
+											<?php if($disassembly_header['status'] != "2"):?>
 												<div class="text-right" id="btnAction">
 													<button type="button" class="btn btn-primary" name="save" id="save" onclick="addDatadb()">Save <i class="icon-pencil5 ml-2"></i></button>
 													<button type="button" class="btn btn-success" name="approve" id="approve" onclick="addDatadb(2)" >Approve <i class="icon-paperplane ml-2" ></input></i>
@@ -92,15 +92,15 @@
 						
 						<div class="card">
 							<div class="card-header">
-								<legend class="font-weight-semibold"><i class="icon-list mr-2"></i>List Work Order</legend>
-								<?php if($disassembly_header['U_Locked'] != "N"):?>
+								<legend class="font-weight-semibold"><i class="icon-list mr-2"></i>List Disassembly</legend>
+								<!-- <?php if($disassembly_header['U_Locked'] != "N"):?>
 									<div class="col-md-12 mb-2" id="btnAddListItem">
 										<div class="text-left">
 											<input type="button" class="btn btn-primary" value="Add" id="addTable"> 
 											<input type="button" value="Delete" class="btn btn-danger" id="deleteRecord"> 
 										</div>
 									</div>
-								<?php endif;?>
+								<?php endif;?> -->
 							</div>
 							<div class="card-body">
 								<table id="table-manajemen" class="table table-striped " style="width:100%">

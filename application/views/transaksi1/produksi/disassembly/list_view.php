@@ -72,7 +72,7 @@
                     <div class="card">
                         <div class="card-header">
                             <legend class="font-weight-semibold"><i class="icon-list mr-2"></i>List of Disassembly</legend>
-                            <a href="<?php echo site_url('transaksi1/wo/add') ?>" class="btn btn-primary"> Add New</a>
+                            <a href="<?php echo site_url('transaksi1/disassembly/add') ?>" class="btn btn-primary"> Add New</a>
                             <input type="button" value="Delete" class="btn btn-danger" id="deleteRecord">  
                         </div>
                         <div class="card-body">

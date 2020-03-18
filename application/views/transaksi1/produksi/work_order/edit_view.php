@@ -93,14 +93,14 @@
 						<div class="card">
 							<div class="card-header">
 								<legend class="font-weight-semibold"><i class="icon-list mr-2"></i>List Work Order</legend>
-								<?php if($wo_header['U_Locked'] != "N"):?>
+								<!-- <?php if($wo_header['U_Locked'] != "N"):?>
 									<div class="col-md-12 mb-2" id="btnAddListItem">
 										<div class="text-left">
 											<input type="button" class="btn btn-primary" value="Add" id="addTable"> 
 											<input type="button" value="Delete" class="btn btn-danger" id="deleteRecord"> 
 										</div>
 									</div>
-								<?php endif;?>
+								<?php endif;?> -->
 							</div>
 							<div class="card-body">
 								<table id="table-manajemen" class="table table-striped " style="width:100%">
