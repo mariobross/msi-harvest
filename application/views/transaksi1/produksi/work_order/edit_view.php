@@ -40,7 +40,7 @@
 											<div class="form-group row">
 												<label class="col-lg-3 col-form-label">Outlet</label>
 												<div class="col-lg-9">
-													<input type="text" class="form-control" readonly="" value="WMSISNST - Senopati" id="wo_plant" nama="wo_plant">
+													<input type="text" class="form-control" readonly="" value="<?= $wo_header['plant']?>" id="wo_plant" nama="wo_plant">
 												</div>
 											</div>
 											

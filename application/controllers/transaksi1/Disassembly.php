@@ -50,46 +50,47 @@ class Disassembly extends CI_Controller{
 		$rs = $this->diss_model->getDataWoVendor_Header($date_from2, $date_to2, $status);
 		$data = array();
 		$back='';
+		if($rs){
+			foreach($rs as $key=>$val){
+				$log = $val['back'];
+				$po = $val['produksi_no'];
+				if ($log==0 && $po !='' && $po !='C'){
+					$back = "Integrated";
+				}else if ($log==1 && ($po =='' || $po =='C')){
+					$back = "Not Integrated";
+				}else if ($log==0 &&  $po =='C'){
+					$back = "Close Document";
+				}
 
-        foreach($rs as $key=>$val){
-			$log = $val['back'];
-			$po = $val['produksi_no'];
-			if ($log==0 && $po !='' && $po !='C'){
-				$back = "Integrated";
-			}else if ($log==1 && ($po =='' || $po =='C')){
-				$back = "Not Integrated";
-			}else if ($log==0 &&  $po =='C'){
-				$back = "Close Document";
+				$nestedData = array();
+				$nestedData['id_disassembly_header'] 	= $val['id_disassembly_header'];
+				$nestedData['id_disassembly_plant'] 	= $val['id_disassembly_plant'];
+				$nestedData['posting_date'] 			= date("d-m-Y",strtotime($val['posting_date']));
+				$nestedData['disassembly_no'] 			= $val['disassembly_no'];
+				$nestedData['plant'] 					= $val['plant'];
+				$nestedData['plant_name'] 				= $val['plant_name'];
+				$nestedData['storage_location'] 		= $val['storage_location'];
+				$nestedData['storage_location_name'] 	= $val['storage_location_name'];
+				$nestedData['created_date'] 			= date("d-m-Y",strtotime($val['created_date']));
+				$nestedData['kode_paket'] 				= $val['kode_paket'];
+				$nestedData['nama_paket'] 				= $val['nama_paket'];
+				$nestedData['qty_paket'] 				= $val['qty_paket'];
+				$nestedData['status'] 					= $val['status'] =='1'?'Not Approved':'Approved';
+				$nestedData['id_user_input'] 			= $val['id_user_input'];
+				$nestedData['id_user_approved'] 		= $val['id_user_approved'];
+				$nestedData['id_user_cancel'] 			= $val['id_user_cancel'];
+				$nestedData['filename'] 				= $val['filename'];
+				$nestedData['lastmodified'] 			= date("d-m-Y",strtotime($val['lastmodified']));
+				$nestedData['num'] 						= $val['num'];
+				$nestedData['uom_paket'] 				= $val['uom_paket'];
+				$nestedData['issue'] 					= $val['doc_issue'];
+				$nestedData['created_by'] 				= $val['created_by'];
+				$nestedData['approved_by'] 				= $val['approved_by'];
+				$nestedData['back'] 					= $back;
+				$data[] = $nestedData;
+
 			}
-
-            $nestedData = array();
-			$nestedData['id_disassembly_header'] 	= $val['id_disassembly_header'];
-			$nestedData['id_disassembly_plant'] 	= $val['id_disassembly_plant'];
-			$nestedData['posting_date'] 			= date("d-m-Y",strtotime($val['posting_date']));
-			$nestedData['disassembly_no'] 			= $val['disassembly_no'];
-			$nestedData['plant'] 					= $val['plant'];
-			$nestedData['plant_name'] 				= $val['plant_name'];
-            $nestedData['storage_location'] 		= $val['storage_location'];
-			$nestedData['storage_location_name'] 	= $val['storage_location_name'];
-			$nestedData['created_date'] 			= date("d-m-Y",strtotime($val['created_date']));
-            $nestedData['kode_paket'] 				= $val['kode_paket'];
-			$nestedData['nama_paket'] 				= $val['nama_paket'];
-			$nestedData['qty_paket'] 				= $val['qty_paket'];
-			$nestedData['status'] 					= $val['status'] =='1'?'Not Approved':'Approved';
-            $nestedData['id_user_input'] 			= $val['id_user_input'];
-			$nestedData['id_user_approved'] 		= $val['id_user_approved'];
-			$nestedData['id_user_cancel'] 			= $val['id_user_cancel'];
-			$nestedData['filename'] 				= $val['filename'];
-			$nestedData['lastmodified'] 			= date("d-m-Y",strtotime($val['lastmodified']));
-			$nestedData['num'] 						= $val['num'];
-			$nestedData['uom_paket'] 				= $val['uom_paket'];
-			$nestedData['issue'] 					= $val['doc_issue'];
-            $nestedData['created_by'] 				= $val['created_by'];
-            $nestedData['approved_by'] 				= $val['approved_by'];
-            $nestedData['back'] 					= $back;
-            $data[] = $nestedData;
-
-        }
+		}
 		
 		$json_data = array(
 			"status"		=> $status,
@@ -163,7 +164,7 @@ class Disassembly extends CI_Controller{
         $id_wo_header = $this->input->post('id');
         $kode_paket = $this->input->post('kodepaket');
         $qty_paket = $this->input->post('qtypaket');
-		$rs = $this->diss_model->wo_details_select($id_wo_header,$kode_paket,$qty_paket);
+		$rs = $this->diss_model->disassembly_details_select($id_wo_header,$kode_paket,$qty_paket);
 		$object['data'] = $this->diss_model->disassembly_header_select($id_wo_header);
 		$disabled = $object['data']['status'] == 2 ? 'disabled' : '';
 		

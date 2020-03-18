@@ -138,7 +138,12 @@
                 const status = $('#status').val();           
 
                 dataTable = $('#tableWhole').DataTable({
-                    "ordering":false,  "paging": true, "searching":true,
+                    "ordering":false,  
+                    "paging": true, 
+                    "searching":true,
+                    "pageLength" : 10,
+                    "processing": true,
+                	"serverSide": true,
                     "ajax": {
                         "url":"<?php echo site_url('transaksi1/wo/showListData');?>",
                         "type":"POST",

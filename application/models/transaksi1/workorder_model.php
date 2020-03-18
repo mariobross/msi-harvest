@@ -2,41 +2,71 @@
 
 class Workorder_model extends CI_Model {
 
-  public function getDataWoVendor_Header($fromDate='', $toDate='', $status=''){
-	  $arr 		=	array();
-	  $kd_plant = $this->session->userdata['ADMIN']['plant'];
-	  $this->db->select('a.*,
-	  b.doc_issue,
-	  (SELECT admin_realname FROM d_admin WHERE admin_id = a.id_user_input)created_by,
-	  (SELECT admin_realname FROM d_admin WHERE admin_id = a.id_user_approved)approved_by');
-	  $this->db->from('t_produksi_header a');
-	  $this->db->join('t_produksi_detail b', 'a.id_produksi_header = b.id_produksi_header');
-	  $this->db->where('a.plant', $kd_plant);
-	  
-      if((!empty($fromDate)) || (!empty($toDate))){
-          if( (!empty($fromDate)) || (!empty($toDate)) ) {
-			  $this->db->where("posting_date BETWEEN '$fromDate' AND '$toDate'");
-		  } else if( (!empty($fromDate))) {
-			  $this->db->where("posting_date >= '$fromDate'");
-		  } else if( (!empty($toDate))) {
-			  $this->db->where("posting_date <= '$toDate'");
-		  }
-	  }
+	public function getDataWoVendor_Header($fromDate='', $toDate='', $status='', $length,$start){
+		$arr 		=	array();
+		$kd_plant = $this->session->userdata['ADMIN']['plant'];
+		$this->db->select('a.*,
+		b.doc_issue,
+		(SELECT admin_realname FROM d_admin WHERE admin_id = a.id_user_input)created_by,
+		(SELECT admin_realname FROM d_admin WHERE admin_id = a.id_user_approved)approved_by');
+		$this->db->from('t_produksi_header a');
+		$this->db->join('t_produksi_detail b', 'a.id_produksi_header = b.id_produksi_header');
+		$this->db->where('a.plant', $kd_plant);
+		
+		if((!empty($fromDate)) || (!empty($toDate))){
+			if( (!empty($fromDate)) || (!empty($toDate)) ) {
+				$this->db->where("posting_date BETWEEN '$fromDate' AND '$toDate'");
+			} else if( (!empty($fromDate))) {
+				$this->db->where("posting_date >= '$fromDate'");
+			} else if( (!empty($toDate))) {
+				$this->db->where("posting_date <= '$toDate'");
+			}
+		}
 
-	  if((!empty($status))){
-		  $this->db->where('status', $status);
-	  }
-	  $this->db->group_by('a.id_produksi_header');
-	  $this->db->order_by('a.id_produksi_header', 'DESC');
+		if((!empty($status))){
+			$this->db->where('status', $status);
+		}
+		$this->db->group_by('a.id_produksi_header');
+		$this->db->order_by('a.id_produksi_header', 'DESC');
+		$this->db->limit($length,$start);
 
-	  $query = $this->db->get();
+		$query = $this->db->get();
 
-	  if($query->num_rows() > 0){
-		  return $query->result_array();
-	  }else{
-		  return FALSE;
-	  }
-  }
+		if($query->num_rows() > 0){
+			return $query->result_array();
+		}else{
+			return FALSE;
+		}
+	}
+
+	public function getCountDataWoVendor_Header($fromDate='', $toDate='', $status=''){
+		$arr 		=	array();
+		$kd_plant = $this->session->userdata['ADMIN']['plant'];
+		$this->db->select('COUNT(*) num');
+		$this->db->from('t_produksi_header a');
+		$this->db->where('a.plant', $kd_plant);
+		
+		if((!empty($fromDate)) || (!empty($toDate))){
+			if( (!empty($fromDate)) || (!empty($toDate)) ) {
+				$this->db->where("posting_date BETWEEN '$fromDate' AND '$toDate'");
+			} else if( (!empty($fromDate))) {
+				$this->db->where("posting_date >= '$fromDate'");
+			} else if( (!empty($toDate))) {
+				$this->db->where("posting_date <= '$toDate'");
+			}
+		}
+
+		if((!empty($status))){
+			$this->db->where('status', $status);
+		}
+		$query = $this->db->get();
+
+		if($query->num_rows() > 0){
+			return $query->result_array();
+		}else{
+			return FALSE;
+		}
+	}
   
   function wo_header_delete($id_wo_header){
     if($this->wo_details_delete($id_wo_header)){
@@ -311,92 +341,6 @@ class Workorder_model extends CI_Model {
 	$query = $this->db->get();
 	$ret = $query->result_array();
 	return $ret;
-	
-	$i = 1;
-	$querySAP = array();
-	$querySAP2 = array();
-	foreach($ret as $data){
-		
-		//$querySAP = $this->wo_details_delete($data['material_no']);
-		$querySAP = $this->wo_detail_valid('1ACRG004');
-		if(count($querySAP)>0){
-			$validFor = $querySAP[0]['validFor'];
-			$decreasAc = $querySAP[0]['DecreasAc'];
-		}
-		
-		//$qty = $this->wo_detail_quantity($kode_paket,$data['material_no']);
-		$qty = $this->wo_detail_quantity('1ACO158','FDY0020');
-		$quantity = $qty[0]['quantity'];
-		$quantity_paket = $qty[0]['quantity_paket'];
-		$resqty=$quantity*$qty_paket/$quantity_paket;
-		
-		//$onhand = $this->wo_detail_onhand($data['material_no']);
-		$onhand = $this->wo_detail_onhand('FDY0020');
-		
-		//$querySAP2 = $this->wo_detail_itemcodebom($kode_paket,$data['material_no']);
-		$querySAP2 = $this->wo_detail_itemcodebom('FDY0020','1ACO158');
-		$descolumn = '';
-		
-		//$openqty = $this->wo_detail_openqty($data['material_no']);
-		$openqty = $this->wo_detail_openqty('FDG0907');
-		
-		//$ucaneditqty = $this->wo_detail_ucaneditqty($kode_paket,$data['material_no']);
-		$ucaneditqty = $this->wo_detail_ucaneditqty('FDY0020','1ACO158');
-		$qtyeditucan = $ucaneditqty[0]['CanEditQty'];
-		$matqty = '';
-		if($quantity_paket > 0){
-			$matqty = '<input style="text-align:right;" type="text" value="'.number_format($resqty, 4, '.', '').'" class="error_number prodqty" size="8">';
-		}else{
-			$matqty = '<div class="matqty" style="text-align:right;">'.number_format($resqty, 4, '.', '').'</div>';
-		}
-		
-		$openqty = $this->wo_detail_item();
-		$qtyopen = '';
-		
-		$select = '<select class="form-control form-control-select2 select2-hidden-accessible" data-live-search="true" name="status" id="status" tabindex="-1" aria-hidden="true">
-						<option value="'.$data['material_no'].'" matqty="'.number_format($resqty, 4, '.', ',').'" matdesc="'.$data['material_desc'].'">'.$data['material_desc'].'</option>';
-						foreach($querySAP2 as $dt){
-							if($dt['U_ItemCodeBOM'] = $data['material_no']){
-								$select .= '<option value="'.$dt['Code'].'" matqty="'.number_format($dt['U_SubsQty'], 4, '.', ',').'" matdesc="'.$dt['NAME'].'">'.$dt['NAME'].'</option>';
-							}
-						}
-		$select .= '</select>';
-		
-		foreach($querySAP2 as $_querySAP2){
-			if($_querySAP2['U_ItemCodeBOM'] = $data['material_no']){
-				$descolumn = $select;
-			}else{
-				$descolumn = $data['material_no'];
-			}
-		}
-		
-		foreach($openqty as $_openqty){
-			if($_openqty['U_ItemCodeBOM'] = $data['material_no']){
-				$qtyopen = $select;
-			}else{
-				$qtyopen = $data['material_no'];
-			}
-		}
-		$nestedData=array();
-		$nestedData['no'] = $i;
-		$nestedData['id_produksi_detail'] = $data['id_produksi_detail'];
-		$nestedData['id_produksi_header'] = $data['id_produksi_header'];
-		$nestedData['material_no'] = $data['material_no'];
-		$nestedData['material_desc'] = $data['material_desc'];
-		$nestedData['qty'] = $data['qty'];
-		$nestedData['uom'] = $data['uom'];
-		$nestedData['OnHand'] = $data['OnHand'];
-		$nestedData['MinStock'] = $data['MinStock']; 
-		$nestedData['OpenQty'] = $data['OpenQty'];
-		$nestedData['doc_issue'] = $data['doc_issue'];
-		$nestedData['validFor'] = $validFor;
-		$nestedData['decreasAc'] = $decreasAc;
-		$nestedData['descolumn'] = $descolumn;
-		$nestedData['matQty'] = $matqty;
-		$arr[] = $nestedData;
-        $i++;
-	}
-	return $arr;
   }
 
 	function wo_header_batch($item,$whs){

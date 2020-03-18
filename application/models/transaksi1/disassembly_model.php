@@ -303,100 +303,14 @@ class Disassembly_model extends CI_Model {
 		return $id_produksi_outlet;
 	}
   
-  function wo_details_select($id_wo_header,$kode_paket,$qty_paket){
+  function disassembly_details_select($id_wo_header,$kode_paket,$qty_paket){
 	$arr 	=	array();
-	$this->db->from('t_produksi_detail');
-    $this->db->where('id_produksi_header', $id_wo_header);
-	$this->db->order_by('id_produksi_detail');
+	$this->db->from('t_disassembly_detail');
+    $this->db->where('id_disassembly_header', $id_wo_header);
+	$this->db->order_by('id_disassembly_detail');
 	$query = $this->db->get();
 	$ret = $query->result_array();
 	return $ret;
-	
-	$i = 1;
-	$querySAP = array();
-	$querySAP2 = array();
-	foreach($ret as $data){
-		
-		//$querySAP = $this->wo_details_delete($data['material_no']);
-		$querySAP = $this->wo_detail_valid('1ACRG004');
-		if(count($querySAP)>0){
-			$validFor = $querySAP[0]['validFor'];
-			$decreasAc = $querySAP[0]['DecreasAc'];
-		}
-		
-		//$qty = $this->wo_detail_quantity($kode_paket,$data['material_no']);
-		$qty = $this->wo_detail_quantity('1ACO158','FDY0020');
-		$quantity = $qty[0]['quantity'];
-		$quantity_paket = $qty[0]['quantity_paket'];
-		$resqty=$quantity*$qty_paket/$quantity_paket;
-		
-		//$onhand = $this->wo_detail_onhand($data['material_no']);
-		$onhand = $this->wo_detail_onhand('FDY0020');
-		
-		//$querySAP2 = $this->wo_detail_itemcodebom($kode_paket,$data['material_no']);
-		$querySAP2 = $this->wo_detail_itemcodebom('FDY0020','1ACO158');
-		$descolumn = '';
-		
-		//$openqty = $this->wo_detail_openqty($data['material_no']);
-		$openqty = $this->wo_detail_openqty('FDG0907');
-		
-		//$ucaneditqty = $this->wo_detail_ucaneditqty($kode_paket,$data['material_no']);
-		$ucaneditqty = $this->wo_detail_ucaneditqty('FDY0020','1ACO158');
-		$qtyeditucan = $ucaneditqty[0]['CanEditQty'];
-		$matqty = '';
-		if($quantity_paket > 0){
-			$matqty = '<input style="text-align:right;" type="text" value="'.number_format($resqty, 4, '.', '').'" class="error_number prodqty" size="8">';
-		}else{
-			$matqty = '<div class="matqty" style="text-align:right;">'.number_format($resqty, 4, '.', '').'</div>';
-		}
-		
-		$openqty = $this->wo_detail_item();
-		$qtyopen = '';
-		
-		$select = '<select class="form-control form-control-select2 select2-hidden-accessible" data-live-search="true" name="status" id="status" tabindex="-1" aria-hidden="true">
-						<option value="'.$data['material_no'].'" matqty="'.number_format($resqty, 4, '.', ',').'" matdesc="'.$data['material_desc'].'">'.$data['material_desc'].'</option>';
-						foreach($querySAP2 as $dt){
-							if($dt['U_ItemCodeBOM'] = $data['material_no']){
-								$select .= '<option value="'.$dt['Code'].'" matqty="'.number_format($dt['U_SubsQty'], 4, '.', ',').'" matdesc="'.$dt['NAME'].'">'.$dt['NAME'].'</option>';
-							}
-						}
-		$select .= '</select>';
-		
-		foreach($querySAP2 as $_querySAP2){
-			if($_querySAP2['U_ItemCodeBOM'] = $data['material_no']){
-				$descolumn = $select;
-			}else{
-				$descolumn = $data['material_no'];
-			}
-		}
-		
-		foreach($openqty as $_openqty){
-			if($_openqty['U_ItemCodeBOM'] = $data['material_no']){
-				$qtyopen = $select;
-			}else{
-				$qtyopen = $data['material_no'];
-			}
-		}
-		$nestedData=array();
-		$nestedData['no'] = $i;
-		$nestedData['id_produksi_detail'] = $data['id_produksi_detail'];
-		$nestedData['id_produksi_header'] = $data['id_produksi_header'];
-		$nestedData['material_no'] = $data['material_no'];
-		$nestedData['material_desc'] = $data['material_desc'];
-		$nestedData['qty'] = $data['qty'];
-		$nestedData['uom'] = $data['uom'];
-		$nestedData['OnHand'] = $data['OnHand'];
-		$nestedData['MinStock'] = $data['MinStock']; 
-		$nestedData['OpenQty'] = $data['OpenQty'];
-		$nestedData['doc_issue'] = $data['doc_issue'];
-		$nestedData['validFor'] = $validFor;
-		$nestedData['decreasAc'] = $decreasAc;
-		$nestedData['descolumn'] = $descolumn;
-		$nestedData['matQty'] = $matqty;
-		$arr[] = $nestedData;
-        $i++;
-	}
-	return $arr;
   }
 
 	function disassembly_header_batch($item,$whs){

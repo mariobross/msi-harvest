@@ -24,7 +24,10 @@ class Wo extends CI_Controller{
 	public function showListData(){
         $fromDate = $this->input->post('fDate');
         $toDate = $this->input->post('tDate');
-        $status = $this->input->post('stts');
+		$status = $this->input->post('stts');
+		$draw = intval($this->input->post("draw"));
+        $length = intval($this->input->post("length"));
+        $start = intval($this->input->post("start"));
 
         $date_from2;
         $date_to2;
@@ -47,7 +50,9 @@ class Wo extends CI_Controller{
             $date_to2='';
         }
         
-		$rs = $this->wovendor->getDataWoVendor_Header($date_from2, $date_to2, $status);
+		$rs = $this->wovendor->getDataWoVendor_Header($date_from2, $date_to2, $status, $length, $start);
+		$totalData = $this->wovendor->getCountDataWoVendor_Header($date_from2, $date_to2, $status);
+		
 		$data = array();
 		$back='';
 
@@ -92,9 +97,9 @@ class Wo extends CI_Controller{
         }
 		
 		$json_data = array(
-			"status"		=> $status,
-            "recordsTotal"    =>  10, 
-            "recordsFiltered" =>  12,
+			"draw" => $draw,
+            "recordsTotal" => $totalData[0]['num'],
+            "recordsFiltered" => $totalData[0]['num'],
             "data"            =>  $data 
         );
 		
@@ -154,6 +159,8 @@ class Wo extends CI_Controller{
         $object['wo_header']['posting_date'] = $object['data']['posting_date'];
 		$object['wo_header']['status'] = $object['data']['status'];
 		$object['wo_header']['U_Locked'] = $u_Locked[0]['U_Locked'];
+		$object['wo_header']['plant'] = $this->session->userdata['ADMIN']['plant'].' - '.$this->session->userdata['ADMIN']['plant_name'];
+		
 		
         $this->load->view('transaksi1/produksi/work_order/edit_view', $object);
     }

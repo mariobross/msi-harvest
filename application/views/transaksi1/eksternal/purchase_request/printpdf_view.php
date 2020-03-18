@@ -2,17 +2,20 @@
     $SAP_MSI = $this->load->database('SAP_MSI', TRUE);
     foreach($data as $row) 
     
-      $plant = $row['plant'] ;
+      $plant = $row['plant'];
       $SAP_MSI->select('WhsName,OLCT.Location');
       $SAP_MSI->from('OWHS');
       $SAP_MSI->join('OLCT','OWHS.Location = OLCT.Code','inner');
       $SAP_MSI->where('WhsCode',$plant);
       $query = $SAP_MSI->get();
       $temp = $query->result_array();
-      print_r($plant);
-      die();
-      $reck=$temp[0]['WhsName'];
-      $reck_loc=$temp[0]['Location'];
+      if (empty($temp)) {
+        $reck='NAMA PLANT (DEFAULT)';
+        $reck_loc='LOKASI PLANT (DEFAULT)';
+      } else {
+        $reck=$temp[0]['WhsName'];
+        $reck_loc=$temp[0]['Location'];
+      }
 
 ?>
 <style type="text/css">
@@ -64,13 +67,12 @@
   <tr>
     <td>Ph. +62 21 726 06680 / Fax. +62 21 727 971 59</td>
     <td>Delivery</td>
-    <td>:&nbsp;<strong><?=$reck;?>
-    </strong></td>
+    <td>:&nbsp;<strong><?=$reck;?></strong></td>
   </tr>
   <tr>
     <td>&nbsp;</td>
     <td>&nbsp;</td>
-    <td>&nbsp;</td>
+    <td>:&nbsp;<strong><?=$reck_loc;?></strong></td>
   </tr>
   <tr>
     <td>&nbsp;</td>
