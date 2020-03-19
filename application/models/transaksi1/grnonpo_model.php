@@ -77,16 +77,15 @@ class Grnonpo_model extends CI_Model {
     function sap_items_select_by_item_group($item_group, $trans_type) {
         $kd_plant = $this->session->userdata['ADMIN']['plant'];
         
-		$this->db->select('MAKTX,m_item.MATNR,MEINS,UNIT');
-     	$this->db->select('(REPLACE(m_item.MATNR,REPEAT("0",(12)),SPACE(0))) AS MATNR1, SPACE(1) AS DistNumber');
-		$this->db->from('m_item');
-        $this->db->join('m_map_item_trans','m_map_item_trans.MATNR = m_item.MATNR','inner');
-        $this->db->join('m_item_group','m_item_group.DISPO = m_item.DISPO','inner');
-        $this->db->where('transtype', $trans_type);
-		$this->db->where('m_item_group.kdplant',$kd_plant);
-      	$this->db->where('m_item_group.DSNAM', $item_group);
+		$SAP_MSI = $this->load->database('SAP_MSI', TRUE);
+        $SAP_MSI->select('t0.ItemCode as MATNR,t0.ItemName as MAKTX,t0.ItmsGrpCod as DISPO,t0.BuyUnitMsr as UNIT,t1.ItmsGrpNam as DSNAM');
+        $SAP_MSI->from('OITM  t0');
+        $SAP_MSI->join('oitb t1','t1.ItmsGrpCod = t0.ItmsGrpCod','inner');
+        $SAP_MSI->where('validFor', 'Y');
+        $SAP_MSI->where('InvntItem', 'Y');
+        $SAP_MSI->where('t1.ItmsGrpNam',$item_group);
 
-		$query = $this->db->get();
+        $query = $SAP_MSI->get();
         
         if(($query)&&($query->num_rows() > 0)) {
 			return $query->result_array();
@@ -99,17 +98,15 @@ class Grnonpo_model extends CI_Model {
         $trans_type = 'stdstock';
         $kd_plant = $this->session->userdata['ADMIN']['plant'];
         if(($itemSelect != '') || ($itemSelect != null)){
-            $this->db->select('m_item.MATNR,m_item.MAKTX,m_item.DISPO,m_item.UNIT,space(0) as DSNAM');
-            $this->db->select('(REPLACE(m_item.MATNR,REPEAT("0",(12)),SPACE(0))) AS MATNR1');
-            $this->db->from('m_item');
-            $this->db->join('m_map_item_trans','m_map_item_trans.MATNR = m_item.MATNR','inner');
-            $this->db->join('m_item_group','m_item_group.DISPO = m_item.DISPO','inner');
-            $this->db->where('transtype', $trans_type);
-            $this->db->where('m_item_group.kdplant', $kd_plant );
-            $this->db->where('m_item.MATNR',$itemSelect);
+            $SAP_MSI = $this->load->database('SAP_MSI', TRUE);
+            $SAP_MSI->select('t0.ItemCode as MATNR,t0.ItemName as MAKTX,t0.ItmsGrpCod as DISPO,t0.BuyUnitMsr as UNIT,t1.ItmsGrpNam as DSNAM');
+            $SAP_MSI->from('OITM  t0');
+            $SAP_MSI->join('oitb t1','t1.ItmsGrpCod = t0.ItmsGrpCod','inner');
+            $SAP_MSI->where('validFor', 'Y');
+            $SAP_MSI->where('InvntItem', 'Y');
+            $SAP_MSI->where('t0.ItemCode',$itemSelect);
 
-            $this->db->limit(100);
-            $query = $this->db->get();
+            $query = $SAP_MSI->get();
             return $query->result_array();
         }else{
             return false;
@@ -360,21 +357,18 @@ class Grnonpo_model extends CI_Model {
     function getDataMaterialGroup($item_group_code ='all'){
         $kd_plant = $this->session->userdata['ADMIN']['plant'];
         $trans_type = 'grnonpo';
-        $this->db->distinct();
-        $this->db->select('m_item.MATNR,m_item.MAKTX,m_item.DISPO,m_item.UNIT,m_item_group.DSNAM');
-        $this->db->select('(REPLACE(m_item.MATNR,REPEAT("0",(12)),SPACE(0))) AS MATNR1');
-        $this->db->from('m_item');
-        $this->db->join('m_map_item_trans','m_map_item_trans.MATNR = m_item.MATNR','inner');
-        $this->db->join('m_item_group','m_item_group.DISPO = m_item.DISPO','inner');
-        $this->db->where('transtype', $trans_type);
-        $this->db->where('m_item_group.kdplant',$kd_plant);
-        
-        $this->db->limit(10000);
+        $SAP_MSI = $this->load->database('SAP_MSI', TRUE);
+        $SAP_MSI->select('t0.ItemCode as MATNR,t0.ItemName as MAKTX,t0.ItmsGrpCod as DISPO,t0.BuyUnitMsr as UNIT,t1.ItmsGrpNam as DSNAM');
+        $SAP_MSI->from('OITM  t0');
+        $SAP_MSI->join('oitb t1','t1.ItmsGrpCod = t0.ItmsGrpCod','inner');
+        $SAP_MSI->where('validFor', 'Y');
+        $SAP_MSI->where('InvntItem', 'Y');
+
         if($item_group_code !='all'){
-            $this->db->where('m_item_group.DSNAM', $item_group_code);
+            $SAP_MSI->where('t1.ItmsGrpNam', $item_group_code);
         }
 
-        $query = $this->db->get();
+        $query = $SAP_MSI->get();
         // echo $this->db->last_query();
         
         if(($query)&&($query->num_rows()>0))
